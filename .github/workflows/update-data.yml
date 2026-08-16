@@ -1,0 +1,37 @@
+name: Update PRTS data
+
+on:
+  schedule:
+    - cron: '17 20 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: prts-data-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Synchronize data
+        run: npm run sync:prts
+      - name: Validate generated data
+        run: npm run check
+      - name: Commit changed snapshots
+        run: |
+          if git diff --quiet -- data/; then
+            echo "No data changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "data: synchronize PRTS snapshot"
+          git push
