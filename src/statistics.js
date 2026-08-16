@@ -36,6 +36,7 @@ export function calculateStatistics(gameData, userState) {
   const investedItems = [];
   const operatorInvestments = [];
   const profession = {};
+  const subprofession = {};
   const rarity = {};
 
   let owned = 0;
@@ -64,6 +65,7 @@ export function calculateStatistics(gameData, userState) {
       planned: plannedOperators.has(operatorName) ? 1 : 0
     };
     addDistribution(profession, operator.p || '未知职业', distributionValues);
+    addDistribution(subprofession, operator.sp || '未知分支', distributionValues);
     addDistribution(rarity, `${(operator.r || 0) + 1}星`, distributionValues);
 
     const operatorItems = buildOperatorUpgradeItems(operatorName, operator, {
@@ -96,7 +98,7 @@ export function calculateStatistics(gameData, userState) {
     },
     invested: summarizeItems(investedItems),
     plan: summarizeItems(planItems),
-    distributions: { profession, rarity },
+    distributions: { profession, subprofession, rarity },
     operatorInvestments
   };
 }

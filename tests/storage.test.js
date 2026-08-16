@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 
 import {
   createProjectExport,
+  createBackup,
+  loadBackup,
   loadUserState,
   mergeImportedCurrentState,
   migrateLegacySnapshot,
@@ -14,10 +16,11 @@ import {
 const gameData = {
   OPS: {
     煌: {
+      id: 'char_017_huang',
       r: 5,
       md: [{ name: '过载的武器与过热的心脏', stages: [{ stage: 1 }, { stage: 2 }, { stage: 3 }] }]
     },
-    能天使: { r: 5, md: [] }
+    能天使: { id: 'char_103_angel', r: 5, md: [] }
   },
   OPS_ORDER: ['煌', '能天使'],
   MAX_LV: { 5: { e0: 50, e1: 80, e2: 90 } }
@@ -134,4 +137,45 @@ test('项目扩展格式可以往返当前、目标和库存', () => {
   assert.equal(exported.format, 'arknights-material-planner');
   assert.equal(parsed.operators.煌.target.mastery.s1, 2);
   assert.equal(parsed.inventory.异铁, 8);
+});
+
+test('自动备份可以恢复为已校验的用户状态', () => {
+  const storage = memoryStorage();
+  createBackup(storage, {
+    operators: { 煌: { id: 'char_017_huang', owned: true, current: { elite: 1, level: 50 } } },
+    inventory: { 异铁: 6 }
+  });
+
+  const backup = loadBackup(storage, gameData);
+
+  assert.equal(backup.state.operators.煌.current.level, 50);
+  assert.equal(backup.state.inventory.异铁, 6);
+});
+
+test('干员改名后通过稳定 ID 迁移本地状态', () => {
+  const renamedData = {
+    ...gameData,
+    OPS: { 新名称: { ...gameData.OPS.煌 } },
+    OPS_ORDER: ['新名称']
+  };
+  const state = {
+    operators: {
+      旧名称: {
+        id: 'char_017_huang',
+        owned: true,
+        current: { elite: 1, level: 55 },
+        target: { elite: 2, level: 80 }
+      }
+    }
+  };
+
+  const normalized = parseProjectImport({
+    format: 'arknights-material-planner',
+    version: 1,
+    userData: state
+  }, renamedData);
+
+  assert.equal(normalized.operators.新名称.id, 'char_017_huang');
+  assert.equal(normalized.operators.新名称.current.level, 55);
+  assert.equal(normalized.operators.旧名称, undefined);
 });

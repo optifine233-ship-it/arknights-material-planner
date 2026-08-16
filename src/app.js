@@ -8,6 +8,7 @@ import {
   createBackup,
   createCultivationState,
   createProjectExport,
+  loadBackup,
   loadUserState,
   normalizeOperatorProgress,
   normalizeUserState,
@@ -15,6 +16,8 @@ import {
   saveUserState
 } from './storage.js';
 import { calculateStatistics } from './statistics.js';
+import { applyMaaOperatorImport, parseMaaOperatorExport } from './importers/maa.js';
+import { loadGameData } from './data-loader.js';
 import {
   formatNumber,
   getAllInventoryMaterials,
@@ -55,10 +58,13 @@ let userState;
 let currentView = 'operators';
 let selectedOperator = null;
 let pendingImport = null;
+let pendingImportKind = null;
 let toastTimer = null;
 let filters = {
   operatorSearch: '',
   profession: '全部',
+  subprofession: 'all',
+  position: 'all',
   rarity: 'all',
   operatorScope: 'all',
   inventorySearch: ''
@@ -144,11 +150,15 @@ function render() {
 
 function renderOperators(items) {
   const planned = itemsByOperator(items);
+  const subprofessions = [...new Set(gameData.OPS_ORDER.map((name) => gameData.OPS[name].sp).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
+  const positions = [...new Set(gameData.OPS_ORDER.map((name) => gameData.OPS[name].pos).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
   const names = gameData.OPS_ORDER.filter((name) => {
     const operator = gameData.OPS[name];
     const progress = getProgress(name);
     if (filters.operatorSearch && !name.toLowerCase().includes(filters.operatorSearch.toLowerCase())) return false;
     if (filters.profession !== '全部' && operator.p !== filters.profession) return false;
+    if (filters.subprofession !== 'all' && operator.sp !== filters.subprofession) return false;
+    if (filters.position !== 'all' && operator.pos !== filters.position) return false;
     if (filters.rarity !== 'all' && String(operator.r + 1) !== filters.rarity) return false;
     if (filters.operatorScope === 'owned' && !progress.owned) return false;
     if (filters.operatorScope === 'planned' && !planned.has(name)) return false;
@@ -161,6 +171,7 @@ function renderOperators(items) {
       <div><h2>建立你的干员状态</h2><p>选择干员后填写目前状态与培养目标。星级只作为标签，职业才是主要浏览入口；之后可在计划页逐项核对材料。</p></div>
       <div class="view-intro__stat"><strong>${ownedCount}</strong><small>OWNED OPERATORS</small></div>
     </section>
+    ${renderOnboarding()}
     <section class="toolbar-panel" aria-label="干员筛选">
       <label class="field field--grow"><span>搜索干员</span><input id="operator-search" type="search" value="${escapeHtml(filters.operatorSearch)}" placeholder="输入干员名称"></label>
       <label class="field"><span>显示范围</span><select id="operator-scope">
@@ -169,12 +180,28 @@ function renderOperators(items) {
       <label class="field"><span>星级</span><select id="operator-rarity">
         ${selectOptions(['all', '6', '5', '4', '3'], filters.rarity, (value) => value === 'all' ? '全部星级' : `${value} 星`)}
       </select></label>
+      <label class="field"><span>分支</span><select id="operator-subprofession">
+        ${selectOptions(['all', ...subprofessions], filters.subprofession, (value) => value === 'all' ? '全部分支' : value)}
+      </select></label>
+      <label class="field"><span>部署位置</span><select id="operator-position">
+        ${selectOptions(['all', ...positions], filters.position, (value) => value === 'all' ? '全部位置' : value)}
+      </select></label>
       <div class="field" style="flex:1 1 100%"><span>职业</span><div class="filter-chips">
         ${['全部', ...PROFESSIONS].map((profession) => `<button type="button" class="filter-chip ${filters.profession === profession ? 'is-active' : ''}" data-action="filter-profession" data-profession="${profession}">${profession}</button>`).join('')}
       </div></div>
     </section>
     ${names.length ? `<div class="operator-grid">${names.map((name) => renderOperatorCard(name, planned.get(name) || [])).join('')}</div>` : emptyState('没有符合条件的干员', '调整职业、星级或显示范围后再试。')}
   `;
+}
+
+function renderOnboarding() {
+  const hasStarted = Object.values(userState.operators).some((progress) => progress.owned)
+    || Object.values(userState.inventory).some((quantity) => quantity > 0);
+  if (hasStarted || userState.settings.onboardingDismissed) return '';
+  return `<section class="onboarding-panel">
+    <header><div><small>QUICK START</small><h2>三步建立你的后勤计划</h2></div><button class="icon-button icon-button--dark" type="button" data-action="dismiss-onboarding" aria-label="关闭新手引导">×</button></header>
+    <div class="onboarding-steps"><div><b>01</b><span><strong>选择干员</strong><small>填写目前状态与目标状态</small></span></div><div><b>02</b><span><strong>登记库存</strong><small>T2 材料也会自动参与抵扣</small></span></div><div><b>03</b><span><strong>查看缺口</strong><small>按资源或培养项核对需求</small></span></div></div>
+  </section>`;
 }
 
 function renderOperatorCard(name, items) {
@@ -188,9 +215,9 @@ function renderOperatorCard(name, items) {
     <button type="button" class="operator-card ${progress.owned ? 'is-owned' : ''}" data-action="open-operator" data-operator="${encoded(name)}">
       ${operatorPortrait(name, operator)}
       <span class="operator-card__body">
-        <span class="operator-card__meta"><span class="rarity-stars">${'★'.repeat(operator.r + 1)}</span> / ${escapeHtml(operator.p)}</span>
+        <span class="operator-card__meta"><span class="rarity-stars">${'★'.repeat(operator.r + 1)}</span> / ${escapeHtml(operator.p)} · ${escapeHtml(operator.sp || '未分类')}</span>
         <h3>${escapeHtml(name)}</h3>
-        <span class="operator-card__profession">${currentText}</span>
+        <span class="operator-card__profession">${escapeHtml(operator.pos || '')}${operator.pos ? ' · ' : ''}${currentText}</span>
         <span class="operator-card__status"><span>${items.length ? `${items.length} 项待培养` : '无培养计划'}</span><b>${items.length ? 'PLAN' : 'OPEN'}</b></span>
       </span>
     </button>
@@ -316,7 +343,18 @@ function renderGaps(items) {
   let rows = [...rowsByName.values()];
   if (display === 'shortage') rows = rows.filter((row) => row.shortage > 0);
   if (display === 'plan') rows = rows.filter((row) => row.required > 0);
-  const groups = groupResultRows(rows, userState.settings.materialGrouping || 'purpose');
+  const lowDirectRows = rows.filter((row) => row.tier < 2 && getMaterialCategory(row.name) === 'material');
+  const baselineRows = rows.filter((row) => !lowDirectRows.includes(row));
+  const groups = groupResultRows(baselineRows, userState.settings.gapGrouping || 'purpose');
+  if (lowDirectRows.length) {
+    groups.unshift({
+      code: 'DIRECT',
+      label: '低阶材料直接需求',
+      tone: 'green',
+      rows: lowDirectRows.sort((a, b) => b.shortage - a.shortage || a.name.localeCompare(b.name, 'zh-CN')),
+      exactOnly: true
+    });
+  }
   const shortageKinds = summary.rows.filter((row) => row.shortage > 0).length;
   const expStock = Object.entries(gameData.EXP_ITEMS || {}).reduce((sum, [name, value]) => sum + (userState.inventory[name] || 0) * value, 0);
   const expShortage = Math.max(0, summary.totalExp - expStock);
@@ -333,7 +371,7 @@ function renderGaps(items) {
     </div>
     <section class="toolbar-panel">
       <label class="field"><span>显示范围</span><select id="material-display">${selectOptions(['shortage', 'plan', 'all'], display, (value) => ({ shortage: '仅显示缺口', plan: '显示计划所需', all: '显示全部材料' })[value])}</select></label>
-      <label class="field"><span>分组方式</span><select id="gap-grouping">${selectOptions(['purpose', 'tier'], userState.settings.materialGrouping || 'purpose', (value) => value === 'purpose' ? '按用途分类' : '按品质分类')}</select></label>
+      <label class="field"><span>分组方式</span><select id="gap-grouping">${selectOptions(['purpose', 'tier', 'shortage'], userState.settings.gapGrouping || 'purpose', (value) => ({ purpose: '按用途分类', tier: '按品质分类', shortage: '按缺口从大到小' })[value])}</select></label>
     </section>
     ${items.length ? renderResourceGap(summary, expStock, lmdStock) : ''}
     ${groups.length ? groups.map((group) => renderGapGroup(group, items)).join('') : emptyState(items.length ? '当前范围内没有材料' : '还没有培养计划', items.length ? '切换显示范围可查看已足量或全部材料。' : '先在干员档案中设置目标状态。')}
@@ -356,19 +394,30 @@ function renderResourceGap(summary, expStock, lmdStock) {
 }
 
 function groupResultRows(rows, grouping) {
+  if (grouping === 'shortage') {
+    return [{
+      code: 'GAP',
+      label: '材料缺口排序',
+      tone: 'red',
+      rows: [...rows].sort((a, b) => b.shortage - a.shortage || b.required - a.required || a.name.localeCompare(b.name, 'zh-CN'))
+    }];
+  }
   const groupedNames = groupMaterialNames(rows.map((row) => row.name), gameData, grouping);
   const byName = new Map(rows.map((row) => [row.name, row]));
   return groupedNames.map((group) => ({ ...group, rows: group.names.map((name) => byName.get(name)).filter(Boolean) }));
 }
 
 function renderGapGroup(group, items) {
+  const fourthColumn = group.exactOnly ? '折算说明' : 'T2 合成抵扣';
   return `
     <section class="section-block">
       ${sectionIndex(group.code, group.label, group.rows.length, group.tone)}
-      <div class="table-scroll"><table class="material-table"><thead><tr><th>材料</th><th>折算需求</th><th>同名库存</th><th>T2 合成抵扣</th><th>最终缺口</th></tr></thead><tbody>
+      <div class="table-scroll"><table class="material-table"><thead><tr><th>材料</th><th>${group.exactOnly ? '直接需要' : '折算需求'}</th><th>同名库存</th><th>${fourthColumn}</th><th>最终缺口</th></tr></thead><tbody>
         ${group.rows.map((row) => {
           const sources = materialSources(row.name, items);
-          const lowerText = row.craftedFromLower
+          const lowerText = group.exactOnly
+            ? '早期培养的直接消耗，不并入 T3 基准表'
+            : row.craftedFromLower
             ? `${row.craftedFromLower}（${Object.entries(row.lowerInventoryUsed).map(([name, qty]) => `${name}×${qty}`).join('、')}）`
             : '—';
           return `<tr>
@@ -403,8 +452,10 @@ function materialSources(materialName, items) {
 function renderStatistics() {
   const stats = calculateStatistics(gameData, userState);
   const overview = stats.overview;
-  const professionRows = Object.entries(stats.distributions.profession);
-  const maxOwned = Math.max(1, ...professionRows.map(([, value]) => value.owned));
+  const distributionMode = userState.settings.statisticsGrouping || 'profession';
+  const distributionRows = Object.entries(stats.distributions[distributionMode] || {});
+  const maxOwned = Math.max(1, ...distributionRows.map(([, value]) => value.owned));
+  const distributionTitle = ({ profession: '职业', subprofession: '分支职业', rarity: '星级' })[distributionMode];
   return `
     ${renderViewIntro('从账号全局看养成投入', '“已投入”由当前养成状态反推，是理论值而不是游戏消费流水；未来计划与库存缺口始终单独计算。', overview.owned, 'OWNED OPERATORS')}
     <div class="stat-card-grid">
@@ -416,8 +467,8 @@ function renderStatistics() {
       ${statCard('PLAN LMD', formatNumber(stats.plan.totalLmd), '当前目标仍需')}
     </div>
     <div class="stats-columns">
-      <section class="panel-card"><h2>职业养成分布</h2><div class="distribution-list">
-        ${professionRows.length ? professionRows.map(([name, value]) => `<div class="distribution-row"><b>${escapeHtml(name)}</b><div class="bar-track"><i style="width:${Math.max(4, value.owned / maxOwned * 100)}%"></i></div><span>${value.elite2}/${value.owned} 精二</span></div>`).join('') : '<p>还没有已拥有干员。</p>'}
+      <section class="panel-card"><div class="panel-heading"><h2>${distributionTitle}养成分布</h2><label class="field"><span>观察维度</span><select id="statistics-grouping">${selectOptions(['profession', 'subprofession', 'rarity'], distributionMode, (value) => ({ profession: '按职业', subprofession: '按分支职业', rarity: '按星级' })[value])}</select></label></div><div class="distribution-list">
+        ${distributionRows.length ? distributionRows.map(([name, value]) => `<div class="distribution-row"><b>${escapeHtml(name)}</b><div class="bar-track"><i style="width:${Math.max(4, value.owned / maxOwned * 100)}%"></i></div><span>${value.elite2}/${value.owned} 精二 · ${value.planned} 计划中</span></div>`).join('') : '<p>还没有已拥有干员。</p>'}
       </div></section>
       <section class="panel-card"><h2>理论投入排行</h2><div class="ranking-list">
         ${stats.operatorInvestments.slice(0, 10).map((row, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2, '0')}</span><span><b>${escapeHtml(row.name)}</b><small>${escapeHtml(row.profession)} · ${row.rarity}★ · ${row.upgradeItems} 项</small></span><strong>LMD ${formatNumber(row.lmd)}</strong></div>`).join('') || '<p>还没有可统计的养成状态。</p>'}
@@ -465,7 +516,7 @@ function renderOperatorDrawer(operatorName) {
       <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" data-drawer-panel>
         <header class="drawer__header"><div><p>${operator.p} / ${operator.r + 1} STAR OPERATOR</p><h2 id="drawer-title">${escapeHtml(operatorName)}</h2></div><button class="icon-button" type="button" data-action="close-drawer" aria-label="关闭">×</button></header>
         <div class="drawer__body">
-          <div class="owned-toggle"><div><b>我拥有这名干员</b><small>未拥有的干员仍可浏览，但不会进入账号统计。</small></div><label class="switch"><input type="checkbox" ${progress.owned ? 'checked' : ''} data-action="toggle-owned" data-operator="${encoded(operatorName)}"><span></span></label></div>
+          <div class="owned-toggle"><div><b>我拥有这名干员</b><small>未拥有的干员仍可浏览，但不会进入账号统计。</small></div><label class="field potential-field"><span>潜能</span><select data-action="potential-change" data-operator="${encoded(operatorName)}">${selectOptions([0,1,2,3,4,5,6], progress.potential, (value) => value ? `潜能 ${value}` : '未记录')}</select></label><label class="switch"><input type="checkbox" ${progress.owned ? 'checked' : ''} data-action="toggle-owned" data-operator="${encoded(operatorName)}"><span></span></label></div>
           <div class="progress-grid">
             ${renderProgressPanel('current', '目前状态', progress.current, eliteValues, currentMax, operatorName)}
             ${renderProgressPanel('target', '目标状态', progress.target, eliteValues, targetMax, operatorName)}
@@ -578,6 +629,31 @@ function confirmClearInventory() {
     </section></div>`;
 }
 
+function openImportMenu() {
+  const backup = loadBackup(localStorage, gameData);
+  if (!backup) {
+    $('#import-file').click();
+    return;
+  }
+  const createdAt = backup.createdAt ? new Date(backup.createdAt).toLocaleString('zh-CN') : '时间未知';
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
+      <header class="modal__header"><h2>导入或恢复</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
+      <div class="modal__body"><p>可以读取本工具备份或 MAA 干员识别 JSON，也可以恢复最近一次清空或替换操作前自动保存的状态。</p><div class="restore-card"><b>最近自动备份</b><span>${escapeHtml(createdAt)}</span></div></div>
+      <footer class="modal__actions"><button class="button" type="button" data-action="select-import-file">选择 JSON 文件</button><button class="button button--dark" type="button" data-action="preview-last-backup">预览并恢复</button></footer>
+    </section></div>`;
+}
+
+function previewLastBackup() {
+  const backup = loadBackup(localStorage, gameData);
+  if (!backup) {
+    closeModal();
+    showToast('没有可恢复的自动备份。', true);
+    return;
+  }
+  previewProjectImport(backup.state);
+}
+
 function exportBackup() {
   const backup = createProjectExport(userState);
   const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
@@ -590,8 +666,9 @@ function exportBackup() {
   showToast('备份已导出，包含当前状态、目标状态和库存。');
 }
 
-function previewImport(state) {
+function previewProjectImport(state) {
   pendingImport = state;
+  pendingImportKind = 'project';
   const owned = Object.values(state.operators).filter((progress) => progress.owned).length;
   const planned = buildPlanUpgradeItems(gameData, state).length;
   const stocked = Object.values(state.inventory).filter((qty) => qty > 0).length;
@@ -605,10 +682,45 @@ function previewImport(state) {
     </section></div>`;
 }
 
+function previewMaaImport(imported) {
+  pendingImport = imported;
+  pendingImportKind = 'maa';
+  const entries = Object.values(imported.operators || {});
+  const owned = entries.filter((progress) => progress.owned).length;
+  const unknown = imported.unknown || [];
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
+      <header class="modal__header"><h2>MAA 干员识别导入</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
+      <div class="modal__body">
+        <p>已识别 MAA 的干员列表。将导入拥有状态、精英阶段、等级和潜能；MAA 当前不提供技能等级、专精和模组信息，因此这些字段以及本工具中的目标状态都会保留。</p>
+        <div class="import-summary"><div><b>${entries.length}</b><small>匹配干员</small></div><div><b>${owned}</b><small>拥有干员</small></div><div><b>${unknown.length}</b><small>未匹配记录</small></div></div>
+        ${unknown.length ? `<div class="import-warning"><b>未匹配：</b>${unknown.slice(0, 8).map((item) => escapeHtml(item.name || item.id || '未知')).join('、')}${unknown.length > 8 ? ` 等 ${unknown.length} 项` : ''}</div>` : ''}
+        <p class="modal-note">“合并”只更新文件中出现的干员；“替换拥有列表”会把未出现在 MAA 拥有列表中的本机干员标记为未拥有，但不会删除培养目标。</p>
+      </div>
+      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button" type="button" data-action="apply-import" data-mode="merge">合并</button><button class="button button--dark" type="button" data-action="apply-import" data-mode="replace">替换拥有列表</button></footer>
+    </section></div>`;
+}
+
+function previewImportText(text) {
+  try {
+    previewProjectImport(parseProjectImport(text, gameData));
+    return;
+  } catch (projectError) {
+    try {
+      previewMaaImport(parseMaaOperatorExport(text, gameData));
+      return;
+    } catch (maaError) {
+      throw new Error(`无法识别导入文件。项目备份：${projectError.message}；MAA：${maaError.message}`);
+    }
+  }
+}
+
 function applyImport(mode) {
   if (!pendingImport) return;
   createBackup(localStorage, userState);
-  if (mode === 'replace') {
+  if (pendingImportKind === 'maa') {
+    userState = applyMaaOperatorImport(userState, pendingImport, mode, gameData);
+  } else if (mode === 'replace') {
     userState = normalizeUserState(pendingImport, gameData);
   } else {
     const merged = normalizeUserState(userState, gameData);
@@ -618,6 +730,7 @@ function applyImport(mode) {
     userState = normalizeUserState(merged, gameData);
   }
   pendingImport = null;
+  pendingImportKind = null;
   $('#modal-root').innerHTML = '';
   persist('数据已导入，替换前的状态已自动备份。');
   render();
@@ -626,6 +739,7 @@ function applyImport(mode) {
 function closeModal() {
   $('#modal-root').innerHTML = '';
   pendingImport = null;
+  pendingImportKind = null;
 }
 
 function handleClick(event) {
@@ -644,6 +758,11 @@ function handleClick(event) {
   const action = button.dataset.action;
   if (action === 'go-view') {
     currentView = button.dataset.view;
+    render();
+  }
+  if (action === 'dismiss-onboarding') {
+    userState.settings.onboardingDismissed = true;
+    persist();
     render();
   }
   if (action === 'filter-profession') {
@@ -665,6 +784,11 @@ function handleClick(event) {
   }
   if (action === 'close-modal' && (event.target === button || button.matches('.button, .icon-button'))) closeModal();
   if (action === 'apply-import') applyImport(button.dataset.mode);
+  if (action === 'select-import-file') {
+    closeModal();
+    $('#import-file').click();
+  }
+  if (action === 'preview-last-backup') previewLastBackup();
 }
 
 function handleInput(event) {
@@ -701,13 +825,31 @@ function handleChange(event) {
     filters.rarity = control.value;
     render();
   }
-  if (control.id === 'material-grouping' || control.id === 'gap-grouping') {
+  if (control.id === 'operator-subprofession') {
+    filters.subprofession = control.value;
+    render();
+  }
+  if (control.id === 'operator-position') {
+    filters.position = control.value;
+    render();
+  }
+  if (control.id === 'material-grouping') {
     userState.settings.materialGrouping = control.value;
+    persist();
+    render();
+  }
+  if (control.id === 'gap-grouping') {
+    userState.settings.gapGrouping = control.value;
     persist();
     render();
   }
   if (control.id === 'material-display') {
     userState.settings.materialDisplay = control.value;
+    persist();
+    render();
+  }
+  if (control.id === 'statistics-grouping') {
+    userState.settings.statisticsGrouping = control.value;
     persist();
     render();
   }
@@ -719,31 +861,40 @@ function handleChange(event) {
     userState.operators[operatorName] = progress;
     rerenderAfterProgressChange();
   }
+  if (control.dataset.action === 'potential-change') {
+    const operatorName = decoded(control.dataset.operator);
+    const progress = getProgress(operatorName);
+    progress.potential = Math.max(0, Math.min(6, Number(control.value) || 0));
+    progress.owned = true;
+    userState.operators[operatorName] = progress;
+    rerenderAfterProgressChange();
+  }
   if (control.id === 'import-file' && control.files?.[0]) {
     const file = control.files[0];
-    file.text().then((text) => previewImport(parseProjectImport(text, gameData))).catch((error) => showToast(error.message || '导入文件无法读取。', true));
+    file.text().then(previewImportText).catch((error) => showToast(error.message || '导入文件无法读取。', true));
     control.value = '';
   }
 }
 
 async function init() {
   try {
-    const response = await fetch('./data/game-data.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error(`数据请求失败：${response.status}`);
-    gameData = await response.json();
+    const loadedData = await loadGameData();
+    gameData = loadedData.data;
     const loaded = loadUserState(localStorage, gameData);
     userState = loaded.state;
     currentView = VIEW_META[userState.settings.activeView] ? userState.settings.activeView : 'operators';
 
-    $('#data-version').textContent = `DATA ${String(gameData.generatedAt || '').slice(0, 10) || 'LOCAL'}`;
+    const dataVersion = loadedData.manifest?.dataVersion || String(gameData.generatedAt || '').slice(0, 10) || 'LOCAL';
+    $('#data-version').textContent = `DATA ${dataVersion}`;
     $('#data-count').textContent = `${gameData.OPS_ORDER.length} 名干员 / ${Object.keys(gameData.MAT_RARITY).length} 种资源`;
+    $('#data-status-dot').title = loadedData.source === 'cache-offline' ? '离线使用最近一次缓存数据' : '已检查并载入最新发布数据';
     $('#boot-screen').hidden = true;
     $('#app-shell').hidden = false;
 
     document.addEventListener('click', handleClick);
     document.addEventListener('input', handleInput);
     document.addEventListener('change', handleChange);
-    $('#import-button').addEventListener('click', () => $('#import-file').click());
+    $('#import-button').addEventListener('click', openImportMenu);
     $('#export-button').addEventListener('click', exportBackup);
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
@@ -754,6 +905,7 @@ async function init() {
 
     render();
     if (loaded.migrated) showToast('已从旧版页面迁移培养计划和库存，原数据仍保留。');
+    else if (loadedData.source === 'cache-offline') showToast('网络不可用，正在使用最近一次缓存的数据。');
   } catch (error) {
     $('#boot-screen').innerHTML = `<div class="empty-state"><div class="empty-state__mark">!</div><h2>数据无法载入</h2><p>${escapeHtml(error.message)}</p><p>请通过本地服务器或 GitHub Pages 打开新版入口。</p></div>`;
   }

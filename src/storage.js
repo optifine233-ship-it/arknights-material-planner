@@ -84,7 +84,9 @@ export function normalizeOperatorProgress(rawProgress = {}, operator, gameData) 
   const rawTarget = rawProgress.target || current;
   const target = clampCultivationState(rawTarget, operator, gameData);
   return {
+    id: String(rawProgress.id || operator?.id || ''),
     owned: Boolean(rawProgress.owned),
+    potential: Math.min(6, integer(rawProgress.potential)),
     current,
     target: targetAtLeastCurrent(current, target)
   };
@@ -100,7 +102,9 @@ export function createEmptyUserState() {
       activeView: 'operators',
       operatorScope: 'all',
       materialDisplay: 'shortage',
-      materialGrouping: 'purpose'
+      materialGrouping: 'purpose',
+      gapGrouping: 'purpose',
+      statisticsGrouping: 'profession'
     },
     migration: {}
   };
@@ -115,7 +119,13 @@ export function normalizeUserState(rawState = {}, gameData) {
     Object.entries(rawState.inventory || {}).map(([name, qty]) => [name, integer(qty)])
   );
 
-  for (const [operatorName, rawProgress] of Object.entries(rawState.operators || {})) {
+  const operatorNameById = new Map(
+    Object.entries(gameData?.OPS || {}).map(([name, operator]) => [String(operator.id || ''), name])
+  );
+  for (const [storedName, rawProgress] of Object.entries(rawState.operators || {})) {
+    const operatorName = gameData?.OPS?.[storedName]
+      ? storedName
+      : operatorNameById.get(String(rawProgress?.id || '')) || storedName;
     state.operators[operatorName] = normalizeOperatorProgress(
       rawProgress,
       gameData?.OPS?.[operatorName],
@@ -243,6 +253,15 @@ export function createBackup(storage, state) {
   return backup;
 }
 
+export function loadBackup(storage, gameData) {
+  const backup = safeParse(storage.getItem(USER_DATA_BACKUP_KEY), null);
+  if (!backup?.state) return null;
+  return {
+    createdAt: backup.createdAt || '',
+    state: normalizeUserState(backup.state, gameData)
+  };
+}
+
 export function mergeImportedCurrentState(existingState, importedState, mode, gameData) {
   const next = normalizeUserState(existingState, gameData);
   const incoming = normalizeUserState(importedState, gameData);
@@ -266,7 +285,9 @@ export function mergeImportedCurrentState(existingState, importedState, mode, ga
       gameData
     );
     next.operators[operatorName] = normalizeOperatorProgress({
+      id: importedProgress.id || existing.id,
       owned: importedProgress.owned,
+      potential: importedProgress.potential || existing.potential,
       current: importedProgress.current,
       target: existing.target
     }, gameData?.OPS?.[operatorName], gameData);

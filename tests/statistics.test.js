@@ -9,6 +9,7 @@ const gameData = {
     甲: {
       r: 5,
       p: '近卫',
+      sp: '强攻手',
       e1: [{ name: '近卫芯片', qty: 5 }],
       e2: [{ name: '近卫双芯片', qty: 4 }],
       sl: [{ level: 2, mats: [{ name: '技巧概要·卷1', qty: 5 }] }],
@@ -18,6 +19,7 @@ const gameData = {
     乙: {
       r: 4,
       p: '狙击',
+      sp: '速射手',
       e1: [{ name: '狙击芯片', qty: 4 }],
       e2: [{ name: '狙击双芯片', qty: 3 }],
       sl: [],
@@ -93,6 +95,8 @@ test('账号概况、职业分布和计划数量来自同一份状态', () => {
   assert.equal(stats.distributions.profession.近卫.owned, 1);
   assert.equal(stats.distributions.profession.近卫.elite2, 1);
   assert.equal(stats.distributions.profession.狙击.planned, 1);
+  assert.equal(stats.distributions.subprofession.强攻手.elite2, 1);
+  assert.equal(stats.distributions.rarity['5星'].planned, 1);
 });
 
 test('理论已投入和未来计划分别计算且不混在一起', () => {
