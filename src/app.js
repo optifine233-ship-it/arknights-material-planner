@@ -1,0 +1,762 @@
+import {
+  buildOperatorUpgradeItems,
+  buildPlanUpgradeItems,
+  computeMaterialSummary,
+  decomposeMaterial
+} from './calculator.js';
+import {
+  createBackup,
+  createCultivationState,
+  createProjectExport,
+  loadUserState,
+  normalizeOperatorProgress,
+  normalizeUserState,
+  parseProjectImport,
+  saveUserState
+} from './storage.js';
+import { calculateStatistics } from './statistics.js';
+import {
+  formatNumber,
+  getAllInventoryMaterials,
+  getMaterialCategory,
+  groupMaterialNames,
+  MATERIAL_CATEGORIES
+} from './materials.js';
+import {
+  emptyState,
+  escapeHtml,
+  materialIcon,
+  operatorPortrait,
+  selectOptions
+} from './ui.js';
+
+const VIEW_META = {
+  operators: { code: 'OPS / OPERATOR INDEX', title: '干员档案' },
+  plan: { code: 'PLAN / CULTIVATION QUEUE', title: '培养计划' },
+  inventory: { code: 'STOCK / RESOURCE LEDGER', title: '材料库存' },
+  gaps: { code: 'GAP / SUPPLY SHORTAGE', title: '缺口统计' },
+  statistics: { code: 'STATS / ACCOUNT REVIEW', title: '养成统计' }
+};
+
+const KIND_LABELS = {
+  level: 'LEVEL',
+  promotion: 'ELITE',
+  skill: 'SKILL',
+  mastery: 'MASTERY',
+  module: 'MODULE'
+};
+
+const PROFESSIONS = ['先锋', '近卫', '重装', '狙击', '术师', '医疗', '辅助', '特种'];
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+let gameData;
+let userState;
+let currentView = 'operators';
+let selectedOperator = null;
+let pendingImport = null;
+let toastTimer = null;
+let filters = {
+  operatorSearch: '',
+  profession: '全部',
+  rarity: 'all',
+  operatorScope: 'all',
+  inventorySearch: ''
+};
+
+function encoded(value) {
+  return encodeURIComponent(String(value));
+}
+
+function decoded(value) {
+  return decodeURIComponent(String(value));
+}
+
+function getProgress(operatorName) {
+  const operator = gameData.OPS[operatorName];
+  return normalizeOperatorProgress(
+    userState.operators[operatorName] || {},
+    operator,
+    gameData
+  );
+}
+
+function persist(message = '') {
+  userState = normalizeUserState(userState, gameData);
+  userState = saveUserState(localStorage, userState);
+  const saveState = $('#save-state');
+  if (saveState) {
+    saveState.innerHTML = '<i></i>已保存 ' + new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+  }
+  if (message) showToast(message);
+}
+
+function showToast(message, error = false) {
+  const toast = $('#toast');
+  clearTimeout(toastTimer);
+  toast.textContent = message;
+  toast.classList.toggle('is-error', error);
+  toast.classList.add('is-visible');
+  toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2800);
+}
+
+function planItems() {
+  return buildPlanUpgradeItems(gameData, userState);
+}
+
+function itemsByOperator(items = planItems()) {
+  const groups = new Map();
+  for (const item of items) {
+    if (!groups.has(item.operatorName)) groups.set(item.operatorName, []);
+    groups.get(item.operatorName).push(item);
+  }
+  return groups;
+}
+
+function renderShellCounts(items) {
+  const owned = Object.values(userState.operators).filter((progress) => progress.owned).length;
+  const planned = new Set(items.map((item) => item.operatorName)).size;
+  const stocked = Object.values(userState.inventory).filter((qty) => Number(qty) > 0).length;
+  const summary = computeMaterialSummary(items, userState.inventory, gameData);
+  const gaps = summary.rows.filter((row) => row.shortage > 0).length;
+  $('#nav-operators-count').textContent = owned;
+  $('#nav-plan-count').textContent = planned;
+  $('#nav-stock-count').textContent = stocked;
+  $('#nav-gap-count').textContent = gaps;
+}
+
+function render() {
+  const meta = VIEW_META[currentView];
+  $('#view-code').textContent = meta.code;
+  $('#view-title').textContent = meta.title;
+  $$('.nav-item').forEach((button) => button.classList.toggle('is-active', button.dataset.view === currentView));
+
+  const items = planItems();
+  renderShellCounts(items);
+  const workspace = $('#workspace');
+
+  if (currentView === 'operators') workspace.innerHTML = renderOperators(items);
+  if (currentView === 'plan') workspace.innerHTML = renderPlan(items);
+  if (currentView === 'inventory') workspace.innerHTML = renderInventory();
+  if (currentView === 'gaps') workspace.innerHTML = renderGaps(items);
+  if (currentView === 'statistics') workspace.innerHTML = renderStatistics();
+}
+
+function renderOperators(items) {
+  const planned = itemsByOperator(items);
+  const names = gameData.OPS_ORDER.filter((name) => {
+    const operator = gameData.OPS[name];
+    const progress = getProgress(name);
+    if (filters.operatorSearch && !name.toLowerCase().includes(filters.operatorSearch.toLowerCase())) return false;
+    if (filters.profession !== '全部' && operator.p !== filters.profession) return false;
+    if (filters.rarity !== 'all' && String(operator.r + 1) !== filters.rarity) return false;
+    if (filters.operatorScope === 'owned' && !progress.owned) return false;
+    if (filters.operatorScope === 'planned' && !planned.has(name)) return false;
+    return true;
+  });
+  const ownedCount = Object.values(userState.operators).filter((progress) => progress.owned).length;
+
+  return `
+    <section class="view-intro">
+      <div><h2>建立你的干员状态</h2><p>选择干员后填写目前状态与培养目标。星级只作为标签，职业才是主要浏览入口；之后可在计划页逐项核对材料。</p></div>
+      <div class="view-intro__stat"><strong>${ownedCount}</strong><small>OWNED OPERATORS</small></div>
+    </section>
+    <section class="toolbar-panel" aria-label="干员筛选">
+      <label class="field field--grow"><span>搜索干员</span><input id="operator-search" type="search" value="${escapeHtml(filters.operatorSearch)}" placeholder="输入干员名称"></label>
+      <label class="field"><span>显示范围</span><select id="operator-scope">
+        ${selectOptions(['all', 'owned', 'planned'], filters.operatorScope, (value) => ({ all: '全部干员', owned: '我的干员', planned: '培养计划中' })[value])}
+      </select></label>
+      <label class="field"><span>星级</span><select id="operator-rarity">
+        ${selectOptions(['all', '6', '5', '4', '3'], filters.rarity, (value) => value === 'all' ? '全部星级' : `${value} 星`)}
+      </select></label>
+      <div class="field" style="flex:1 1 100%"><span>职业</span><div class="filter-chips">
+        ${['全部', ...PROFESSIONS].map((profession) => `<button type="button" class="filter-chip ${filters.profession === profession ? 'is-active' : ''}" data-action="filter-profession" data-profession="${profession}">${profession}</button>`).join('')}
+      </div></div>
+    </section>
+    ${names.length ? `<div class="operator-grid">${names.map((name) => renderOperatorCard(name, planned.get(name) || [])).join('')}</div>` : emptyState('没有符合条件的干员', '调整职业、星级或显示范围后再试。')}
+  `;
+}
+
+function renderOperatorCard(name, items) {
+  const operator = gameData.OPS[name];
+  const progress = getProgress(name);
+  const current = progress.current;
+  const currentText = progress.owned
+    ? `精${current.elite} · ${current.level}级 · 技${current.skillLevel}`
+    : '尚未标记拥有';
+  return `
+    <button type="button" class="operator-card ${progress.owned ? 'is-owned' : ''}" data-action="open-operator" data-operator="${encoded(name)}">
+      ${operatorPortrait(name, operator)}
+      <span class="operator-card__body">
+        <span class="operator-card__meta"><span class="rarity-stars">${'★'.repeat(operator.r + 1)}</span> / ${escapeHtml(operator.p)}</span>
+        <h3>${escapeHtml(name)}</h3>
+        <span class="operator-card__profession">${currentText}</span>
+        <span class="operator-card__status"><span>${items.length ? `${items.length} 项待培养` : '无培养计划'}</span><b>${items.length ? 'PLAN' : 'OPEN'}</b></span>
+      </span>
+    </button>
+  `;
+}
+
+function renderPlan(items) {
+  const groups = itemsByOperator(items);
+  const totalExp = items.reduce((sum, item) => sum + item.exp, 0);
+  const totalLmd = items.reduce((sum, item) => sum + item.lmd, 0);
+  if (!items.length) {
+    return `${renderViewIntro('把目标拆成可核对的升级项', '每个强化项都会保留直接材料与基准层材料，所有小计能够与总表对账。', '0', 'ACTIVE OPERATORS')}${emptyState('培养队列为空', '先在干员档案中填写当前状态和目标状态。', '<button class="button button--signal" type="button" data-action="go-view" data-view="operators">选择干员</button>')}`;
+  }
+  return `
+    ${renderViewIntro('逐项核对培养需求', '展开任意项目即可查看直接材料和分解后的基准层材料。模组名称始终完整显示。', String(groups.size), 'ACTIVE OPERATORS')}
+    <div class="summary-strip">
+      ${summaryCell('UPGRADE ITEMS', items.length, '独立强化项')}
+      ${summaryCell('OPERATORS', groups.size, '涉及干员')}
+      ${summaryCell('EXP REQUIRED', formatNumber(totalExp), '升级经验')}
+      ${summaryCell('LMD REQUIRED', formatNumber(totalLmd), '含精英化与模组')}
+    </div>
+    <div>${[...groups.entries()].map(([name, operatorItems]) => renderPlanOperator(name, operatorItems)).join('')}</div>
+  `;
+}
+
+function renderPlanOperator(name, items) {
+  const exp = items.reduce((sum, item) => sum + item.exp, 0);
+  const lmd = items.reduce((sum, item) => sum + item.lmd, 0);
+  return `
+    <article class="plan-operator">
+      <header class="plan-operator__header">
+        <div><h3>${escapeHtml(name)}</h3><p>${items.length} 个强化项 · EXP ${formatNumber(exp)} · LMD ${formatNumber(lmd)}</p></div>
+        <b>${escapeHtml(gameData.OPS[name]?.p || '')} / ${gameData.OPS[name]?.r + 1}★</b>
+        <button class="button button--small" type="button" data-action="open-operator" data-operator="${encoded(name)}">编辑目标</button>
+      </header>
+      <div class="upgrade-list">${renderUpgradeItems(items)}</div>
+    </article>
+  `;
+}
+
+function renderUpgradeItems(items) {
+  return items.map((item) => {
+    const base = {};
+    for (const material of item.materials) {
+      const decomposed = decomposeMaterial(material.name, material.qty, gameData);
+      for (const [name, qty] of Object.entries(decomposed)) base[name] = (base[name] || 0) + qty;
+    }
+    const cost = [item.exp ? `EXP ${formatNumber(item.exp)}` : '', item.lmd ? `LMD ${formatNumber(item.lmd)}` : ''].filter(Boolean).join(' · ');
+    return `
+      <details class="upgrade-item">
+        <summary><span class="upgrade-kind">${KIND_LABELS[item.kind] || item.kind}</span><span class="upgrade-label">${escapeHtml(item.label)}</span>${cost ? `<span class="upgrade-cost-inline">${cost}</span>` : ''}</summary>
+        <div class="upgrade-item__body">
+          <span class="breakdown-label">DIRECT / 直接需求</span>
+          ${renderMaterialChips(item.materials)}
+          <span class="breakdown-label">BASELINE / 分解到展示基准层</span>
+          ${renderMaterialChips(Object.entries(base).map(([name, qty]) => ({ name, qty })))}
+        </div>
+      </details>
+    `;
+  }).join('');
+}
+
+function renderMaterialChips(materials) {
+  if (!materials?.length) return '<span style="color:var(--structure);font-size:11px">无材料</span>';
+  return `<div class="material-chip-list">${materials.map((material) => `<span class="material-chip">${materialIcon(material.name, gameData, { size: 'sm' })}<span>${escapeHtml(material.name)}</span><b>×${formatNumber(material.qty)}</b></span>`).join('')}</div>`;
+}
+
+function renderInventory() {
+  const allNames = getAllInventoryMaterials(gameData);
+  const names = allNames.filter((name) => !filters.inventorySearch || name.includes(filters.inventorySearch));
+  const grouping = userState.settings.materialGrouping || 'purpose';
+  const groups = groupMaterialNames(names, gameData, grouping);
+  const stocked = Object.values(userState.inventory).filter((qty) => qty > 0).length;
+  return `
+    ${renderViewIntro('登记现有物资', '库存按用途分类；T2 材料也会参与合成抵扣，但缺口主表仍以 T3 为普通材料的最低展示层。', stocked, 'STOCKED TYPES')}
+    <section class="toolbar-panel">
+      <label class="field field--grow"><span>搜索资源</span><input id="inventory-search" type="search" value="${escapeHtml(filters.inventorySearch)}" placeholder="输入材料名称"></label>
+      <label class="field"><span>分组方式</span><select id="material-grouping">${selectOptions(['purpose', 'tier'], grouping, (value) => value === 'purpose' ? '按用途分类' : '按品质分类')}</select></label>
+      <button class="button button--danger" type="button" data-action="confirm-clear-inventory">清空库存</button>
+    </section>
+    ${groups.map((group) => `
+      <section class="section-block">
+        ${sectionIndex(group.code, group.label, group.names.length, group.tone)}
+        <div class="inventory-grid">${group.names.map((name) => renderInventoryItem(name)).join('')}</div>
+      </section>
+    `).join('')}
+  `;
+}
+
+function renderInventoryItem(name) {
+  const tier = gameData.MAT_RARITY[name] ?? 0;
+  return `
+    <label class="inventory-item">
+      ${materialIcon(name, gameData)}
+      <span class="inventory-item__name"><b title="${escapeHtml(name)}">${escapeHtml(name)}</b><small>${tier ? `T${tier + 1}` : MATERIAL_CATEGORIES[getMaterialCategory(name)].code}</small></span>
+      <input class="inventory-input" type="number" inputmode="numeric" min="0" value="${userState.inventory[name] || 0}" data-action="inventory-change" data-material="${encoded(name)}" aria-label="${escapeHtml(name)}库存">
+    </label>
+  `;
+}
+
+function renderGaps(items) {
+  const summary = computeMaterialSummary(items, userState.inventory, gameData);
+  const display = userState.settings.materialDisplay || 'shortage';
+  const rowsByName = new Map(summary.rows.map((row) => [row.name, row]));
+  if (display === 'all') {
+    for (const name of getAllInventoryMaterials(gameData)) {
+      const tier = gameData.MAT_RARITY[name] ?? 0;
+      if (tier === 1 || getMaterialCategory(name) === 'exp' || name === '龙门币') continue;
+      if (!rowsByName.has(name)) {
+        rowsByName.set(name, {
+          name,
+          tier,
+          required: 0,
+          directInventoryUsed: 0,
+          craftedFromLower: 0,
+          lowerInventoryUsed: {},
+          shortage: 0,
+          procurementCertificates: 0
+        });
+      }
+    }
+  }
+  let rows = [...rowsByName.values()];
+  if (display === 'shortage') rows = rows.filter((row) => row.shortage > 0);
+  if (display === 'plan') rows = rows.filter((row) => row.required > 0);
+  const groups = groupResultRows(rows, userState.settings.materialGrouping || 'purpose');
+  const shortageKinds = summary.rows.filter((row) => row.shortage > 0).length;
+  const expStock = Object.entries(gameData.EXP_ITEMS || {}).reduce((sum, [name, value]) => sum + (userState.inventory[name] || 0) * value, 0);
+  const expShortage = Math.max(0, summary.totalExp - expStock);
+  const lmdStock = userState.inventory.龙门币 || 0;
+  const lmdShortage = Math.max(0, summary.totalLmd - lmdStock);
+
+  return `
+    ${renderViewIntro('把计划变成缺口清单', '先使用同名成品库存，再统一分配 T2 材料进行整数合成。所有抵扣共享同一份库存。', shortageKinds, 'SHORTAGE TYPES')}
+    <div class="summary-strip">
+      ${summaryCell('OPERATORS', new Set(items.map((item) => item.operatorName)).size, '培养计划中')}
+      ${summaryCell('MATERIAL GAPS', shortageKinds, '有缺口的资源', shortageKinds ? 'danger' : '')}
+      ${summaryCell('EXP GAP', formatNumber(expShortage), `库存等效 ${formatNumber(expStock)}`, expShortage ? 'danger' : '')}
+      ${summaryCell('LMD GAP', formatNumber(lmdShortage), `库存 ${formatNumber(lmdStock)}`, lmdShortage ? 'danger' : '')}
+    </div>
+    <section class="toolbar-panel">
+      <label class="field"><span>显示范围</span><select id="material-display">${selectOptions(['shortage', 'plan', 'all'], display, (value) => ({ shortage: '仅显示缺口', plan: '显示计划所需', all: '显示全部材料' })[value])}</select></label>
+      <label class="field"><span>分组方式</span><select id="gap-grouping">${selectOptions(['purpose', 'tier'], userState.settings.materialGrouping || 'purpose', (value) => value === 'purpose' ? '按用途分类' : '按品质分类')}</select></label>
+    </section>
+    ${items.length ? renderResourceGap(summary, expStock, lmdStock) : ''}
+    ${groups.length ? groups.map((group) => renderGapGroup(group, items)).join('') : emptyState(items.length ? '当前范围内没有材料' : '还没有培养计划', items.length ? '切换显示范围可查看已足量或全部材料。' : '先在干员档案中设置目标状态。')}
+  `;
+}
+
+function renderResourceGap(summary, expStock, lmdStock) {
+  const rows = [
+    { name: '作战记录（经验等效）', required: summary.totalExp, inventory: expStock, shortage: Math.max(0, summary.totalExp - expStock), note: '四种作战记录统一折算为经验' },
+    { name: '龙门币', required: summary.totalLmd, inventory: lmdStock, shortage: Math.max(0, summary.totalLmd - lmdStock), note: '包含升级、精英化与模组费用' }
+  ];
+  return `
+    <section class="section-block">
+      ${sectionIndex('EXP / LMD', '经验与龙门币', 2, 'gold')}
+      <div class="table-scroll"><table class="material-table"><thead><tr><th>资源</th><th>计划需要</th><th>库存等效</th><th>缺口</th></tr></thead><tbody>
+        ${rows.map((row) => `<tr><td><div class="material-name-cell">${materialIcon(row.name.startsWith('作战') ? '高级作战记录' : '龙门币', gameData)}<span><b>${row.name}</b><small>${row.note}</small></span></div></td><td>${formatNumber(row.required)}</td><td>${formatNumber(row.inventory)}</td><td class="${row.shortage ? 'shortage' : 'covered'}">${row.shortage ? formatNumber(row.shortage) : '已覆盖'}</td></tr>`).join('')}
+      </tbody></table></div>
+    </section>
+  `;
+}
+
+function groupResultRows(rows, grouping) {
+  const groupedNames = groupMaterialNames(rows.map((row) => row.name), gameData, grouping);
+  const byName = new Map(rows.map((row) => [row.name, row]));
+  return groupedNames.map((group) => ({ ...group, rows: group.names.map((name) => byName.get(name)).filter(Boolean) }));
+}
+
+function renderGapGroup(group, items) {
+  return `
+    <section class="section-block">
+      ${sectionIndex(group.code, group.label, group.rows.length, group.tone)}
+      <div class="table-scroll"><table class="material-table"><thead><tr><th>材料</th><th>折算需求</th><th>同名库存</th><th>T2 合成抵扣</th><th>最终缺口</th></tr></thead><tbody>
+        ${group.rows.map((row) => {
+          const sources = materialSources(row.name, items);
+          const lowerText = row.craftedFromLower
+            ? `${row.craftedFromLower}（${Object.entries(row.lowerInventoryUsed).map(([name, qty]) => `${name}×${qty}`).join('、')}）`
+            : '—';
+          return `<tr>
+            <td><div class="material-name-cell">${materialIcon(row.name, gameData)}<span><b>${escapeHtml(row.name)}</b><small><button class="link-button" type="button" data-action="show-material-sources" data-material="${encoded(row.name)}">查看 ${sources.length} 个来源</button>${row.procurementCertificates ? ` · 等效 ${formatNumber(row.procurementCertificates)} 采购凭证` : ''}</small></span></div></td>
+            <td>${formatNumber(row.required)}</td><td>${formatNumber(row.directInventoryUsed)}</td><td class="${row.craftedFromLower ? 'lower-offset' : ''}">${lowerText}</td><td class="${row.shortage ? 'shortage' : 'covered'}">${row.shortage ? formatNumber(row.shortage) : '已覆盖'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody></table></div>
+    </section>
+  `;
+}
+
+function materialSources(materialName, items) {
+  const sources = [];
+  for (const item of items) {
+    let direct = 0;
+    let baseline = 0;
+    const via = [];
+    for (const material of item.materials) {
+      if (material.name === materialName) direct += material.qty;
+      const decomposed = decomposeMaterial(material.name, material.qty, gameData);
+      if (decomposed[materialName]) {
+        baseline += decomposed[materialName];
+        if (material.name !== materialName) via.push(material.name);
+      }
+    }
+    if (direct || baseline) sources.push({ item, direct, baseline, via: [...new Set(via)] });
+  }
+  return sources;
+}
+
+function renderStatistics() {
+  const stats = calculateStatistics(gameData, userState);
+  const overview = stats.overview;
+  const professionRows = Object.entries(stats.distributions.profession);
+  const maxOwned = Math.max(1, ...professionRows.map(([, value]) => value.owned));
+  return `
+    ${renderViewIntro('从账号全局看养成投入', '“已投入”由当前养成状态反推，是理论值而不是游戏消费流水；未来计划与库存缺口始终单独计算。', overview.owned, 'OWNED OPERATORS')}
+    <div class="stat-card-grid">
+      ${statCard('OWNED', overview.owned, '已拥有干员')}
+      ${statCard('ELITE 2', overview.elite2, `${Math.round(overview.elite2Ratio * 100)}% 精二率`)}
+      ${statCard('MASTERY', overview.masteryStages, '累计专精阶段')}
+      ${statCard('MODULE', overview.unlockedModules, `${overview.level3Modules} 个三级模组`)}
+      ${statCard('INVESTED LMD', formatNumber(stats.invested.totalLmd), '理论已投入')}
+      ${statCard('PLAN LMD', formatNumber(stats.plan.totalLmd), '当前目标仍需')}
+    </div>
+    <div class="stats-columns">
+      <section class="panel-card"><h2>职业养成分布</h2><div class="distribution-list">
+        ${professionRows.length ? professionRows.map(([name, value]) => `<div class="distribution-row"><b>${escapeHtml(name)}</b><div class="bar-track"><i style="width:${Math.max(4, value.owned / maxOwned * 100)}%"></i></div><span>${value.elite2}/${value.owned} 精二</span></div>`).join('') : '<p>还没有已拥有干员。</p>'}
+      </div></section>
+      <section class="panel-card"><h2>理论投入排行</h2><div class="ranking-list">
+        ${stats.operatorInvestments.slice(0, 10).map((row, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2, '0')}</span><span><b>${escapeHtml(row.name)}</b><small>${escapeHtml(row.profession)} · ${row.rarity}★ · ${row.upgradeItems} 项</small></span><strong>LMD ${formatNumber(row.lmd)}</strong></div>`).join('') || '<p>还没有可统计的养成状态。</p>'}
+      </div></section>
+    </div>
+    <section class="panel-card" style="margin-top:18px"><h2>理论投入与未来计划</h2>
+      <div class="summary-strip" style="margin:0">
+        ${summaryCell('INVESTED EXP', formatNumber(stats.invested.totalExp), '根据当前状态反推')}
+        ${summaryCell('INVESTED ITEMS', stats.invested.items.length, '已完成强化项')}
+        ${summaryCell('PLAN EXP', formatNumber(stats.plan.totalExp), '从当前到目标')}
+        ${summaryCell('PLAN ITEMS', stats.plan.items.length, '未来强化项')}
+      </div>
+    </section>
+  `;
+}
+
+function renderViewIntro(title, body, value, label) {
+  return `<section class="view-intro"><div><h2>${escapeHtml(title)}</h2><p>${escapeHtml(body)}</p></div><div class="view-intro__stat"><strong>${escapeHtml(value)}</strong><small>${escapeHtml(label)}</small></div></section>`;
+}
+
+function sectionIndex(code, label, count, tone = 'slate') {
+  return `<header class="section-index section-index--${tone}"><span class="section-index__code">${escapeHtml(code)}</span><h2>${escapeHtml(label)}</h2><small>${count} ITEMS</small></header>`;
+}
+
+function summaryCell(label, value, note, state = '') {
+  return `<div class="summary-cell"><small>${escapeHtml(label)}</small><strong class="${state === 'danger' ? 'is-danger' : ''}">${escapeHtml(value)}</strong><p>${escapeHtml(note)}</p></div>`;
+}
+
+function statCard(label, value, note) {
+  return `<div class="stat-card"><small>${escapeHtml(label)}</small><strong>${escapeHtml(value)}</strong><p>${escapeHtml(note)}</p></div>`;
+}
+
+function renderOperatorDrawer(operatorName) {
+  const operator = gameData.OPS[operatorName];
+  if (!operator) return '';
+  const progress = getProgress(operatorName);
+  const items = buildOperatorUpgradeItems(operatorName, operator, progress, gameData);
+  const maxLevels = gameData.MAX_LV[operator.r] || {};
+  const eliteValues = [0, 1, 2].filter((elite) => maxLevels[`e${elite}`]);
+  const currentMax = maxLevels[`e${progress.current.elite}`] || 1;
+  const targetMax = maxLevels[`e${progress.target.elite}`] || 1;
+
+  return `
+    <div class="drawer-backdrop" data-action="close-drawer">
+      <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" data-drawer-panel>
+        <header class="drawer__header"><div><p>${operator.p} / ${operator.r + 1} STAR OPERATOR</p><h2 id="drawer-title">${escapeHtml(operatorName)}</h2></div><button class="icon-button" type="button" data-action="close-drawer" aria-label="关闭">×</button></header>
+        <div class="drawer__body">
+          <div class="owned-toggle"><div><b>我拥有这名干员</b><small>未拥有的干员仍可浏览，但不会进入账号统计。</small></div><label class="switch"><input type="checkbox" ${progress.owned ? 'checked' : ''} data-action="toggle-owned" data-operator="${encoded(operatorName)}"><span></span></label></div>
+          <div class="progress-grid">
+            ${renderProgressPanel('current', '目前状态', progress.current, eliteValues, currentMax, operatorName)}
+            ${renderProgressPanel('target', '目标状态', progress.target, eliteValues, targetMax, operatorName)}
+          </div>
+          ${(operator.md || []).length ? `<div class="module-progress"><span class="progress-subtitle">MODULE / 模组状态</span>${operator.md.map((module) => renderModuleProgress(operatorName, module, progress)).join('')}</div>` : ''}
+          <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="button button--quiet" type="button" data-action="target-current" data-operator="${encoded(operatorName)}">目标设为当前</button><button class="button button--signal" type="button" data-action="target-max" data-operator="${encoded(operatorName)}">目标设为全满</button></div>
+          <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : emptyState('已经达到目标', '提高目标等级、技能、专精或模组后，这里会显示逐项材料。')}</section>
+        </div>
+      </aside>
+    </div>
+  `;
+}
+
+function renderProgressPanel(scope, title, state, eliteValues, maxLevel, operatorName) {
+  const encodedName = encoded(operatorName);
+  return `
+    <section class="progress-panel">
+      <h3>${title}<small>${scope.toUpperCase()}</small></h3>
+      <div class="form-grid">
+        <label class="field"><span>精英阶段</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="elite">${selectOptions(eliteValues, state.elite, (value) => `精英 ${value}`)}</select></label>
+        <label class="field"><span>等级 / ${maxLevel}</span><input type="number" min="1" max="${maxLevel}" value="${state.level}" data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="level"></label>
+        <label class="field" style="grid-column:1/-1"><span>技能等级</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="skillLevel">${selectOptions([1,2,3,4,5,6,7], state.skillLevel, (value) => `技能 ${value}`)}</select></label>
+      </div>
+      <p class="progress-subtitle">MASTERY / 专精阶段</p>
+      <div class="triple-select">${['s1','s2','s3'].map((skill, index) => `<label class="field"><span>S${index + 1}</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="mastery" data-key="${skill}">${selectOptions([0,1,2,3], state.mastery[skill], (value) => value ? `专 ${value}` : '未专精')}</select></label>`).join('')}</div>
+    </section>
+  `;
+}
+
+function renderModuleProgress(operatorName, module, progress) {
+  const key = String(module.id || module.name);
+  const current = progress.current.modules[key] || 0;
+  const target = progress.target.modules[key] || 0;
+  const stages = [0, ...(module.stages || []).map((stage) => stage.stage)];
+  return `<div class="module-row"><b>${escapeHtml(module.name)}</b><select aria-label="${escapeHtml(module.name)}当前等级" data-action="progress-change" data-operator="${encoded(operatorName)}" data-scope="current" data-field="module" data-key="${encoded(key)}">${selectOptions(stages, current, (value) => value ? `${value}级` : '未解锁')}</select><span>→</span><select aria-label="${escapeHtml(module.name)}目标等级" data-action="progress-change" data-operator="${encoded(operatorName)}" data-scope="target" data-field="module" data-key="${encoded(key)}">${selectOptions(stages, target, (value) => value ? `${value}级` : '未解锁')}</select></div>`;
+}
+
+function openOperator(operatorName) {
+  selectedOperator = operatorName;
+  $('#drawer-root').innerHTML = renderOperatorDrawer(operatorName);
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer() {
+  selectedOperator = null;
+  $('#drawer-root').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+function rerenderAfterProgressChange() {
+  persist();
+  render();
+  if (selectedOperator) $('#drawer-root').innerHTML = renderOperatorDrawer(selectedOperator);
+}
+
+function updateProgress(control) {
+  const operatorName = decoded(control.dataset.operator);
+  const operator = gameData.OPS[operatorName];
+  const progress = getProgress(operatorName);
+  const scope = control.dataset.scope;
+  const field = control.dataset.field;
+  const value = Math.max(0, Number(control.value) || 0);
+  progress.owned = true;
+
+  if (field === 'mastery') progress[scope].mastery[control.dataset.key] = value;
+  else if (field === 'module') progress[scope].modules[decoded(control.dataset.key)] = value;
+  else progress[scope][field] = value;
+
+  userState.operators[operatorName] = normalizeOperatorProgress(progress, operator, gameData);
+  rerenderAfterProgressChange();
+}
+
+function setTarget(operatorName, mode) {
+  const operator = gameData.OPS[operatorName];
+  const progress = getProgress(operatorName);
+  progress.owned = true;
+  if (mode === 'current') {
+    progress.target = JSON.parse(JSON.stringify(progress.current));
+  } else {
+    const maxLevels = gameData.MAX_LV[operator.r] || {};
+    const maxElite = maxLevels.e2 ? 2 : maxLevels.e1 ? 1 : 0;
+    progress.target = {
+      elite: maxElite,
+      level: maxLevels[`e${maxElite}`] || 1,
+      skillLevel: (operator.sl || []).length ? 7 : progress.current.skillLevel,
+      mastery: Object.fromEntries(['s1','s2','s3'].map((skill) => [skill, (operator.ms?.[skill] || []).length ? Math.max(...operator.ms[skill].map((stage) => stage.stage)) : 0])),
+      modules: Object.fromEntries((operator.md || []).map((module) => [String(module.id || module.name), Math.max(...module.stages.map((stage) => stage.stage))]))
+    };
+  }
+  userState.operators[operatorName] = normalizeOperatorProgress(progress, operator, gameData);
+  rerenderAfterProgressChange();
+}
+
+function openMaterialSources(name) {
+  const sources = materialSources(name, planItems());
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
+      <header class="modal__header"><h2>${escapeHtml(name)} · 材料来源</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
+      <div class="modal__body">${sources.length ? `<div class="ranking-list">${sources.map((source, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2,'0')}</span><span><b>${escapeHtml(source.item.operatorName)} · ${escapeHtml(source.item.label)}</b><small>${source.direct ? `直接 ×${source.direct}` : `经 ${source.via.join('、')} 分解`}</small></span><strong>×${source.baseline || source.direct}</strong></div>`).join('')}</div>` : '<p>当前计划中没有这个材料的直接或间接来源。</p>'}</div>
+      <footer class="modal__actions"><button class="button button--dark" type="button" data-action="close-modal">关闭</button></footer>
+    </section></div>`;
+}
+
+function confirmClearInventory() {
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
+      <header class="modal__header"><h2>清空全部库存？</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
+      <div class="modal__body"><p>所有材料数量会归零。执行前会自动保存一份本机备份，可以通过之后的恢复功能取回。</p></div>
+      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button button--danger" type="button" data-action="clear-inventory">确认清空</button></footer>
+    </section></div>`;
+}
+
+function exportBackup() {
+  const backup = createProjectExport(userState);
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = `arknights-material-plan-${new Date().toISOString().slice(0, 10)}.json`;
+  anchor.click();
+  URL.revokeObjectURL(url);
+  showToast('备份已导出，包含当前状态、目标状态和库存。');
+}
+
+function previewImport(state) {
+  pendingImport = state;
+  const owned = Object.values(state.operators).filter((progress) => progress.owned).length;
+  const planned = buildPlanUpgradeItems(gameData, state).length;
+  const stocked = Object.values(state.inventory).filter((qty) => qty > 0).length;
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
+      <header class="modal__header"><h2>导入预览</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
+      <div class="modal__body"><p>文件格式与版本校验通过。合并会用文件中的同名记录覆盖本机记录；替换会先自动备份，再完整恢复这个文件。</p>
+        <div class="import-summary"><div><b>${owned}</b><small>拥有干员</small></div><div><b>${planned}</b><small>培养项目</small></div><div><b>${stocked}</b><small>有库存资源</small></div></div>
+      </div>
+      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button" type="button" data-action="apply-import" data-mode="merge">合并</button><button class="button button--dark" type="button" data-action="apply-import" data-mode="replace">替换全部</button></footer>
+    </section></div>`;
+}
+
+function applyImport(mode) {
+  if (!pendingImport) return;
+  createBackup(localStorage, userState);
+  if (mode === 'replace') {
+    userState = normalizeUserState(pendingImport, gameData);
+  } else {
+    const merged = normalizeUserState(userState, gameData);
+    merged.operators = { ...merged.operators, ...pendingImport.operators };
+    merged.inventory = { ...merged.inventory, ...pendingImport.inventory };
+    merged.settings = { ...merged.settings, ...pendingImport.settings };
+    userState = normalizeUserState(merged, gameData);
+  }
+  pendingImport = null;
+  $('#modal-root').innerHTML = '';
+  persist('数据已导入，替换前的状态已自动备份。');
+  render();
+}
+
+function closeModal() {
+  $('#modal-root').innerHTML = '';
+  pendingImport = null;
+}
+
+function handleClick(event) {
+  const button = event.target.closest('[data-action], [data-view]');
+  if (!button) return;
+
+  if (button.dataset.view && !button.dataset.action) {
+    currentView = button.dataset.view;
+    userState.settings.activeView = currentView;
+    persist();
+    render();
+    $('#workspace').focus();
+    return;
+  }
+
+  const action = button.dataset.action;
+  if (action === 'go-view') {
+    currentView = button.dataset.view;
+    render();
+  }
+  if (action === 'filter-profession') {
+    filters.profession = button.dataset.profession;
+    render();
+  }
+  if (action === 'open-operator') openOperator(decoded(button.dataset.operator));
+  if (action === 'close-drawer' && (event.target === button || button.matches('.icon-button'))) closeDrawer();
+  if (action === 'target-current') setTarget(decoded(button.dataset.operator), 'current');
+  if (action === 'target-max') setTarget(decoded(button.dataset.operator), 'max');
+  if (action === 'show-material-sources') openMaterialSources(decoded(button.dataset.material));
+  if (action === 'confirm-clear-inventory') confirmClearInventory();
+  if (action === 'clear-inventory') {
+    createBackup(localStorage, userState);
+    userState.inventory = {};
+    closeModal();
+    persist('库存已清空，原数据已自动备份。');
+    render();
+  }
+  if (action === 'close-modal' && (event.target === button || button.matches('.button, .icon-button'))) closeModal();
+  if (action === 'apply-import') applyImport(button.dataset.mode);
+}
+
+function handleInput(event) {
+  const control = event.target;
+  if (control.id === 'operator-search') {
+    filters.operatorSearch = control.value.trim();
+    render();
+    const replacement = $('#operator-search');
+    replacement?.focus();
+    replacement?.setSelectionRange(replacement.value.length, replacement.value.length);
+  }
+  if (control.id === 'inventory-search') {
+    filters.inventorySearch = control.value.trim();
+    render();
+    const replacement = $('#inventory-search');
+    replacement?.focus();
+    replacement?.setSelectionRange(replacement.value.length, replacement.value.length);
+  }
+  if (control.dataset.action === 'inventory-change') {
+    const material = decoded(control.dataset.material);
+    userState.inventory[material] = Math.max(0, Math.floor(Number(control.value) || 0));
+    persist();
+    renderShellCounts(planItems());
+  }
+}
+
+function handleChange(event) {
+  const control = event.target;
+  if (control.id === 'operator-scope') {
+    filters.operatorScope = control.value;
+    render();
+  }
+  if (control.id === 'operator-rarity') {
+    filters.rarity = control.value;
+    render();
+  }
+  if (control.id === 'material-grouping' || control.id === 'gap-grouping') {
+    userState.settings.materialGrouping = control.value;
+    persist();
+    render();
+  }
+  if (control.id === 'material-display') {
+    userState.settings.materialDisplay = control.value;
+    persist();
+    render();
+  }
+  if (control.dataset.action === 'progress-change') updateProgress(control);
+  if (control.dataset.action === 'toggle-owned') {
+    const operatorName = decoded(control.dataset.operator);
+    const progress = getProgress(operatorName);
+    progress.owned = control.checked;
+    userState.operators[operatorName] = progress;
+    rerenderAfterProgressChange();
+  }
+  if (control.id === 'import-file' && control.files?.[0]) {
+    const file = control.files[0];
+    file.text().then((text) => previewImport(parseProjectImport(text, gameData))).catch((error) => showToast(error.message || '导入文件无法读取。', true));
+    control.value = '';
+  }
+}
+
+async function init() {
+  try {
+    const response = await fetch('./data/game-data.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`数据请求失败：${response.status}`);
+    gameData = await response.json();
+    const loaded = loadUserState(localStorage, gameData);
+    userState = loaded.state;
+    currentView = VIEW_META[userState.settings.activeView] ? userState.settings.activeView : 'operators';
+
+    $('#data-version').textContent = `DATA ${String(gameData.generatedAt || '').slice(0, 10) || 'LOCAL'}`;
+    $('#data-count').textContent = `${gameData.OPS_ORDER.length} 名干员 / ${Object.keys(gameData.MAT_RARITY).length} 种资源`;
+    $('#boot-screen').hidden = true;
+    $('#app-shell').hidden = false;
+
+    document.addEventListener('click', handleClick);
+    document.addEventListener('input', handleInput);
+    document.addEventListener('change', handleChange);
+    $('#import-button').addEventListener('click', () => $('#import-file').click());
+    $('#export-button').addEventListener('click', exportBackup);
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if ($('#modal-root').children.length) closeModal();
+        else if (selectedOperator) closeDrawer();
+      }
+    });
+
+    render();
+    if (loaded.migrated) showToast('已从旧版页面迁移培养计划和库存，原数据仍保留。');
+  } catch (error) {
+    $('#boot-screen').innerHTML = `<div class="empty-state"><div class="empty-state__mark">!</div><h2>数据无法载入</h2><p>${escapeHtml(error.message)}</p><p>请通过本地服务器或 GitHub Pages 打开新版入口。</p></div>`;
+  }
+}
+
+init();

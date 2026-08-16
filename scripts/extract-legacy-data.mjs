@@ -29,13 +29,26 @@ const t3Recipes = {
   异铁组: [{ name: '异铁', qty: 4 }],
   酮凝集组: [{ name: '酮凝集', qty: 4 }]
 };
+const expItems = {
+  基础作战记录: 200,
+  初级作战记录: 400,
+  中级作战记录: 1000,
+  高级作战记录: 2000
+};
 
 for (const name of t2Materials) {
   legacyData.MAT_RARITY[name] = 1;
 }
 legacyData.MAT_RARITY.芯片助剂 = 3;
 legacyData.MAT_RARITY.液化高能气体 = 2;
+legacyData.MAT_RARITY.龙门币 = 0;
+legacyData.MAT_RARITY.基础作战记录 = 1;
+legacyData.MAT_RARITY.初级作战记录 = 1;
+legacyData.MAT_RARITY.中级作战记录 = 2;
+legacyData.MAT_RARITY.高级作战记录 = 3;
 legacyData.MATS_T2 = t2Materials;
+legacyData.EXP_ITEMS = expItems;
+legacyData.SPECIAL_RESOURCES = ['龙门币', ...Object.keys(expItems), '芯片助剂'];
 if (!legacyData.MATS_BLUE.includes('液化高能气体')) {
   legacyData.MATS_BLUE.push('液化高能气体');
 }

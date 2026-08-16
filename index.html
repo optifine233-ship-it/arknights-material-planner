@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141a20">
+  <meta name="description" content="明日方舟干员养成材料统计与培养计划工具">
+  <title>罗德岛后勤计划 · 干员养成材料统计</title>
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+  <div id="boot-screen" class="boot-screen">
+    <div class="boot-screen__signal"></div>
+    <p>RHODES ISLAND / LOGISTICS</p>
+    <strong>正在装载后勤数据…</strong>
+  </div>
+
+  <div id="app-shell" class="app-shell" hidden>
+    <aside class="index-rail" aria-label="主导航">
+      <div class="brand" aria-label="罗德岛后勤计划">
+        <span class="brand__mark">RI</span>
+        <span class="brand__copy"><b>后勤计划</b><small>MATERIAL CONTROL</small></span>
+      </div>
+      <nav class="primary-nav">
+        <button class="nav-item is-active" type="button" data-view="operators"><span>OPS</span><b>干员</b><small id="nav-operators-count">0</small></button>
+        <button class="nav-item" type="button" data-view="plan"><span>PLAN</span><b>计划</b><small id="nav-plan-count">0</small></button>
+        <button class="nav-item" type="button" data-view="inventory"><span>STOCK</span><b>库存</b><small id="nav-stock-count">0</small></button>
+        <button class="nav-item" type="button" data-view="gaps"><span>GAP</span><b>缺口</b><small id="nav-gap-count">—</small></button>
+        <button class="nav-item" type="button" data-view="statistics"><span>STATS</span><b>统计</b><small>↗</small></button>
+      </nav>
+      <div class="rail-footer">
+        <span class="status-dot" id="data-status-dot"></span>
+        <div><b id="data-version">本地数据</b><small id="data-count">—</small></div>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="command-bar">
+        <div>
+          <p class="eyebrow" id="view-code">OPS / OPERATOR INDEX</p>
+          <h1 id="view-title">干员档案</h1>
+        </div>
+        <div class="command-actions">
+          <span class="save-state" id="save-state"><i></i>本机自动保存</span>
+          <button class="button button--quiet" type="button" id="import-button">导入</button>
+          <button class="button button--dark" type="button" id="export-button">导出备份</button>
+        </div>
+      </header>
+
+      <main id="workspace" class="workspace" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div id="drawer-root"></div>
+  <div id="modal-root"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <input id="import-file" type="file" accept="application/json,.json" hidden>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
