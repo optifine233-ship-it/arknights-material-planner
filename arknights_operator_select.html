@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>明日方舟 干员培养选择</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Microsoft YaHei', sans-serif; font-size: 13px; background: #1a1a2e; color: #e0e0e0; }
+.hd { background: #16213e; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+h1 { font-size: 15px; color: #e6a817; margin-right: 8px; }
+#sch { background: #0f3460; border: 1px solid #444; color: #eee; padding: 4px 8px; border-radius: 4px; width: 180px; }
+.btn { background: #0f3460; border: 1px solid #555; color: #ccc; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.btn:hover { background: #1a4a80; }
+.bg { background: #1a4a2a; border-color: #2a7a3a; color: #7fc; }
+.br { background: #4a1a1a; border-color: #7a2a2a; color: #c77; }
+table { width: 100%; border-collapse: collapse; }
+.rh td { padding: 5px 10px; font-weight: bold; font-size: 13px; background: #16213e; }
+.r6 td { border-left: 4px solid #e6a817; color: #e6a817; }
+.r5 td { border-left: 4px solid #c8a0d4; color: #c8a0d4; }
+.r4 td { border-left: 4px solid #a0c4ff; color: #a0c4ff; }
+.r3 td { border-left: 4px solid #7fbf7f; color: #7fbf7f; }
+.ph td { padding: 2px 10px 2px 18px; background: #0f1a30; color: #888; font-size: 11px; }
+tr:nth-child(even) td { background: #0d1117; }
+td { padding: 2px 6px; border-bottom: 1px solid #1e1e2e; vertical-align: middle; width: 33%; }
+label { display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 2px 0; white-space: nowrap; }
+label:hover { color: #fff; }
+input[type=checkbox] { cursor: pointer; }
+.cnt { font-size: 11px; color: #888; margin-left: 4px; }
+.tb { background: none; border: none; color: #888; cursor: pointer; font-size: 11px; margin-right: 4px; padding: 0; }
+.sb { background: #0f3460; border: 1px solid #444; color: #aaa; padding: 1px 6px; border-radius: 3px; cursor: pointer; font-size: 11px; margin-left: 6px; }
+.sb:hover { background: #1a4a80; }
+#rb { background: #0d1117; border: 1px solid #444; border-radius: 4px; padding: 10px; margin: 10px; font-size: 12px; color: #aaa; word-break: break-all; line-height: 1.8; display: none; }
+#rb b { color: #e6a817; }
+</style>
+</head>
+<body>
+<div class="hd">
+  <h1>⚡ 明日方舟 干员培养选择</h1>
+  <input type="text" id="sch" placeholder="搜索干员名..." oninput="flt(this.value)">
+  <button class="btn bg" onclick="exp()">📋 导出已选 (<span id="sc">0</span>)</button>
+  <button class="btn br" onclick="clrAll()">清除全选</button>
+  <button class="btn" onclick="togAll(true)">全部展开</button>
+  <button class="btn" onclick="togAll(false)">全部折叠</button>
+</div>
+<table id="t"></table>
+<div id="rb"></div>
+
+<script>
+const OPS = [{"name":"艾丽妮","rarity":5,"profession":"近卫"},{"name":"百炼嘉维尔","rarity":5,"profession":"近卫"},{"name":"贝洛内","rarity":5,"profession":"近卫"},{"name":"陈","rarity":5,"profession":"近卫"},{"name":"赤刃明霄陈","rarity":5,"profession":"近卫"},{"name":"仇白","rarity":5,"profession":"近卫"},{"name":"丰川祥子","rarity":5,"profession":"近卫"},{"name":"赫德雷","rarity":5,"profession":"近卫"},{"name":"赫拉格","rarity":5,"profession":"近卫"},{"name":"煌","rarity":5,"profession":"近卫"},{"name":"棘刺","rarity":5,"profession":"近卫"},{"name":"锏","rarity":5,"profession":"近卫"},{"name":"领主·Sharp","rarity":5,"profession":"近卫"},{"name":"玛恩纳","rarity":5,"profession":"近卫"},{"name":"怒潮凛冬","rarity":5,"profession":"近卫"},{"name":"帕拉斯","rarity":5,"profession":"近卫"},{"name":"佩佩","rarity":5,"profession":"近卫"},{"name":"山","rarity":5,"profession":"近卫"},{"name":"圣约送葬人","rarity":5,"profession":"近卫"},{"name":"史尔特尔","rarity":5,"profession":"近卫"},{"name":"司霆惊蛰","rarity":5,"profession":"近卫"},{"name":"斯卡蒂","rarity":5,"profession":"近卫"},{"name":"薇薇安娜","rarity":5,"profession":"近卫"},{"name":"维娜·维多利亚","rarity":5,"profession":"近卫"},{"name":"乌尔比安","rarity":5,"profession":"近卫"},{"name":"耀骑士临光","rarity":5,"profession":"近卫"},{"name":"银灰","rarity":5,"profession":"近卫"},{"name":"隐德来希","rarity":5,"profession":"近卫"},{"name":"止颂","rarity":5,"profession":"近卫"},{"name":"重岳","rarity":5,"profession":"近卫"},{"name":"左乐","rarity":5,"profession":"近卫"},{"name":"菲亚梅塔","rarity":5,"profession":"狙击"},{"name":"黑","rarity":5,"profession":"狙击"},{"name":"鸿雪","rarity":5,"profession":"狙击"},{"name":"灰烬","rarity":5,"profession":"狙击"},{"name":"假日威龙陈","rarity":5,"profession":"狙击"},{"name":"空弦","rarity":5,"profession":"狙击"},{"name":"莱伊","rarity":5,"profession":"狙击"},{"name":"蕾缪安","rarity":5,"profession":"狙击"},{"name":"迷迭香","rarity":5,"profession":"狙击"},{"name":"娜仁图亚","rarity":5,"profession":"狙击"},{"name":"能天使","rarity":5,"profession":"狙击"},{"name":"提丰","rarity":5,"profession":"狙击"},{"name":"维什戴尔","rarity":5,"profession":"狙击"},{"name":"焰狐龙梓兰","rarity":5,"profession":"狙击"},{"name":"远牙","rarity":5,"profession":"狙击"},{"name":"早露","rarity":5,"profession":"狙击"},{"name":"W","rarity":5,"profession":"狙击"},{"name":"艾雅法拉","rarity":5,"profession":"术师"},{"name":"澄闪","rarity":5,"profession":"术师"},{"name":"黑键","rarity":5,"profession":"术师"},{"name":"荒芜拉普兰德","rarity":5,"profession":"术师"},{"name":"霍尔海雅","rarity":5,"profession":"术师"},{"name":"卡涅利安","rarity":5,"profession":"术师"},{"name":"刻俄柏","rarity":5,"profession":"术师"},{"name":"林","rarity":5,"profession":"术师"},{"name":"逻各斯","rarity":5,"profession":"术师"},{"name":"玛露西尔","rarity":5,"profession":"术师"},{"name":"莫斯提马","rarity":5,"profession":"术师"},{"name":"妮芙","rarity":5,"profession":"术师"},{"name":"圣聆初雪","rarity":5,"profession":"术师"},{"name":"死芒","rarity":5,"profession":"术师"},{"name":"维伊","rarity":5,"profession":"术师"},{"name":"夕","rarity":5,"profession":"术师"},{"name":"伊芙利特","rarity":5,"profession":"术师"},{"name":"异客","rarity":5,"profession":"术师"},{"name":"真言","rarity":5,"profession":"术师"},{"name":"烛煌","rarity":5,"profession":"术师"},{"name":"纯烬艾雅法拉","rarity":5,"profession":"医疗"},{"name":"凯尔希","rarity":5,"profession":"医疗"},{"name":"凯尔希·思衡托","rarity":5,"profession":"医疗"},{"name":"流明","rarity":5,"profession":"医疗"},{"name":"闪灵","rarity":5,"profession":"医疗"},{"name":"缇缇","rarity":5,"profession":"医疗"},{"name":"焰影苇草","rarity":5,"profession":"医疗"},{"name":"夜莺","rarity":5,"profession":"医疗"},{"name":"Mon3tr","rarity":5,"profession":"医疗"},{"name":"斥罪","rarity":5,"profession":"重装"},{"name":"涤火杰西卡","rarity":5,"profession":"重装"},{"name":"号角","rarity":5,"profession":"重装"},{"name":"泥岩","rarity":5,"profession":"重装"},{"name":"年","rarity":5,"profession":"重装"},{"name":"塞雷娅","rarity":5,"profession":"重装"},{"name":"森蚺","rarity":5,"profession":"重装"},{"name":"黍","rarity":5,"profession":"重装"},{"name":"瑕光","rarity":5,"profession":"重装"},{"name":"信仰搅拌机","rarity":5,"profession":"重装"},{"name":"星熊","rarity":5,"profession":"重装"},{"name":"余","rarity":5,"profession":"重装"},{"name":"斩业星熊","rarity":5,"profession":"重装"},{"name":"安洁莉娜","rarity":5,"profession":"辅助"},{"name":"白铁","rarity":5,"profession":"辅助"},{"name":"淬羽赫默","rarity":5,"profession":"辅助"},{"name":"电弧","rarity":5,"profession":"辅助"},{"name":"酒神","rarity":5,"profession":"辅助"},{"name":"灵知","rarity":5,"profession":"辅助"},{"name":"铃兰","rarity":5,"profession":"辅助"},{"name":"令","rarity":5,"profession":"辅助"},{"name":"麦哲伦","rarity":5,"profession":"辅助"},{"name":"魔王","rarity":5,"profession":"辅助"},{"name":"娜斯提","rarity":5,"profession":"辅助"},{"name":"塑心","rarity":5,"profession":"辅助"},{"name":"溯光星源","rarity":5,"profession":"辅助"},{"name":"遥","rarity":5,"profession":"辅助"},{"name":"浊心斯卡蒂","rarity":5,"profession":"辅助"},{"name":"阿","rarity":5,"profession":"特种"},{"name":"阿斯卡纶","rarity":5,"profession":"特种"},{"name":"艾拉","rarity":5,"profession":"特种"},{"name":"多萝西","rarity":5,"profession":"特种"},{"name":"歌蕾蒂娅","rarity":5,"profession":"特种"},{"name":"归溟幽灵鲨","rarity":5,"profession":"特种"},{"name":"缄默德克萨斯","rarity":5,"profession":"特种"},{"name":"傀影","rarity":5,"profession":"特种"},{"name":"老鲤","rarity":5,"profession":"特种"},{"name":"琳琅诗怀雅","rarity":5,"profession":"特种"},{"name":"麒麟R夜刀","rarity":5,"profession":"特种"},{"name":"弑君者","rarity":5,"profession":"特种"},{"name":"水月","rarity":5,"profession":"特种"},{"name":"望","rarity":5,"profession":"特种"},{"name":"温蒂","rarity":5,"profession":"特种"},{"name":"新约能天使","rarity":5,"profession":"特种"},{"name":"引星棘刺","rarity":5,"profession":"特种"},{"name":"伺夜","rarity":5,"profession":"先锋"},{"name":"嵯峨","rarity":5,"profession":"先锋"},{"name":"风笛","rarity":5,"profession":"先锋"},{"name":"可露希尔","rarity":5,"profession":"先锋"},{"name":"凛御银灰","rarity":5,"profession":"先锋"},{"name":"缪尔赛思","rarity":5,"profession":"先锋"},{"name":"琴柳","rarity":5,"profession":"先锋"},{"name":"忍冬","rarity":5,"profession":"先锋"},{"name":"推进之王","rarity":5,"profession":"先锋"},{"name":"焰尾","rarity":5,"profession":"先锋"},{"name":"伊内丝","rarity":5,"profession":"先锋"},{"name":"奥达","rarity":4,"profession":"近卫"},{"name":"柏喙","rarity":4,"profession":"近卫"},{"name":"摆渡人","rarity":4,"profession":"近卫"},{"name":"暴行","rarity":4,"profession":"近卫"},{"name":"鞭刃","rarity":4,"profession":"近卫"},{"name":"布洛卡","rarity":4,"profession":"近卫"},{"name":"苍苔","rarity":4,"profession":"近卫"},{"name":"赤冬","rarity":4,"profession":"近卫"},{"name":"达格达","rarity":4,"profession":"近卫"},{"name":"导火索","rarity":4,"profession":"近卫"},{"name":"断崖","rarity":4,"profession":"近卫"},{"name":"铎铃","rarity":4,"profession":"近卫"},{"name":"芙兰卡","rarity":4,"profession":"近卫"},{"name":"哈蒂娅","rarity":4,"profession":"近卫"},{"name":"海沫","rarity":4,"profession":"近卫"},{"name":"火龙S黑角","rarity":4,"profession":"近卫"},{"name":"拉普兰德","rarity":4,"profession":"近卫"},{"name":"莱欧斯","rarity":4,"profession":"近卫"},{"name":"雷狼龙S空爆","rarity":4,"profession":"近卫"},{"name":"烈夏","rarity":4,"profession":"近卫"},{"name":"聆音","rarity":4,"profession":"近卫"},{"name":"龙舌兰","rarity":4,"profession":"近卫"},{"name":"摩根","rarity":4,"profession":"近卫"},{"name":"诗怀雅","rarity":4,"profession":"近卫"},{"name":"燧石","rarity":4,"profession":"近卫"},{"name":"星极","rarity":4,"profession":"近卫"},{"name":"炎客","rarity":4,"profession":"近卫"},{"name":"医生","rarity":4,"profession":"近卫"},{"name":"因陀罗","rarity":4,"profession":"近卫"},{"name":"幽灵鲨","rarity":4,"profession":"近卫"},{"name":"祐天寺若麦","rarity":4,"profession":"近卫"},{"name":"羽毛笔","rarity":4,"profession":"近卫"},{"name":"战车","rarity":4,"profession":"近卫"},{"name":"铸铁","rarity":4,"profession":"近卫"},{"name":"Sharp","rarity":4,"profession":"近卫"},{"name":"埃拉托","rarity":4,"profession":"狙击"},{"name":"安哲拉","rarity":4,"profession":"狙击"},{"name":"奥斯塔","rarity":4,"profession":"狙击"},{"name":"白金","rarity":4,"profession":"狙击"},{"name":"冰酿","rarity":4,"profession":"狙击"},{"name":"承曦格雷伊","rarity":4,"profession":"狙击"},{"name":"寒芒克洛丝","rarity":4,"profession":"狙击"},{"name":"灰喉","rarity":4,"profession":"狙击"},{"name":"吉星","rarity":4,"profession":"狙击"},{"name":"截云","rarity":4,"profession":"狙击"},{"name":"矩","rarity":4,"profession":"狙击"},{"name":"蓝毒","rarity":4,"profession":"狙击"},{"name":"玫拉","rarity":4,"profession":"狙击"},{"name":"普罗旺斯","rarity":4,"profession":"狙击"},{"name":"熔泉","rarity":4,"profession":"狙击"},{"name":"慑砂","rarity":4,"profession":"狙击"},{"name":"守林人","rarity":4,"profession":"狙击"},{"name":"水灯心","rarity":4,"profession":"狙击"},{"name":"四月","rarity":4,"profession":"狙击"},{"name":"送葬人","rarity":4,"profession":"狙击"},{"name":"天空盒","rarity":4,"profession":"狙击"},{"name":"雪猎","rarity":4,"profession":"狙击"},{"name":"隐现","rarity":4,"profession":"狙击"},{"name":"陨星","rarity":4,"profession":"狙击"},{"name":"子月","rarity":4,"profession":"狙击"},{"name":"Stormeye","rarity":4,"profession":"狙击"},{"name":"阿罗玛","rarity":4,"profession":"术师"},{"name":"阿米娅","rarity":4,"profession":"术师"},{"name":"爱丽丝","rarity":4,"profession":"术师"},{"name":"薄绿","rarity":4,"profession":"术师"},{"name":"戴菲恩","rarity":4,"profession":"术师"},{"name":"复奏","rarity":4,"profession":"术师"},{"name":"寒檀","rarity":4,"profession":"术师"},{"name":"和弦","rarity":4,"profession":"术师"},{"name":"惊蛰","rarity":4,"profession":"术师"},{"name":"苦艾","rarity":4,"profession":"术师"},{"name":"莱恩哈特","rarity":4,"profession":"术师"},{"name":"洛洛","rarity":4,"profession":"术师"},{"name":"蜜蜡","rarity":4,"profession":"术师"},{"name":"蚀清","rarity":4,"profession":"术师"},{"name":"特克诺","rarity":4,"profession":"术师"},{"name":"特米米","rarity":4,"profession":"术师"},{"name":"天火","rarity":4,"profession":"术师"},{"name":"温米","rarity":4,"profession":"术师"},{"name":"星源","rarity":4,"profession":"术师"},{"name":"雪绒","rarity":4,"profession":"术师"},{"name":"炎狱炎熔","rarity":4,"profession":"术师"},{"name":"耶拉","rarity":4,"profession":"术师"},{"name":"夜魔","rarity":4,"profession":"术师"},{"name":"折光","rarity":4,"profession":"术师"},{"name":"至简","rarity":4,"profession":"术师"},{"name":"Miss.Christine","rarity":4,"profession":"术师"},{"name":"Pith","rarity":4,"profession":"术师"},{"name":"白面鸮","rarity":4,"profession":"医疗"},{"name":"刺玫","rarity":4,"profession":"医疗"},{"name":"风絮","rarity":4,"profession":"医疗"},{"name":"瑰盐","rarity":4,"profession":"医疗"},{"name":"哈洛德","rarity":4,"profession":"医疗"},{"name":"赫默","rarity":4,"profession":"医疗"},{"name":"华法琳","rarity":4,"profession":"医疗"},{"name":"录武官","rarity":4,"profession":"医疗"},{"name":"蜜莓","rarity":4,"profession":"医疗"},{"name":"明椒","rarity":4,"profession":"医疗"},{"name":"诺威尔","rarity":4,"profession":"医疗"},{"name":"桑葚","rarity":4,"profession":"医疗"},{"name":"莎草","rarity":4,"profession":"医疗"},{"name":"图耶","rarity":4,"profession":"医疗"},{"name":"微风","rarity":4,"profession":"医疗"},{"name":"乌啾","rarity":4,"profession":"医疗"},{"name":"锡兰","rarity":4,"profession":"医疗"},{"name":"絮雨","rarity":4,"profession":"医疗"},{"name":"亚叶","rarity":4,"profession":"医疗"},{"name":"濯尘芙蓉","rarity":4,"profession":"医疗"},{"name":"Touch","rarity":4,"profession":"医疗"},{"name":"拜松","rarity":4,"profession":"重装"},{"name":"暴雨","rarity":4,"profession":"重装"},{"name":"车尔尼","rarity":4,"profession":"重装"},{"name":"菲莱","rarity":4,"profession":"重装"},{"name":"吽","rarity":4,"profession":"重装"},{"name":"灰毫","rarity":4,"profession":"重装"},{"name":"火哨","rarity":4,"profession":"重装"},{"name":"火神","rarity":4,"profession":"重装"},{"name":"极光","rarity":4,"profession":"重装"},{"name":"可颂","rarity":4,"profession":"重装"},{"name":"雷蛇","rarity":4,"profession":"重装"},{"name":"裂响","rarity":4,"profession":"重装"},{"name":"临光","rarity":4,"profession":"重装"},{"name":"暮落","rarity":4,"profession":"重装"},{"name":"森西","rarity":4,"profession":"重装"},{"name":"闪击","rarity":4,"profession":"重装"},{"name":"深律","rarity":4,"profession":"重装"},{"name":"深巡","rarity":4,"profession":"重装"},{"name":"石棉","rarity":4,"profession":"重装"},{"name":"响石","rarity":4,"profession":"重装"},{"name":"洋灰","rarity":4,"profession":"重装"},{"name":"折桠","rarity":4,"profession":"重装"},{"name":"阿兰娜","rarity":4,"profession":"辅助"},{"name":"波卜","rarity":4,"profession":"辅助"},{"name":"伯塔尼","rarity":4,"profession":"辅助"},{"name":"初雪","rarity":4,"profession":"辅助"},{"name":"但书","rarity":4,"profession":"辅助"},{"name":"格劳克斯","rarity":4,"profession":"辅助"},{"name":"海蒂","rarity":4,"profession":"辅助"},{"name":"海霓","rarity":4,"profession":"辅助"},{"name":"衡沙","rarity":4,"profession":"辅助"},{"name":"九色鹿","rarity":4,"profession":"辅助"},{"name":"凯瑟琳","rarity":4,"profession":"辅助"},{"name":"空","rarity":4,"profession":"辅助"},{"name":"凛视","rarity":4,"profession":"辅助"},{"name":"掠风","rarity":4,"profession":"辅助"},{"name":"梅尔","rarity":4,"profession":"辅助"},{"name":"三角初华","rarity":4,"profession":"辅助"},{"name":"巫恋","rarity":4,"profession":"辅助"},{"name":"稀音","rarity":4,"profession":"辅助"},{"name":"夏栎","rarity":4,"profession":"辅助"},{"name":"小满","rarity":4,"profession":"辅助"},{"name":"撷英调香师","rarity":4,"profession":"辅助"},{"name":"行箸","rarity":4,"profession":"辅助"},{"name":"月禾","rarity":4,"profession":"辅助"},{"name":"真理","rarity":4,"profession":"辅助"},{"name":"八幡海铃","rarity":4,"profession":"特种"},{"name":"贝娜","rarity":4,"profession":"特种"},{"name":"裁度","rarity":4,"profession":"特种"},{"name":"蒂比","rarity":4,"profession":"特种"},{"name":"风丸","rarity":4,"profession":"特种"},{"name":"红","rarity":4,"profession":"特种"},{"name":"槐琥","rarity":4,"profession":"特种"},{"name":"见行者","rarity":4,"profession":"特种"},{"name":"卡夫卡","rarity":4,"profession":"特种"},{"name":"空构","rarity":4,"profession":"特种"},{"name":"罗宾","rarity":4,"profession":"特种"},{"name":"钼铅","rarity":4,"profession":"特种"},{"name":"绮良","rarity":4,"profession":"特种"},{"name":"若叶睦","rarity":4,"profession":"特种"},{"name":"狮蝎","rarity":4,"profession":"特种"},{"name":"食铁兽","rarity":4,"profession":"特种"},{"name":"双月","rarity":4,"profession":"特种"},{"name":"霜华","rarity":4,"profession":"特种"},{"name":"乌有","rarity":4,"profession":"特种"},{"name":"锡人","rarity":4,"profession":"特种"},{"name":"杏仁","rarity":4,"profession":"特种"},{"name":"雪雉","rarity":4,"profession":"特种"},{"name":"崖心","rarity":4,"profession":"特种"},{"name":"德克萨斯","rarity":4,"profession":"先锋"},{"name":"渡桥","rarity":4,"profession":"先锋"},{"name":"格拉尼","rarity":4,"profession":"先锋"},{"name":"红隼","rarity":4,"profession":"先锋"},{"name":"极境","rarity":4,"profession":"先锋"},{"name":"贾维","rarity":4,"profession":"先锋"},{"name":"历阵锐枪芬","rarity":4,"profession":"先锋"},{"name":"凛冬","rarity":4,"profession":"先锋"},{"name":"谜图","rarity":4,"profession":"先锋"},{"name":"齐尔查克","rarity":4,"profession":"先锋"},{"name":"青枳","rarity":4,"profession":"先锋"},{"name":"松桐","rarity":4,"profession":"先锋"},{"name":"万顷","rarity":4,"profession":"先锋"},{"name":"苇草","rarity":4,"profession":"先锋"},{"name":"晓歌","rarity":4,"profession":"先锋"},{"name":"寻澜","rarity":4,"profession":"先锋"},{"name":"野鬃","rarity":4,"profession":"先锋"},{"name":"夜半","rarity":4,"profession":"先锋"},{"name":"郁金香","rarity":4,"profession":"先锋"},{"name":"艾丝黛尔","rarity":3,"profession":"近卫"},{"name":"缠丸","rarity":3,"profession":"近卫"},{"name":"骋风","rarity":3,"profession":"近卫"},{"name":"杜宾","rarity":3,"profession":"近卫"},{"name":"断罪者","rarity":3,"profession":"近卫"},{"name":"芳汀","rarity":3,"profession":"近卫"},{"name":"杰克","rarity":3,"profession":"近卫"},{"name":"刻刀","rarity":3,"profession":"近卫"},{"name":"猎蜂","rarity":3,"profession":"近卫"},{"name":"罗小黑","rarity":3,"profession":"近卫"},{"name":"慕斯","rarity":3,"profession":"近卫"},{"name":"石英","rarity":3,"profession":"近卫"},{"name":"霜叶","rarity":3,"profession":"近卫"},{"name":"休谟斯","rarity":3,"profession":"近卫"},{"name":"宴","rarity":3,"profession":"近卫"},{"name":"安比尔","rarity":3,"profession":"狙击"},{"name":"白雪","rarity":3,"profession":"狙击"},{"name":"红云","rarity":3,"profession":"狙击"},{"name":"杰西卡","rarity":3,"profession":"狙击"},{"name":"流星","rarity":3,"profession":"狙击"},{"name":"梅","rarity":3,"profession":"狙击"},{"name":"铅踝","rarity":3,"profession":"狙击"},{"name":"松果","rarity":3,"profession":"狙击"},{"name":"酸糖","rarity":3,"profession":"狙击"},{"name":"跃跃","rarity":3,"profession":"狙击"},{"name":"布丁","rarity":3,"profession":"术师"},{"name":"格雷伊","rarity":3,"profession":"术师"},{"name":"卡达","rarity":3,"profession":"术师"},{"name":"深靛","rarity":3,"profession":"术师"},{"name":"协律","rarity":3,"profession":"术师"},{"name":"夜烟","rarity":3,"profession":"术师"},{"name":"远山","rarity":3,"profession":"术师"},{"name":"调香师","rarity":3,"profession":"医疗"},{"name":"褐果","rarity":3,"profession":"医疗"},{"name":"嘉维尔","rarity":3,"profession":"医疗"},{"name":"末药","rarity":3,"profession":"医疗"},{"name":"清流","rarity":3,"profession":"医疗"},{"name":"苏苏洛","rarity":3,"profession":"医疗"},{"name":"古米","rarity":3,"profession":"重装"},{"name":"坚雷","rarity":3,"profession":"重装"},{"name":"角峰","rarity":3,"profession":"重装"},{"name":"露托","rarity":3,"profession":"重装"},{"name":"泡泡","rarity":3,"profession":"重装"},{"name":"蛇屠箱","rarity":3,"profession":"重装"},{"name":"波登可","rarity":3,"profession":"辅助"},{"name":"地灵","rarity":3,"profession":"辅助"},{"name":"罗比菈塔","rarity":3,"profession":"辅助"},{"name":"盟约·辅助干员","rarity":3,"profession":"辅助"},{"name":"深海色","rarity":3,"profession":"辅助"},{"name":"阿消","rarity":3,"profession":"特种"},{"name":"暗索","rarity":3,"profession":"特种"},{"name":"孑","rarity":3,"profession":"特种"},{"name":"砾","rarity":3,"profession":"特种"},{"name":"维荻","rarity":3,"profession":"特种"},{"name":"伊桑","rarity":3,"profession":"特种"},{"name":"云迹","rarity":3,"profession":"特种"},{"name":"冬时","rarity":3,"profession":"先锋"},{"name":"豆苗","rarity":3,"profession":"先锋"},{"name":"红豆","rarity":3,"profession":"先锋"},{"name":"清道夫","rarity":3,"profession":"先锋"},{"name":"桃金娘","rarity":3,"profession":"先锋"},{"name":"讯使","rarity":3,"profession":"先锋"},{"name":"玫兰莎","rarity":2,"profession":"近卫"},{"name":"泡普卡","rarity":2,"profession":"近卫"},{"name":"月见夜","rarity":2,"profession":"近卫"},{"name":"安德切尔","rarity":2,"profession":"狙击"},{"name":"克洛丝","rarity":2,"profession":"狙击"},{"name":"空爆","rarity":2,"profession":"狙击"},{"name":"预备干员-狙击","rarity":2,"profession":"狙击"},{"name":"史都华德","rarity":2,"profession":"术师"},{"name":"炎熔","rarity":2,"profession":"术师"},{"name":"预备干员-术师","rarity":2,"profession":"术师"},{"name":"安赛尔","rarity":2,"profession":"医疗"},{"name":"芙蓉","rarity":2,"profession":"医疗"},{"name":"预备干员-后勤","rarity":2,"profession":"医疗"},{"name":"斑点","rarity":2,"profession":"重装"},{"name":"卡缇","rarity":2,"profession":"重装"},{"name":"米格鲁","rarity":2,"profession":"重装"},{"name":"预备干员-重装","rarity":2,"profession":"重装"},{"name":"梓兰","rarity":2,"profession":"辅助"},{"name":"芬","rarity":2,"profession":"先锋"},{"name":"翎羽","rarity":2,"profession":"先锋"},{"name":"香草","rarity":2,"profession":"先锋"},{"name":"预备干员-近战","rarity":2,"profession":"先锋"}];
+
+const RARITY_LABEL = {5:'六星 ★★★★★★', 4:'五星 ★★★★★', 3:'四星 ★★★★', 2:'三星 ★★★'};
+const RARITY_CLS = {5:'r6', 4:'r5', 3:'r4', 2:'r3'};
+const PROF_ORDER = ['近卫','狙击','术师','医疗','重装','辅助','特种','先锋'];
+
+// group ops
+function buildGroups(ops) {
+  const g = {};
+  ops.forEach(function(op) {
+    if (!g[op.rarity]) g[op.rarity] = {};
+    if (!g[op.rarity][op.profession]) g[op.rarity][op.profession] = [];
+    g[op.rarity][op.profession].push(op.name);
+  });
+  return g;
+}
+
+function render() {
+  const groups = buildGroups(OPS);
+  const tbl = document.getElementById('t');
+  let html = '';
+  [5,4,3,2].forEach(function(r) {
+    if (!groups[r]) return;
+    const total = Object.values(groups[r]).reduce(function(s,a){return s+a.length;}, 0);
+    const rc = RARITY_CLS[r];
+    html += '<tr class="rh ' + rc + '"><td colspan="3"><button class="tb" onclick="tog(' + r + ')">▼</button> '
+          + RARITY_LABEL[r] + ' <span class="cnt">(' + total + '人)</span>'
+          + ' <button class="sb" onclick="selR(' + r + ',true)">全选</button>'
+          + ' <button class="sb" onclick="selR(' + r + ',false)">全不选</button></td></tr>';
+    PROF_ORDER.forEach(function(prof) {
+      if (!groups[r][prof]) return;
+      const names = groups[r][prof];
+      html += '<tr class="ph g' + r + '"><td colspan="3" class="pl">' + prof + ' (' + names.length + ')</td></tr>';
+      for (let i = 0; i < names.length; i += 3) {
+        html += '<tr class="g' + r + '">';
+        for (let j = 0; j < 3; j++) {
+          const name = names[i+j];
+          if (!name) { html += '<td></td>'; continue; }
+          const safe = name.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+          html += '<td><label><input type="checkbox" class="op r' + r + '" data-n="' + safe + '"> ' + safe + '</label></td>';
+        }
+        html += '</tr>';
+      }
+    });
+  });
+  tbl.innerHTML = html;
+  tbl.addEventListener('change', upd);
+}
+
+const col = {};
+function upd() {
+  document.getElementById('sc').textContent = document.querySelectorAll('.op:checked').length;
+}
+function selR(r, v) {
+  document.querySelectorAll('.r' + r).forEach(function(c){ c.checked = v; });
+  upd();
+}
+function tog(r) {
+  col[r] = !col[r];
+  document.querySelectorAll('.g' + r).forEach(function(tr){ tr.style.display = col[r] ? 'none' : ''; });
+  const rc = RARITY_CLS[r];
+  const btn = document.querySelector('.' + rc + ' .tb');
+  if (btn) btn.textContent = col[r] ? '▶' : '▼';
+}
+function togAll(v) {
+  [5,4,3,2].forEach(function(r){ if (v && col[r]) tog(r); if (!v && !col[r]) tog(r); });
+}
+function clrAll() {
+  document.querySelectorAll('.op').forEach(function(c){ c.checked = false; });
+  upd();
+}
+function exp() {
+  const sel = Array.from(document.querySelectorAll('.op:checked')).map(function(c){ return c.dataset.n; });
+  const rb = document.getElementById('rb');
+  rb.style.display = 'block';
+  if (!sel.length) { rb.innerHTML = '<b>请先勾选干员</b>'; return; }
+  rb.innerHTML = '<b>已选 ' + sel.length + ' 个干员（复制下方内容发给我）：</b><br>' + sel.join(',');
+  rb.scrollIntoView({behavior:'smooth'});
+}
+function flt(q) {
+  const trs = document.querySelectorAll('#t tr');
+  if (!q) {
+    trs.forEach(function(tr){ tr.style.display = ''; });
+    [5,4,3,2].forEach(function(r){ if (col[r]) document.querySelectorAll('.g'+r).forEach(function(tr){ tr.style.display='none'; }); });
+    return;
+  }
+  q = q.toLowerCase();
+  trs.forEach(function(tr) {
+    if (tr.classList.contains('rh') || tr.classList.contains('ph')) { tr.style.display = ''; return; }
+    const ok = Array.from(tr.querySelectorAll('label')).some(function(l){ return l.textContent.toLowerCase().includes(q); });
+    tr.style.display = ok ? '' : 'none';
+  });
+}
+
+render();
+</script>
+</body>
+</html>

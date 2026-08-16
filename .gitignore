@@ -1,0 +1,29 @@
+# Local AI-tool settings
+.claude/settings.local.json
+
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+
+# Environment and local-only configuration
+.env
+.env.*
+!.env.example
+*.local.*
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db
+Desktop.ini
+
