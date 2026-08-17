@@ -34,9 +34,10 @@ function addDistribution(target, key, values) {
   target[key].planned += values.planned;
 }
 
-export function calculateStatistics(gameData, userState) {
-  const planItems = buildPlanUpgradeItems(gameData, userState);
-  const plannedOperators = new Set(planItems.map((item) => item.operatorName));
+export function calculateStatistics(gameData, userState, scopedPlanItems = null) {
+  const allPlanItems = buildPlanUpgradeItems(gameData, userState);
+  const planItems = Array.isArray(scopedPlanItems) ? scopedPlanItems : allPlanItems;
+  const plannedOperators = new Set(allPlanItems.map((item) => item.operatorName));
   const investedItems = [];
   const operatorInvestments = [];
   const profession = {};

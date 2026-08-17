@@ -105,8 +105,18 @@ test('逐项生成升级、精英化、技能、专精和完整模组名称', ()
   assert.ok(items.some((item) => item.kind === 'promotion' && item.stage === 1));
   assert.ok(items.some((item) => item.kind === 'promotion' && item.stage === 2));
   assert.deepEqual(
-    items.filter((item) => item.kind === 'skill').map((item) => item.stage),
-    [2, 3]
+    items.filter((item) => item.kind === 'skill').map((item) => ({
+      key: item.key,
+      label: item.label,
+      stage: item.stage,
+      materials: item.materials
+    })),
+    [{
+      key: 'skill:1-3',
+      label: '技能等级 1→3',
+      stage: 3,
+      materials: [{ name: '蓝材料', qty: 3 }]
+    }]
   );
   assert.deepEqual(
     items.filter((item) => item.kind === 'mastery').map((item) => item.stage),
@@ -118,6 +128,45 @@ test('逐项生成升级、精英化、技能、专精和完整模组名称', ()
   );
   assert.equal(items.reduce((sum, item) => sum + item.exp, 0), 60);
   assert.equal(items.reduce((sum, item) => sum + item.lmd, 0), 300 + 6 + 80000 + 100000);
+});
+
+test('从任意当前技能等级到目标等级合并为一项', () => {
+  const operator = {
+    id: 'char_skill_range',
+    r: 5,
+    sl: [2, 3, 4, 5, 6, 7].map((level) => ({
+      level,
+      mats: [{ name: '蓝材料', qty: level }]
+    }))
+  };
+  const items = buildOperatorUpgradeItems('测试干员', operator, {
+    current: { elite: 0, level: 1, skillLevel: 3 },
+    target: { elite: 0, level: 1, skillLevel: 7 }
+  }, fixture);
+
+  assert.equal(items.length, 1);
+  assert.equal(items[0].key, 'skill:3-7');
+  assert.equal(items[0].label, '技能等级 3→7');
+  assert.deepEqual(items[0].materials, [{ name: '蓝材料', qty: 22 }]);
+});
+
+test('电弧和机械师不生成任何养成资源需求', () => {
+  for (const id of ['char_4195_radian', 'char_4230_mcnist']) {
+    const items = buildOperatorUpgradeItems('特殊干员', { id, r: 5, e1: [], e2: [], sl: [], ms: {}, md: [] }, {
+      current: { elite: 0, level: 1, skillLevel: 1 },
+      target: { elite: 2, level: 90, skillLevel: 7 }
+    }, fixture);
+    assert.deepEqual(items, []);
+  }
+});
+
+test('特殊干员名称不会误伤同名材料汇总', () => {
+  assert.deepEqual(sumDirectMaterials([{
+    materials: [
+      { name: '电弧', qty: 2 },
+      { name: '机械师', qty: 3 }
+    ]
+  }]), { 电弧: 2, 机械师: 3 });
 });
 
 test('材料递归分解默认停在 T3 展示基准层', () => {

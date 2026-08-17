@@ -2,7 +2,8 @@ import {
   buildOperatorUpgradeItems,
   buildPlanUpgradeItems,
   computeMaterialSummary,
-  decomposeMaterial
+  decomposeMaterial,
+  isResourceFreeCultivationOperator
 } from './calculator.js';
 import {
   createBackup,
@@ -10,12 +11,21 @@ import {
   createProjectExport,
   loadBackup,
   loadUserState,
+  mergeProjectImport,
   normalizeOperatorProgress,
   normalizeUserState,
   parseProjectImport,
   saveUserState
 } from './storage.js';
 import { calculateStatistics } from './statistics.js';
+import {
+  applyPlanSelectionPreset,
+  filterSelectedPlanItems,
+  isPlanItemSelected,
+  operatorPlanSelectionState,
+  setPlanItemSelected,
+  setPlanOperatorSelected
+} from './plan-selection.js';
 import { applyMaaOperatorImport, parseMaaOperatorExport } from './importers/maa.js';
 import { loadGameData } from './data-loader.js';
 import {
@@ -60,6 +70,7 @@ let selectedOperator = null;
 let pendingImport = null;
 let pendingImportKind = null;
 let toastTimer = null;
+const openPlanOperators = new Set();
 let filters = {
   operatorSearch: '',
   professions: [],
@@ -118,11 +129,15 @@ function showToast(message, error = false) {
   toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 2800);
 }
 
-function planItems() {
+function allPlanItems() {
   return buildPlanUpgradeItems(gameData, userState);
 }
 
-function itemsByOperator(items = planItems()) {
+function selectedPlanItems(items = allPlanItems()) {
+  return filterSelectedPlanItems(items, userState.settings.planSelection, gameData, userState);
+}
+
+function itemsByOperator(items = allPlanItems()) {
   const groups = new Map();
   for (const item of items) {
     if (!groups.has(item.operatorName)) groups.set(item.operatorName, []);
@@ -131,11 +146,11 @@ function itemsByOperator(items = planItems()) {
   return groups;
 }
 
-function renderShellCounts(items) {
+function renderShellCounts(allItems, scopedItems = selectedPlanItems(allItems)) {
   const owned = Object.values(userState.operators).filter((progress) => progress.owned).length;
-  const planned = new Set(items.map((item) => item.operatorName)).size;
+  const planned = new Set(allItems.map((item) => item.operatorName)).size;
   const stocked = Object.values(userState.inventory).filter((qty) => Number(qty) > 0).length;
-  const summary = computeMaterialSummary(items, userState.inventory, gameData);
+  const summary = computeMaterialSummary(scopedItems, userState.inventory, gameData);
   const gaps = summary.rows.filter((row) => row.shortage > 0).length;
   $('#nav-operators-count').textContent = owned;
   $('#nav-plan-count').textContent = planned;
@@ -149,15 +164,17 @@ function render() {
   $('#view-title').textContent = meta.title;
   $$('.nav-item').forEach((button) => button.classList.toggle('is-active', button.dataset.view === currentView));
 
-  const items = planItems();
-  renderShellCounts(items);
+  const items = allPlanItems();
+  const scopedItems = selectedPlanItems(items);
+  renderShellCounts(items, scopedItems);
   const workspace = $('#workspace');
 
   if (currentView === 'operators') workspace.innerHTML = renderOperators(items);
-  if (currentView === 'plan') workspace.innerHTML = renderPlan(items);
+  if (currentView === 'plan') workspace.innerHTML = renderPlan(items, scopedItems);
   if (currentView === 'inventory') workspace.innerHTML = renderInventory();
-  if (currentView === 'gaps') workspace.innerHTML = renderGaps(items);
-  if (currentView === 'statistics') workspace.innerHTML = renderStatistics();
+  if (currentView === 'gaps') workspace.innerHTML = renderGaps(scopedItems, items);
+  if (currentView === 'statistics') workspace.innerHTML = renderStatistics(items, scopedItems);
+  syncPlanCheckboxStates();
 }
 
 function renderOperators(items) {
@@ -216,35 +233,37 @@ function renderOperatorCard(name, items) {
   const operator = gameData.OPS[name];
   const progress = getProgress(name);
   const current = progress.current;
+  const resourceFree = isResourceFreeCultivationOperator(operator);
   const currentText = progress.owned
-    ? `精${current.elite} · ${current.level}级 · 技${current.skillLevel}`
+    ? [`精${current.elite}`, `${current.level}级`, current.skillLevel > 1 ? `技${current.skillLevel}` : ''].filter(Boolean).join(' · ')
     : '尚未标记拥有';
   return `
     <button type="button" class="operator-card ${progress.owned ? 'is-owned' : ''}" data-action="open-operator" data-operator="${encoded(name)}">
       ${operatorPortrait(name, operator)}
       <span class="operator-card__body">
-        <span class="operator-card__rarity">${operator.r + 1}★</span>
+        <span class="operator-card__rarity operator-card__rarity--${operator.r + 1}">${operator.r + 1}★</span>
         <span class="operator-card__meta">${escapeHtml(operator.p)} · ${escapeHtml(operator.sp || '未分类')}</span>
         <h3>${escapeHtml(name)}</h3>
         <span class="operator-card__profession">${escapeHtml(operator.pos || '')}${operator.pos ? ' · ' : ''}${currentText}</span>
-        <span class="operator-card__status"><span>${items.length ? `${items.length} 项待培养` : '无培养计划'}</span><b>${items.length ? '计划中' : '设置'}</b></span>
+        <span class="operator-card__status"><span>${resourceFree ? '不计养成材料' : items.length ? `${items.length} 项待培养` : '无培养计划'}</span><b>${resourceFree ? '特殊养成' : items.length ? '计划中' : '设置'}</b></span>
       </span>
     </button>
   `;
 }
 
-function renderPlan(items) {
+function renderPlan(items, scopedItems) {
   const groups = itemsByOperator(items);
-  const totalExp = items.reduce((sum, item) => sum + item.exp, 0);
-  const totalLmd = items.reduce((sum, item) => sum + item.lmd, 0);
+  const totalExp = scopedItems.reduce((sum, item) => sum + item.exp, 0);
+  const totalLmd = scopedItems.reduce((sum, item) => sum + item.lmd, 0);
   if (!items.length) {
     return `${renderViewIntro('培养计划', '这里会列出当前状态到目标状态之间的全部强化项。', '0', 'ACTIVE OPERATORS')}${emptyState('还没有培养计划', '请先为干员设置目标状态。', '<button class="button button--signal" type="button" data-action="go-view" data-view="operators">前往干员档案</button>')}`;
   }
   return `
     ${renderViewIntro('培养计划', '按干员查看升级、精英化、技能、专精和模组需求。', String(groups.size), 'ACTIVE OPERATORS')}
+    ${renderPlanSelectionPanel(items, scopedItems)}
     <div class="summary-strip">
-      ${summaryCell('UPGRADE ITEMS', items.length, '独立强化项')}
-      ${summaryCell('OPERATORS', groups.size, '涉及干员')}
+      ${summaryCell('SELECTED ITEMS', scopedItems.length, `全部 ${items.length} 项`)}
+      ${summaryCell('OPERATORS', new Set(scopedItems.map((item) => item.operatorName)).size, '本次统计')}
       ${summaryCell('EXP REQUIRED', formatNumber(totalExp), '升级经验')}
       ${summaryCell('LMD REQUIRED', formatNumber(totalLmd), '含精英化与模组')}
     </div>
@@ -252,23 +271,39 @@ function renderPlan(items) {
   `;
 }
 
+function renderPlanSelectionPanel(items, scopedItems) {
+  const preset = userState.settings.planSelection?.preset || 'all';
+  const presets = [
+    ['all', '全部干员'],
+    ['owned', '仅已拥有'],
+    ...[6, 5, 4, 3, 2, 1].map((rarity) => [`rarity:${rarity}`, `${rarity}★`])
+  ];
+  return `<section class="plan-scope-panel">
+    <header><div><small>MATERIAL SCOPE</small><h2>本次材料统计</h2><p>取消勾选只会改变材料统计，不会删除培养目标。</p></div><strong>${scopedItems.length}<span> / ${items.length} 项</span></strong></header>
+    <div class="plan-scope-presets" aria-label="统计范围预设">${presets.map(([value, label]) => `<button type="button" class="${preset === value ? 'is-active' : ''}" aria-pressed="${preset === value}" data-action="apply-plan-preset" data-preset="${value}">${label}</button>`).join('')}</div>
+  </section>`;
+}
+
 function renderPlanOperator(name, items) {
-  const exp = items.reduce((sum, item) => sum + item.exp, 0);
-  const lmd = items.reduce((sum, item) => sum + item.lmd, 0);
+  const selection = operatorPlanSelectionState(name, items, userState.settings.planSelection, gameData, userState);
+  const selectedItems = items.filter((item) => isPlanItemSelected(item, userState.settings.planSelection, gameData, userState));
+  const exp = selectedItems.reduce((sum, item) => sum + item.exp, 0);
+  const lmd = selectedItems.reduce((sum, item) => sum + item.lmd, 0);
   return `
-    <details class="plan-operator" open>
+    <details class="plan-operator ${selection.selectedCount ? '' : 'is-excluded'}" data-operator="${encoded(name)}" ${openPlanOperators.has(name) ? 'open' : ''}>
       <summary class="plan-operator__header">
-        <div><h3>${escapeHtml(name)}</h3><p>${items.length} 个强化项 · EXP ${formatNumber(exp)} · LMD ${formatNumber(lmd)}</p></div>
+        <input class="plan-checkbox" type="checkbox" ${selection.checked ? 'checked' : ''} data-indeterminate="${selection.indeterminate}" data-action="plan-operator-selection" data-operator="${encoded(name)}" aria-label="将${escapeHtml(name)}纳入本次材料统计">
+        <div><h3>${escapeHtml(name)}</h3><p>已选 ${selection.selectedCount}/${items.length} 项 · EXP ${formatNumber(exp)} · LMD ${formatNumber(lmd)}</p></div>
         <b>${escapeHtml(gameData.OPS[name]?.p || '')} / ${gameData.OPS[name]?.r + 1}★</b>
         <span class="plan-operator__toggle" aria-hidden="true"></span>
       </summary>
       <div class="plan-operator__tools"><button class="button button--small" type="button" data-action="open-operator" data-operator="${encoded(name)}">编辑目标</button></div>
-      <div class="upgrade-list">${renderUpgradeItems(items)}</div>
+      <div class="upgrade-list">${renderUpgradeItems(items, { selectable: true })}</div>
     </details>
   `;
 }
 
-function renderUpgradeItems(items) {
+function renderUpgradeItems(items, options = {}) {
   return items.map((item) => {
     const base = {};
     for (const material of item.materials) {
@@ -276,9 +311,10 @@ function renderUpgradeItems(items) {
       for (const [name, qty] of Object.entries(decomposed)) base[name] = (base[name] || 0) + qty;
     }
     const cost = [item.exp ? `EXP ${formatNumber(item.exp)}` : '', item.lmd ? `LMD ${formatNumber(item.lmd)}` : ''].filter(Boolean).join(' · ');
+    const selected = !options.selectable || isPlanItemSelected(item, userState.settings.planSelection, gameData, userState);
     return `
-      <details class="upgrade-item">
-        <summary><span class="upgrade-kind">${KIND_LABELS[item.kind] || item.kind}</span><span class="upgrade-label">${escapeHtml(item.label)}</span>${cost ? `<span class="upgrade-cost-inline">${cost}</span>` : ''}</summary>
+      <details class="upgrade-item ${options.selectable ? 'upgrade-item--selectable' : ''} ${selected ? '' : 'is-excluded'}">
+        <summary>${options.selectable ? `<input class="plan-checkbox plan-checkbox--item" type="checkbox" ${selected ? 'checked' : ''} data-action="plan-item-selection" data-operator="${encoded(item.operatorName)}" data-key="${encoded(item.key)}" aria-label="将${escapeHtml(item.operatorName)}的${escapeHtml(item.label)}纳入本次材料统计">` : ''}<span class="upgrade-kind">${KIND_LABELS[item.kind] || item.kind}</span><span class="upgrade-label">${escapeHtml(item.label)}</span>${cost ? `<span class="upgrade-cost-inline">${cost}</span>` : ''}</summary>
         <div class="upgrade-item__body">
           <span class="breakdown-label">DIRECT / 直接材料</span>
           ${renderMaterialChips(item.materials)}
@@ -288,6 +324,17 @@ function renderUpgradeItems(items) {
       </details>
     `;
   }).join('');
+}
+
+function syncPlanCheckboxStates() {
+  $$('[data-indeterminate="true"]').forEach((checkbox) => { checkbox.indeterminate = true; });
+}
+
+function restorePlanSelectionFocus(operatorName, key = '') {
+  const selector = key
+    ? `[data-action="plan-item-selection"][data-operator="${encoded(operatorName)}"][data-key="${encoded(key)}"]`
+    : `[data-action="plan-operator-selection"][data-operator="${encoded(operatorName)}"]`;
+  $(selector)?.focus();
 }
 
 function renderMaterialChips(materials) {
@@ -342,7 +389,7 @@ function renderInventoryItem(name) {
   `;
 }
 
-function renderGaps(items) {
+function renderGaps(items, allItems = items) {
   const summary = computeMaterialSummary(items, userState.inventory, gameData);
   const display = userState.settings.materialDisplay || 'shortage';
   const rowsByName = new Map(summary.rows.map((row) => [row.name, row]));
@@ -398,7 +445,10 @@ function renderGaps(items) {
       <label class="field"><span>分组方式</span><select id="gap-grouping">${selectOptions(['purpose', 'tier', 'shortage'], userState.settings.gapGrouping || 'purpose', (value) => ({ purpose: '按用途分类', tier: '按品质分类', shortage: '按缺口从大到小' })[value])}</select></label>
     </section>
     ${items.length ? renderResourceGap(summary, expStock, lmdStock) : ''}
-    ${groups.length ? groups.map((group) => renderGapGroup(group, items)).join('') : emptyState(items.length ? '当前范围内没有材料' : '还没有培养计划', items.length ? '可以切换显示范围查看其他材料。' : '请先为干员设置目标状态。')}
+    ${groups.length ? groups.map((group) => renderGapGroup(group, items)).join('') : emptyState(
+      items.length ? '当前范围内没有材料' : allItems.length ? '本次未选择强化项' : '还没有培养计划',
+      items.length ? '可以切换显示范围查看其他材料。' : allItems.length ? '请在培养计划中勾选本次要统计的干员或强化项。' : '请先为干员设置目标状态。'
+    )}
   `;
 }
 
@@ -473,8 +523,8 @@ function materialSources(materialName, items) {
   return sources;
 }
 
-function renderStatistics() {
-  const stats = calculateStatistics(gameData, userState);
+function renderStatistics(allItems, scopedItems) {
+  const stats = calculateStatistics(gameData, userState, scopedItems);
   const overview = stats.overview;
   const distributionMode = userState.settings.statisticsGrouping || 'profession';
   const distributionRows = Object.entries(stats.distributions[distributionMode] || {});
@@ -485,9 +535,11 @@ function renderStatistics() {
   const coveredMaterialTypes = materialPlanRows.filter((row) => row.shortage === 0).length;
   const expStock = Object.entries(gameData.EXP_ITEMS || {}).reduce((sum, [name, value]) => sum + (userState.inventory[name] || 0) * value, 0);
   const lmdStock = userState.inventory.龙门币 || 0;
-  const expCoverage = stats.plan.totalExp ? Math.min(1, expStock / stats.plan.totalExp) : 1;
-  const lmdCoverage = stats.plan.totalLmd ? Math.min(1, lmdStock / stats.plan.totalLmd) : 1;
-  const materialCoverage = materialPlanRows.length ? coveredMaterialTypes / materialPlanRows.length : 1;
+  const hasScopedPlan = stats.plan.items.length > 0;
+  const expCoverage = stats.plan.totalExp ? Math.min(1, expStock / stats.plan.totalExp) : 0;
+  const lmdCoverage = stats.plan.totalLmd ? Math.min(1, lmdStock / stats.plan.totalLmd) : 0;
+  const materialCoverage = materialPlanRows.length ? coveredMaterialTypes / materialPlanRows.length : 0;
+  const emptyScopeText = '本次未选择强化项';
   const expRanking = [...stats.operatorInvestments].sort((a, b) => b.exp - a.exp || b.lmd - a.lmd).slice(0, 6);
   return `
     ${renderViewIntro('账号养成统计', '汇总当前养成状态、培养分布、理论投入与计划覆盖情况。', overview.owned, 'OWNED OPERATORS')}
@@ -513,9 +565,9 @@ function renderStatistics() {
       </section>
     </div>
     <section class="panel-card stats-section"><h2>计划覆盖情况</h2><div class="coverage-grid">
-      ${renderCoverageRow('普通与特殊材料', materialCoverage, `${coveredMaterialTypes}/${materialPlanRows.length} 种已足量`)}
-      ${renderCoverageRow('作战记录', expCoverage, `库存 ${formatNumber(expStock)} / 需要 ${formatNumber(stats.plan.totalExp)} EXP`)}
-      ${renderCoverageRow('龙门币', lmdCoverage, `库存 ${formatNumber(lmdStock)} / 需要 ${formatNumber(stats.plan.totalLmd)}`)}
+      ${renderCoverageRow('普通与特殊材料', materialCoverage, hasScopedPlan ? `${coveredMaterialTypes}/${materialPlanRows.length} 种已足量` : emptyScopeText)}
+      ${renderCoverageRow('作战记录', expCoverage, hasScopedPlan ? `库存 ${formatNumber(expStock)} / 需要 ${formatNumber(stats.plan.totalExp)} EXP` : emptyScopeText)}
+      ${renderCoverageRow('龙门币', lmdCoverage, hasScopedPlan ? `库存 ${formatNumber(lmdStock)} / 需要 ${formatNumber(stats.plan.totalLmd)}` : emptyScopeText)}
     </div></section>
     <div class="stats-columns stats-section">
       <section class="panel-card"><h2>理论投入 · 龙门币</h2><div class="ranking-list">
@@ -570,6 +622,7 @@ function renderOperatorDrawer(operatorName) {
   if (!operator) return '';
   const progress = getProgress(operatorName);
   const items = buildOperatorUpgradeItems(operatorName, operator, progress, gameData);
+  const resourceFree = isResourceFreeCultivationOperator(operator);
   const maxLevels = gameData.MAX_LV[operator.r] || {};
   const eliteValues = [0, 1, 2].filter((elite) => maxLevels[`e${elite}`]);
   const currentMax = maxLevels[`e${progress.current.elite}`] || 1;
@@ -587,7 +640,7 @@ function renderOperatorDrawer(operatorName) {
           </div>
           ${(operator.md || []).length ? `<div class="module-progress"><span class="progress-subtitle">MODULE / 模组状态</span>${operator.md.map((module) => renderModuleProgress(operatorName, module, progress)).join('')}</div>` : ''}
           <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="button button--quiet" type="button" data-action="target-current" data-operator="${encoded(operatorName)}">目标设为当前</button><button class="button button--signal" type="button" data-action="target-max" data-operator="${encoded(operatorName)}">目标设为全满</button></div>
-          <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : emptyState('当前状态已达到目标', '调整目标后，这里会显示新增的强化项。')}</section>
+          <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : resourceFree ? emptyState('特殊养成', '该干员可以记录养成状态，但不会产生材料、经验或龙门币需求。') : emptyState('当前状态已达到目标', '调整目标后，这里会显示新增的强化项。')}</section>
         </div>
       </aside>
     </div>
@@ -675,7 +728,7 @@ function setTarget(operatorName, mode) {
 }
 
 function openMaterialSources(name) {
-  const sources = materialSources(name, planItems());
+  const sources = materialSources(name, selectedPlanItems());
   $('#modal-root').innerHTML = `
     <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
       <header class="modal__header"><h2>${escapeHtml(name)} · 材料来源</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
@@ -811,11 +864,7 @@ function applyImport(mode) {
   } else if (mode === 'replace') {
     userState = normalizeUserState(pendingImport, gameData);
   } else {
-    const merged = normalizeUserState(userState, gameData);
-    merged.operators = { ...merged.operators, ...pendingImport.operators };
-    merged.inventory = { ...merged.inventory, ...pendingImport.inventory };
-    merged.settings = { ...merged.settings, ...pendingImport.settings };
-    userState = normalizeUserState(merged, gameData);
+    userState = mergeProjectImport(userState, pendingImport, gameData);
   }
   pendingImport = null;
   pendingImportKind = null;
@@ -881,6 +930,19 @@ function handleClick(event) {
     filters.operatorScope = 'all';
     render();
   }
+  if (action === 'apply-plan-preset') {
+    const items = allPlanItems();
+    userState.settings.planSelection = applyPlanSelectionPreset(
+      userState.settings.planSelection,
+      button.dataset.preset,
+      items,
+      gameData,
+      userState
+    );
+    persist();
+    render();
+    $(`[data-action="apply-plan-preset"][data-preset="${button.dataset.preset}"]`)?.focus();
+  }
   if (action === 'open-operator') openOperator(decoded(button.dataset.operator));
   if (action === 'close-drawer' && (event.target === button || button.matches('.icon-button'))) closeDrawer();
   if (action === 'target-current') setTarget(decoded(button.dataset.operator), 'current');
@@ -924,7 +986,8 @@ function handleInput(event) {
     const material = decoded(control.dataset.material);
     userState.inventory[material] = Math.max(0, Math.floor(Number(control.value) || 0));
     persist();
-    renderShellCounts(planItems());
+    const items = allPlanItems();
+    renderShellCounts(items, selectedPlanItems(items));
   }
 }
 
@@ -966,6 +1029,39 @@ function handleChange(event) {
     persist();
     render();
   }
+  if (control.dataset.action === 'plan-operator-selection') {
+    const items = allPlanItems();
+    userState.settings.planSelection = setPlanOperatorSelected(
+      userState.settings.planSelection,
+      decoded(control.dataset.operator),
+      items,
+      control.checked,
+      gameData,
+      userState
+    );
+    persist();
+    render();
+    restorePlanSelectionFocus(decoded(control.dataset.operator));
+  }
+  if (control.dataset.action === 'plan-item-selection') {
+    const items = allPlanItems();
+    const operatorName = decoded(control.dataset.operator);
+    const key = decoded(control.dataset.key);
+    const item = items.find((entry) => entry.operatorName === operatorName && entry.key === key);
+    if (item) {
+      userState.settings.planSelection = setPlanItemSelected(
+        userState.settings.planSelection,
+        item,
+        items,
+        control.checked,
+        gameData,
+        userState
+      );
+      persist();
+      render();
+      restorePlanSelectionFocus(operatorName, key);
+    }
+  }
   if (control.dataset.action === 'progress-change') updateProgress(control);
   if (control.dataset.action === 'toggle-owned') {
     const operatorName = decoded(control.dataset.operator);
@@ -989,6 +1085,14 @@ function handleChange(event) {
   }
 }
 
+function handleToggle(event) {
+  const details = event.target;
+  if (!(details instanceof HTMLDetailsElement) || !details.matches('.plan-operator[data-operator]')) return;
+  const operatorName = decoded(details.dataset.operator);
+  if (details.open) openPlanOperators.add(operatorName);
+  else openPlanOperators.delete(operatorName);
+}
+
 async function init() {
   try {
     const loadedData = await loadGameData();
@@ -1007,6 +1111,7 @@ async function init() {
     document.addEventListener('click', handleClick);
     document.addEventListener('input', handleInput);
     document.addEventListener('change', handleChange);
+    document.addEventListener('toggle', handleToggle, true);
     $('#import-button').addEventListener('click', openImportMenu);
     $('#export-button').addEventListener('click', exportBackup);
     document.addEventListener('keydown', (event) => {

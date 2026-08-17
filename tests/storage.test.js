@@ -7,6 +7,7 @@ import {
   loadBackup,
   loadUserState,
   mergeImportedCurrentState,
+  mergeProjectImport,
   migrateLegacySnapshot,
   parseProjectImport,
   saveUserState,
@@ -130,6 +131,11 @@ test('项目扩展格式可以往返当前、目标和库存', () => {
     levels: { 煌: { fe: 1, fl: 60, te: 2, tl: 80 } },
     inventory: { 异铁: 8 }
   }, gameData);
+  state.settings.planSelection = {
+    preset: 'custom',
+    excludedOperators: ['char_103_angel'],
+    excludedItems: ['char_017_huang::skill:levels']
+  };
 
   const exported = createProjectExport(state, { now: '2026-08-17T00:00:00.000Z' });
   const parsed = parseProjectImport(JSON.stringify(exported), gameData);
@@ -137,6 +143,36 @@ test('项目扩展格式可以往返当前、目标和库存', () => {
   assert.equal(exported.format, 'arknights-material-planner');
   assert.equal(parsed.operators.煌.target.mastery.s1, 2);
   assert.equal(parsed.inventory.异铁, 8);
+  assert.deepEqual(parsed.settings.planSelection, state.settings.planSelection);
+});
+
+test('旧数据没有材料统计选择时默认包含全部计划', () => {
+  const state = migrateLegacySnapshot({}, gameData);
+
+  assert.deepEqual(state.settings.planSelection, {
+    preset: 'all',
+    excludedOperators: [],
+    excludedItems: []
+  });
+});
+
+test('合并旧项目备份时保留本机材料统计范围', () => {
+  const local = migrateLegacySnapshot({}, gameData);
+  local.settings.planSelection = {
+    preset: 'custom',
+    excludedOperators: ['char_103_angel'],
+    excludedItems: ['char_017_huang::skill:levels']
+  };
+  const oldBackup = parseProjectImport({
+    format: 'arknights-material-planner',
+    version: 1,
+    userData: { operators: {}, inventory: { 异铁: 5 } }
+  }, gameData);
+
+  const merged = mergeProjectImport(local, oldBackup, gameData);
+
+  assert.equal(merged.inventory.异铁, 5);
+  assert.deepEqual(merged.settings.planSelection, local.settings.planSelection);
 });
 
 test('自动备份可以恢复为已校验的用户状态', () => {

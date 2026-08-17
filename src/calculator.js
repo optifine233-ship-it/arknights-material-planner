@@ -4,6 +4,15 @@ const DEFAULT_MODULE_LMD = {
   5: [80000, 100000, 120000]
 };
 
+const NO_RESOURCE_CULTIVATION_IDS = new Set([
+  'char_4195_radian',
+  'char_4230_mcnist'
+]);
+
+export function isResourceFreeCultivationOperator(operator) {
+  return NO_RESOURCE_CULTIVATION_IDS.has(String(operator?.id || ''));
+}
+
 function safeNumber(value, fallback = 0) {
   const number = Number(value);
   return Number.isFinite(number) ? number : fallback;
@@ -68,6 +77,7 @@ function makeUpgradeItem(operatorName, fields) {
     operatorName,
     kind: fields.kind,
     key: fields.key,
+    selectionKey: fields.selectionKey || fields.key,
     label: fields.label,
     stage: fields.stage ?? null,
     materials: cloneMaterials(fields.materials),
@@ -79,6 +89,7 @@ function makeUpgradeItem(operatorName, fields) {
 
 export function buildOperatorUpgradeItems(operatorName, operator, progress, gameData) {
   if (!operator || !gameData) return [];
+  if (isResourceFreeCultivationOperator(operator)) return [];
 
   const current = normalizeCultivationState(progress?.current);
   const target = normalizeCultivationState(progress?.target);
@@ -97,6 +108,7 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
         items.push(makeUpgradeItem(operatorName, {
           kind: 'level',
           key: `level:e${elite}:${fromLevel}-${boundedToLevel}`,
+          selectionKey: `level:e${elite}`,
           label: `精英${elite} · ${fromLevel}→${boundedToLevel}级`,
           stage: elite,
           exp: cost.exp,
@@ -110,6 +122,7 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
         items.push(makeUpgradeItem(operatorName, {
           kind: 'promotion',
           key: `promotion:e${promotionStage}`,
+          selectionKey: `promotion:e${promotionStage}`,
           label: `晋升精英${promotionStage}`,
           stage: promotionStage,
           materials: operator[`e${promotionStage}`] || [],
@@ -120,16 +133,28 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
   }
 
   const maxSkillLevel = Math.max(current.skillLevel, target.skillLevel);
-  for (let level = current.skillLevel + 1; level <= maxSkillLevel; level += 1) {
-    const skillStage = (operator.sl || []).find((entry) => nonNegativeInteger(entry.level) === level);
-    if (!skillStage) continue;
-    items.push(makeUpgradeItem(operatorName, {
-      kind: 'skill',
-      key: `skill:${level}`,
-      label: `技能等级 ${level}`,
-      stage: level,
-      materials: skillStage.mats
-    }));
+  if (maxSkillLevel > current.skillLevel) {
+    const skillMaterials = {};
+    let hasSkillStage = false;
+    for (let level = current.skillLevel + 1; level <= maxSkillLevel; level += 1) {
+      const skillStage = (operator.sl || []).find((entry) => nonNegativeInteger(entry.level) === level);
+      if (!skillStage) continue;
+      hasSkillStage = true;
+      for (const material of cloneMaterials(skillStage.mats)) {
+        addMaterial(skillMaterials, material.name, material.qty);
+      }
+    }
+    if (hasSkillStage) {
+      items.push(makeUpgradeItem(operatorName, {
+        kind: 'skill',
+        key: `skill:${current.skillLevel}-${maxSkillLevel}`,
+        selectionKey: 'skill:levels',
+        label: `技能等级 ${current.skillLevel}→${maxSkillLevel}`,
+        stage: maxSkillLevel,
+        materials: Object.entries(skillMaterials).map(([name, qty]) => ({ name, qty })),
+        meta: { fromLevel: current.skillLevel, toLevel: maxSkillLevel }
+      }));
+    }
   }
 
   for (const [skillKey, skillLabel] of [['s1', '技能一'], ['s2', '技能二'], ['s3', '技能三']]) {
@@ -143,6 +168,7 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
       items.push(makeUpgradeItem(operatorName, {
         kind: 'mastery',
         key: `mastery:${skillKey}:${stage}`,
+        selectionKey: `mastery:${skillKey}:${stage}`,
         label: `${skillLabel} · 专精${stage}`,
         stage,
         materials: masteryStage.mats,
@@ -153,6 +179,7 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
 
   for (const [moduleIndex, module] of (operator.md || []).entries()) {
     const moduleKey = String(module.id || module.name || moduleIndex);
+    const moduleSelectionKey = String(module.id || module.name || `index-${moduleIndex}`);
     const fromStage = current.modules[moduleKey] || 0;
     const toStage = Math.max(fromStage, target.modules[moduleKey] || 0);
     for (let stage = fromStage + 1; stage <= toStage; stage += 1) {
@@ -163,6 +190,7 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
       items.push(makeUpgradeItem(operatorName, {
         kind: 'module',
         key: `module:${moduleKey}:${stage}`,
+        selectionKey: `module:${moduleSelectionKey}:${stage}`,
         label: `${module.name} · ${stage}级`,
         stage,
         materials: moduleStage.mats,

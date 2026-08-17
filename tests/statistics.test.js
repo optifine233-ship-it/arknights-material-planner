@@ -117,3 +117,21 @@ test('理论已投入和未来计划分别计算且不混在一起', () => {
   assert.ok(stats.invested.materialRanking.some((row) => row.name === '近卫芯片'));
   assert.ok(stats.invested.materialRanking.every((row, index, values) => index === 0 || values[index - 1].qty >= row.qty));
 });
+
+test('材料统计范围只改变未来需求，不改变完整计划与账号概况', () => {
+  const scopedItems = [{
+    operatorName: '甲',
+    kind: 'level',
+    key: 'level:e2:2-3',
+    materials: [],
+    exp: 40,
+    lmd: 4
+  }];
+  const stats = calculateStatistics(gameData, state, scopedItems);
+
+  assert.deepEqual(stats.plan.items, scopedItems);
+  assert.equal(stats.plan.operatorCount, 1);
+  assert.equal(stats.progress.plannedOperators, 2);
+  assert.equal(stats.distributions.profession.狙击.planned, 1);
+  assert.equal(stats.overview.owned, 2);
+});

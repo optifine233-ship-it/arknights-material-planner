@@ -1,3 +1,5 @@
+import { normalizePlanSelection } from './plan-selection.js';
+
 export const USER_DATA_SCHEMA_VERSION = 2;
 export const USER_DATA_STORAGE_KEY = 'arknights-material-planner:user-data:v2';
 export const USER_DATA_BACKUP_KEY = 'arknights-material-planner:backup';
@@ -104,7 +106,8 @@ export function createEmptyUserState() {
       materialDisplay: 'shortage',
       materialGrouping: 'purpose',
       gapGrouping: 'purpose',
-      statisticsGrouping: 'profession'
+      statisticsGrouping: 'profession',
+      planSelection: normalizePlanSelection()
     },
     migration: {}
   };
@@ -114,6 +117,7 @@ export function normalizeUserState(rawState = {}, gameData) {
   const state = createEmptyUserState();
   state.updatedAt = typeof rawState.updatedAt === 'string' ? rawState.updatedAt : state.updatedAt;
   state.settings = { ...state.settings, ...(rawState.settings || {}) };
+  state.settings.planSelection = normalizePlanSelection(rawState.settings?.planSelection);
   state.migration = { ...(rawState.migration || {}) };
   state.inventory = Object.fromEntries(
     Object.entries(rawState.inventory || {}).map(([name, qty]) => [name, integer(qty)])
@@ -294,6 +298,20 @@ export function mergeImportedCurrentState(existingState, importedState, mode, ga
   }
 
   return next;
+}
+
+export function mergeProjectImport(existingState, importedState, gameData) {
+  const next = normalizeUserState(existingState, gameData);
+  const incoming = normalizeUserState(importedState, gameData);
+  const localPlanSelection = next.settings.planSelection;
+  next.operators = { ...next.operators, ...incoming.operators };
+  next.inventory = { ...next.inventory, ...incoming.inventory };
+  next.settings = {
+    ...next.settings,
+    ...incoming.settings,
+    planSelection: localPlanSelection
+  };
+  return normalizeUserState(next, gameData);
 }
 
 export function createProjectExport(state, options = {}) {
