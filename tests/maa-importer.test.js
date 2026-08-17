@@ -51,6 +51,20 @@ test('可以直接解析粘贴的 MAA 干员识别 JSON 文本', () => {
   assert.equal(result.operators.煌.potential, 4);
 });
 
+test('兼容 MAA 直接复制出的干员对象数组', () => {
+  const pasted = JSON.stringify([
+    { id: 'char_017_huang', name: '煌', elite: 2, level: 70, own: true, potential: 4, rarity: 5 },
+    { id: 'char_103_angel', name: '能天使', elite: 1, level: 80, own: true, potential: 2, rarity: 5 }
+  ]);
+
+  const result = parseMaaOperatorExport(pasted, gameData);
+
+  assert.equal(result.format, 'maa-oper-box');
+  assert.equal(result.operators.煌.current.level, 70);
+  assert.equal(result.operators.能天使.current.elite, 1);
+  assert.equal(result.sourceCounts.owned, 2);
+});
+
 test('应用 MAA 导入时保留其无法识别的技能、专精和模组状态', () => {
   const existing = {
     schemaVersion: 2,

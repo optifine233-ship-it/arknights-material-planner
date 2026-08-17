@@ -20,6 +20,21 @@ function findOperBoxPayload(root) {
   return null;
 }
 
+function directOperatorListPayload(root) {
+  if (!Array.isArray(root) || !root.length) return null;
+  const looksLikeOperators = root.every((entry) => (
+    entry
+    && typeof entry === 'object'
+    && !Array.isArray(entry)
+    && (typeof entry.id === 'string' || typeof entry.name === 'string')
+    && ['own', 'elite', 'level', 'potential', 'rarity'].some((field) => field in entry)
+  ));
+  if (!looksLikeOperators) return null;
+  return root.some((entry) => entry.own === false)
+    ? { all_opers: root }
+    : { own_opers: root };
+}
+
 function integer(value, fallback = 0) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.max(0, Math.floor(parsed)) : fallback;
@@ -41,9 +56,9 @@ function resolveName(raw, indexes) {
 
 export function parseMaaOperatorExport(input, gameData) {
   const root = parsedJson(input);
-  const payload = findOperBoxPayload(root);
+  const payload = findOperBoxPayload(root) || directOperatorListPayload(root);
   if (!payload || (!Array.isArray(payload.all_opers) && !Array.isArray(payload.own_opers))) {
-    throw new Error('未找到 MAA 干员识别 JSON 中的 all_opers 或 own_opers。');
+    throw new Error('未找到 MAA 干员识别数组，也未找到 all_opers 或 own_opers。');
   }
 
   const indexes = gameDataIndexes(gameData);
