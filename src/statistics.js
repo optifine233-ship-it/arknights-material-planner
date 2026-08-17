@@ -23,6 +23,23 @@ function summarizeItems(items) {
   };
 }
 
+function resourceLedger(invested, stock, required, dailyIncome) {
+  const safeInvested = Math.max(0, Math.floor(Number(invested) || 0));
+  const safeStock = Math.max(0, Math.floor(Number(stock) || 0));
+  const safeRequired = Math.max(0, Math.floor(Number(required) || 0));
+  const safeDailyIncome = Math.max(0, Math.floor(Number(dailyIncome) || 0));
+  const shortage = Math.max(0, safeRequired - safeStock);
+  return {
+    invested: safeInvested,
+    stock: safeStock,
+    recordedTotal: safeInvested + safeStock,
+    required: safeRequired,
+    shortage,
+    dailyIncome: safeDailyIncome,
+    estimatedDays: shortage === 0 ? 0 : safeDailyIncome > 0 ? Math.ceil(shortage / safeDailyIncome) : null
+  };
+}
+
 function blankDistribution() {
   return { owned: 0, elite2: 0, planned: 0 };
 }
@@ -106,6 +123,14 @@ export function calculateStatistics(gameData, userState, scopedPlanItems = null)
 
   operatorInvestments.sort((a, b) => b.lmd - a.lmd || b.exp - a.exp || a.name.localeCompare(b.name, 'zh-CN'));
 
+  const invested = summarizeItems(investedItems);
+  const plan = summarizeItems(planItems);
+  const expStock = Object.entries(gameData.EXP_ITEMS || {}).reduce(
+    (sum, [name, value]) => sum + (userState?.inventory?.[name] || 0) * value,
+    0
+  );
+  const lmdStock = userState?.inventory?.龙门币 || 0;
+
   return {
     overview: {
       owned,
@@ -123,8 +148,12 @@ export function calculateStatistics(gameData, userState, scopedPlanItems = null)
       moduleStages,
       plannedOperators: plannedOperators.size
     },
-    invested: summarizeItems(investedItems),
-    plan: summarizeItems(planItems),
+    invested,
+    plan,
+    resources: {
+      exp: resourceLedger(invested.totalExp, expStock, plan.totalExp, userState?.settings?.statisticsDailyExp),
+      lmd: resourceLedger(invested.totalLmd, lmdStock, plan.totalLmd, userState?.settings?.statisticsDailyLmd)
+    },
     distributions: { profession, subprofession, rarity },
     operatorInvestments
   };

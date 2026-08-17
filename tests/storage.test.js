@@ -9,6 +9,7 @@ import {
   mergeImportedCurrentState,
   mergeProjectImport,
   migrateLegacySnapshot,
+  normalizeUserState,
   parseProjectImport,
   saveUserState,
   USER_DATA_STORAGE_KEY
@@ -214,4 +215,16 @@ test('干员改名后通过稳定 ID 迁移本地状态', () => {
   assert.equal(normalized.operators.新名称.id, 'char_017_huang');
   assert.equal(normalized.operators.新名称.current.level, 55);
   assert.equal(normalized.operators.旧名称, undefined);
+});
+
+test('每日资源积累量会作为非负整数保存', () => {
+  const normalized = normalizeUserState({
+    settings: {
+      statisticsDailyExp: '1234.9',
+      statisticsDailyLmd: -20
+    }
+  }, gameData);
+
+  assert.equal(normalized.settings.statisticsDailyExp, 1234);
+  assert.equal(normalized.settings.statisticsDailyLmd, 0);
 });

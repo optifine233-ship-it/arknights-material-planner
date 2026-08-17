@@ -39,7 +39,8 @@ const gameData = {
   ELITE_LMD: {
     5: { e1: 100, e2: 200 },
     4: { e1: 80, e2: 150 }
-  }
+  },
+  EXP_ITEMS: { 基础作战记录: 1 }
 };
 
 const state = {
@@ -80,7 +81,8 @@ const state = {
       }
     }
   },
-  inventory: {}
+  inventory: { 基础作战记录: 2, 龙门币: 50 },
+  settings: { statisticsDailyExp: 25, statisticsDailyLmd: 10 }
 };
 
 test('账号概况、职业分布和计划数量来自同一份状态', () => {
@@ -134,4 +136,35 @@ test('材料统计范围只改变未来需求，不改变完整计划与账号�
   assert.equal(stats.progress.plannedOperators, 2);
   assert.equal(stats.distributions.profession.狙击.planned, 1);
   assert.equal(stats.overview.owned, 2);
+});
+
+test('资源账汇总全部已拥有干员的投入、库存、计划缺口和积累天数', () => {
+  const stats = calculateStatistics(gameData, state);
+
+  assert.equal(stats.resources.exp.invested, stats.invested.totalExp);
+  assert.equal(stats.resources.exp.stock, 2);
+  assert.equal(stats.resources.exp.recordedTotal, stats.invested.totalExp + 2);
+  assert.equal(stats.resources.exp.required, stats.plan.totalExp);
+  assert.equal(stats.resources.exp.shortage, Math.max(0, stats.plan.totalExp - 2));
+  assert.equal(stats.resources.exp.dailyIncome, 25);
+  assert.equal(stats.resources.exp.estimatedDays, Math.ceil(stats.resources.exp.shortage / 25));
+
+  assert.equal(stats.resources.lmd.invested, stats.invested.totalLmd);
+  assert.equal(stats.resources.lmd.stock, 50);
+  assert.equal(stats.resources.lmd.recordedTotal, stats.invested.totalLmd + 50);
+  assert.equal(stats.resources.lmd.required, stats.plan.totalLmd);
+  assert.equal(stats.resources.lmd.shortage, Math.max(0, stats.plan.totalLmd - 50));
+  assert.equal(stats.resources.lmd.dailyIncome, 10);
+  assert.equal(stats.resources.lmd.estimatedDays, Math.ceil(stats.resources.lmd.shortage / 10));
+
+  const withoutRate = calculateStatistics(gameData, { ...state, inventory: {}, settings: {} });
+  assert.equal(withoutRate.resources.exp.estimatedDays, null);
+
+  const covered = calculateStatistics(gameData, {
+    ...state,
+    inventory: { 基础作战记录: 100000, 龙门币: 100000 },
+    settings: {}
+  });
+  assert.equal(covered.resources.exp.shortage, 0);
+  assert.equal(covered.resources.exp.estimatedDays, 0);
 });

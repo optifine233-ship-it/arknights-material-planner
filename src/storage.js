@@ -107,6 +107,8 @@ export function createEmptyUserState() {
       materialGrouping: 'purpose',
       gapGrouping: 'purpose',
       statisticsGrouping: 'profession',
+      statisticsDailyExp: 0,
+      statisticsDailyLmd: 0,
       planSelection: normalizePlanSelection()
     },
     migration: {}
@@ -117,6 +119,8 @@ export function normalizeUserState(rawState = {}, gameData) {
   const state = createEmptyUserState();
   state.updatedAt = typeof rawState.updatedAt === 'string' ? rawState.updatedAt : state.updatedAt;
   state.settings = { ...state.settings, ...(rawState.settings || {}) };
+  state.settings.statisticsDailyExp = integer(state.settings.statisticsDailyExp);
+  state.settings.statisticsDailyLmd = integer(state.settings.statisticsDailyLmd);
   state.settings.planSelection = normalizePlanSelection(rawState.settings?.planSelection);
   state.migration = { ...(rawState.migration || {}) };
   state.inventory = Object.fromEntries(

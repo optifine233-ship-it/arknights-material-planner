@@ -535,17 +535,14 @@ function renderStatistics(allItems, scopedItems) {
   const materialSummary = computeMaterialSummary(stats.plan.items, userState.inventory, gameData);
   const materialPlanRows = materialSummary.rows.filter((row) => row.required > 0);
   const coveredMaterialTypes = materialPlanRows.filter((row) => row.shortage === 0).length;
-  const expStock = Object.entries(gameData.EXP_ITEMS || {}).reduce((sum, [name, value]) => sum + (userState.inventory[name] || 0) * value, 0);
-  const lmdStock = userState.inventory.龙门币 || 0;
   const hasScopedPlan = stats.plan.items.length > 0;
-  const expCoverage = stats.plan.totalExp ? Math.min(1, expStock / stats.plan.totalExp) : 0;
-  const lmdCoverage = stats.plan.totalLmd ? Math.min(1, lmdStock / stats.plan.totalLmd) : 0;
+  const expCoverage = stats.resources.exp.required ? Math.min(1, stats.resources.exp.stock / stats.resources.exp.required) : 0;
+  const lmdCoverage = stats.resources.lmd.required ? Math.min(1, stats.resources.lmd.stock / stats.resources.lmd.required) : 0;
   const materialCoverage = materialPlanRows.length ? coveredMaterialTypes / materialPlanRows.length : 0;
   const emptyScopeText = '本次未选择强化项';
-  const expRanking = [...stats.operatorInvestments].sort((a, b) => b.exp - a.exp || b.lmd - a.lmd).slice(0, 6);
   return `
-    ${renderViewIntro('账号养成统计', '汇总当前养成状态、培养分布、理论投入与计划覆盖情况。', overview.owned, 'OWNED OPERATORS')}
-    <div class="statistics-note">理论投入根据当前养成状态反推，不代表游戏内的实际消费记录。</div>
+    ${renderViewIntro('账号养成统计', '查看账号养成规模、资源积累与培养目标还差多少。', overview.owned, 'OWNED OPERATORS')}
+    <div class="statistics-note">养成累计投入根据全部已拥有干员的当前状态反推；已记录总量为养成投入与当前库存之和，不代表完整的游戏流水。</div>
     <div class="stat-card-grid">
       ${statCard('OWNED', overview.owned, '已拥有干员')}
       ${statCard('ELITE 2', overview.elite2, `${Math.round(overview.elite2Ratio * 100)}% 精二率`)}
@@ -553,8 +550,8 @@ function renderStatistics(allItems, scopedItems) {
       ${statCard('POTENTIAL 6', overview.maxPotential, '满潜干员')}
       ${statCard('MASTERY', overview.masteryStages, '累计专精阶段')}
       ${statCard('MODULE', overview.unlockedModules, `${overview.level3Modules} 个三级模组`)}
-      ${statCard('INVESTED LMD', formatNumber(stats.invested.totalLmd), '理论已投入')}
-      ${statCard('PLAN LMD', formatNumber(stats.plan.totalLmd), '当前目标仍需')}
+      ${statCard('RECORDED EXP', formatNumber(stats.resources.exp.recordedTotal), '养成投入 + 当前库存')}
+      ${statCard('RECORDED LMD', formatNumber(stats.resources.lmd.recordedTotal), '养成投入 + 当前库存')}
     </div>
     <div class="stats-columns">
       <section class="panel-card"><div class="panel-heading"><h2>${distributionTitle}养成分布</h2><label class="field"><span>观察维度</span><select id="statistics-grouping">${selectOptions(['profession', 'subprofession', 'rarity'], distributionMode, (value) => ({ profession: '按职业', subprofession: '按分支职业', rarity: '按星级' })[value])}</select></label></div><div class="distribution-list">
@@ -568,30 +565,43 @@ function renderStatistics(allItems, scopedItems) {
     </div>
     <section class="panel-card stats-section"><h2>计划覆盖情况</h2><div class="coverage-grid">
       ${renderCoverageRow('普通与特殊材料', materialCoverage, hasScopedPlan ? `${coveredMaterialTypes}/${materialPlanRows.length} 种已足量` : emptyScopeText)}
-      ${renderCoverageRow('作战记录', expCoverage, hasScopedPlan ? `库存 ${formatNumber(expStock)} / 需要 ${formatNumber(stats.plan.totalExp)} EXP` : emptyScopeText)}
-      ${renderCoverageRow('龙门币', lmdCoverage, hasScopedPlan ? `库存 ${formatNumber(lmdStock)} / 需要 ${formatNumber(stats.plan.totalLmd)}` : emptyScopeText)}
+      ${renderCoverageRow('作战记录', expCoverage, hasScopedPlan ? `库存 ${formatNumber(stats.resources.exp.stock)} / 需要 ${formatNumber(stats.resources.exp.required)} EXP` : emptyScopeText)}
+      ${renderCoverageRow('龙门币', lmdCoverage, hasScopedPlan ? `库存 ${formatNumber(stats.resources.lmd.stock)} / 需要 ${formatNumber(stats.resources.lmd.required)}` : emptyScopeText)}
     </div></section>
-    <div class="stats-columns stats-section">
-      <section class="panel-card"><h2>理论投入 · 龙门币</h2><div class="ranking-list">
-        ${stats.operatorInvestments.slice(0, 10).map((row, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2, '0')}</span><span><b>${escapeHtml(row.name)}</b><small>${escapeHtml(row.profession)} · ${row.rarity}★ · ${row.upgradeItems} 项</small></span><strong>LMD ${formatNumber(row.lmd)}</strong></div>`).join('') || '<p>还没有可统计的养成状态。</p>'}
-      </div></section>
-      <section class="panel-card"><h2>理论投入 · 经验</h2><div class="ranking-list">
-        ${expRanking.map((row, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2, '0')}</span><span><b>${escapeHtml(row.name)}</b><small>${escapeHtml(row.profession)} · ${row.rarity}★</small></span><strong>EXP ${formatNumber(row.exp)}</strong></div>`).join('') || '<p>还没有可统计的养成状态。</p>'}
-      </div></section>
+    <div class="resource-ledger-grid stats-section">
+      ${renderResourceLedger('exp', '作战经验', 'EXP', stats.resources.exp, '高级作战记录')}
+      ${renderResourceLedger('lmd', '龙门币', 'LMD', stats.resources.lmd, '龙门币')}
     </div>
-    <section class="panel-card stats-section"><h2>理论投入与未来计划</h2>
-      <div class="summary-strip" style="margin:0">
-        ${summaryCell('INVESTED EXP', formatNumber(stats.invested.totalExp), '根据当前状态反推')}
-        ${summaryCell('INVESTED ITEMS', stats.invested.items.length, '已完成强化项')}
-        ${summaryCell('PLAN EXP', formatNumber(stats.plan.totalExp), '从当前到目标')}
-        ${summaryCell('PLAN ITEMS', stats.plan.items.length, '未来强化项')}
-      </div>
-    </section>
     <div class="stats-columns stats-section">
-      ${renderMaterialRanking('理论投入最多的材料', stats.invested.materialRanking)}
+      ${renderMaterialRanking('养成累计投入最多的材料', stats.invested.materialRanking)}
       ${renderMaterialRanking('培养计划需求最多的材料', stats.plan.materialRanking)}
     </div>
   `;
+}
+
+function renderResourceLedger(key, title, code, ledger, iconName) {
+  const forecast = resourceForecastText(code, ledger);
+  return `<section class="panel-card resource-ledger resource-ledger--${key}">
+    <header class="resource-ledger__header">${materialIcon(iconName, gameData)}<div><small>${code} / RESOURCE LOG</small><h2>${escapeHtml(title)}</h2></div></header>
+    <div class="resource-ledger__total"><small>已记录总量</small><strong>${formatNumber(ledger.recordedTotal)}</strong><span>养成投入 + 当前库存</span></div>
+    <div class="resource-ledger__rows">
+      <div><span>养成累计投入</span><b>${formatNumber(ledger.invested)}</b></div>
+      <div><span>当前库存</span><b>${formatNumber(ledger.stock)}</b></div>
+      <div><span>所选目标需要</span><b>${formatNumber(ledger.required)}</b></div>
+      <div class="${ledger.shortage ? 'is-shortage' : 'is-covered'}"><span>仍需积累</span><b>${ledger.shortage ? formatNumber(ledger.shortage) : '已覆盖'}</b></div>
+    </div>
+    <div class="resource-forecast">
+      <label for="statistics-daily-${key}"><span>我每天通常能积累</span><div><input id="statistics-daily-${key}" type="number" inputmode="numeric" min="0" value="${ledger.dailyIncome}"><b>${code} / 天</b></div></label>
+      <p>${escapeHtml(forecast)}</p>
+    </div>
+  </section>`;
+}
+
+function resourceForecastText(code, ledger) {
+  if (ledger.required === 0) return `所选培养目标不需要额外 ${code}。`;
+  if (ledger.shortage === 0) return '当前库存已经能够覆盖所选培养目标。';
+  if (ledger.estimatedDays !== null) return `按此速度，预计还需约 ${formatNumber(ledger.estimatedDays)} 天。`;
+  return '填写每天通常能积累的数量，即可估算时间。';
 }
 
 function renderCoverageRow(label, ratio, detail) {
@@ -1034,6 +1044,19 @@ function handleChange(event) {
     userState.settings.statisticsGrouping = control.value;
     persist();
     render();
+  }
+  if (control.id === 'statistics-daily-exp' || control.id === 'statistics-daily-lmd') {
+    const setting = control.id === 'statistics-daily-exp' ? 'statisticsDailyExp' : 'statisticsDailyLmd';
+    const resourceKey = control.id === 'statistics-daily-exp' ? 'exp' : 'lmd';
+    const code = resourceKey === 'exp' ? 'EXP' : 'LMD';
+    const value = Math.max(0, Math.floor(Number(control.value) || 0));
+    userState.settings[setting] = value;
+    control.value = value;
+    persist();
+    const items = allPlanItems();
+    const stats = calculateStatistics(gameData, userState, selectedPlanItems(items));
+    const forecast = control.closest('.resource-forecast')?.querySelector('p');
+    if (forecast) forecast.textContent = resourceForecastText(code, stats.resources[resourceKey]);
   }
   if (control.dataset.action === 'plan-operator-selection') {
     const items = allPlanItems();
