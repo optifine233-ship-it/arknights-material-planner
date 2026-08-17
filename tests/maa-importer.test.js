@@ -107,9 +107,22 @@ test('应用 MAA 导入时保留其无法识别的技能、专精和模组状态
   assert.equal(next.operators.煌.potential, 4);
 });
 
+test('首次导入 MAA 干员时技能和模组使用安全默认值', () => {
+  const imported = parseMaaOperatorExport([
+    { id: 'char_017_huang', name: '煌', elite: 1, level: 60, own: true, potential: 2 }
+  ], gameData);
+
+  const next = applyMaaOperatorImport({}, imported, 'merge', gameData);
+
+  assert.equal(next.operators.煌.current.skillLevel, 1);
+  assert.deepEqual(next.operators.煌.current.mastery, { s1: 0, s2: 0, s3: 0 });
+  assert.deepEqual(next.operators.煌.current.modules, {});
+});
+
 test('不接受无法定位 all_opers 或 own_opers 的普通 JSON', () => {
-  assert.throws(
-    () => parseMaaOperatorExport({ operators: [] }, gameData),
-    /MAA 干员识别/
-  );
+  assert.throws(() => parseMaaOperatorExport({ operators: [] }, gameData), (error) => {
+    assert.match(error.message, /MAA“干员识别”/);
+    assert.doesNotMatch(error.message, /all_opers|own_opers/);
+    return true;
+  });
 });

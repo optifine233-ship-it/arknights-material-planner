@@ -42,7 +42,12 @@
         </div>
         <div class="command-actions">
           <span class="save-state" id="save-state"><i></i>本机自动保存</span>
-          <button class="button button--quiet" type="button" id="import-button">导入</button>
+          <span class="import-action">
+            <button class="import-help" type="button" aria-label="查看导入方法" aria-describedby="import-help-tooltip">i
+              <span class="import-help__tooltip" id="import-help-tooltip" role="tooltip">在 MAA 使用“干员识别”，复制识别结果后粘贴导入；也可以导入本站导出的备份。MAA 不提供技能等级、专精和模组状态，首次导入按技能 1、未专精、未解锁模组记录。</span>
+            </button>
+            <button class="button button--quiet" type="button" id="import-button">导入</button>
+          </span>
           <button class="button button--dark" type="button" id="export-button">导出备份</button>
         </div>
       </header>

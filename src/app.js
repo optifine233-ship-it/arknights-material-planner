@@ -236,7 +236,7 @@ function renderOperatorCard(name, items) {
   const resourceFree = isResourceFreeCultivationOperator(operator);
   const currentText = progress.owned
     ? [`精${current.elite}`, `${current.level}级`, current.skillLevel > 1 ? `技${current.skillLevel}` : ''].filter(Boolean).join(' · ')
-    : '尚未标记拥有';
+    : '未拥有';
   return `
     <button type="button" class="operator-card ${progress.owned ? 'is-owned' : ''}" data-action="open-operator" data-operator="${encoded(name)}">
       ${operatorPortrait(name, operator)}
@@ -285,6 +285,7 @@ function renderPlanSelectionPanel(items, scopedItems) {
 }
 
 function renderPlanOperator(name, items) {
+  const operator = gameData.OPS[name];
   const selection = operatorPlanSelectionState(name, items, userState.settings.planSelection, gameData, userState);
   const selectedItems = items.filter((item) => isPlanItemSelected(item, userState.settings.planSelection, gameData, userState));
   const exp = selectedItems.reduce((sum, item) => sum + item.exp, 0);
@@ -293,8 +294,9 @@ function renderPlanOperator(name, items) {
     <details class="plan-operator ${selection.selectedCount ? '' : 'is-excluded'}" data-operator="${encoded(name)}" ${openPlanOperators.has(name) ? 'open' : ''}>
       <summary class="plan-operator__header">
         <input class="plan-checkbox" type="checkbox" ${selection.checked ? 'checked' : ''} data-indeterminate="${selection.indeterminate}" data-action="plan-operator-selection" data-operator="${encoded(name)}" aria-label="将${escapeHtml(name)}纳入本次材料统计">
+        <div class="plan-operator__portrait" aria-hidden="true">${operatorPortrait(name, operator)}</div>
         <div><h3>${escapeHtml(name)}</h3><p>已选 ${selection.selectedCount}/${items.length} 项 · EXP ${formatNumber(exp)} · LMD ${formatNumber(lmd)}</p></div>
-        <b>${escapeHtml(gameData.OPS[name]?.p || '')} / ${gameData.OPS[name]?.r + 1}★</b>
+        <b>${escapeHtml(operator?.p || '')} / ${operator?.r + 1}★</b>
         <span class="plan-operator__toggle" aria-hidden="true"></span>
       </summary>
       <div class="plan-operator__tools"><button class="button button--small" type="button" data-action="open-operator" data-operator="${encoded(name)}">编辑目标</button></div>
@@ -753,10 +755,14 @@ function openImportMenu() {
     <div class="modal-backdrop" data-action="close-modal"><section class="modal modal--import" role="dialog" aria-modal="true" aria-labelledby="import-dialog-title">
       <header class="modal__header"><h2 id="import-dialog-title">导入数据</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button></header>
       <div class="modal__body">
-        <p>粘贴 MAA 干员识别结果，即可检查并导入。也支持本工具导出的备份 JSON。</p>
+        <div class="import-paths">
+          <div><b>MAA 干员识别</b><span>在 MAA 完成干员识别后，复制识别结果并粘贴到下方。</span></div>
+          <div><b>本站备份</b><span>粘贴本站导出的备份内容，或直接选择 JSON 文件。</span></div>
+        </div>
+        <p class="import-limit"><b>MAA 识别范围：</b>可导入拥有状态、精英阶段、等级和潜能；不包含技能等级、专精和模组状态。首次导入的干员按技能 1、未专精、未解锁模组记录；已有本地技能、专精、模组及培养目标会保留。</p>
         <label class="import-json-field" for="import-json">
-          <span>MAA 识别结果 / JSON</span>
-          <textarea id="import-json" spellcheck="false" autocomplete="off" placeholder="在此粘贴包含 all_opers 或 own_opers 的 MAA 识别结果…"></textarea>
+          <span>识别结果或备份内容</span>
+          <textarea id="import-json" spellcheck="false" autocomplete="off" placeholder="在这里粘贴 MAA 干员识别结果，或本站导出的备份内容…"></textarea>
           <small>粘贴后点击“预览导入”，或按 Ctrl + Enter。</small>
         </label>
         ${backup ? `<div class="restore-card"><span><b>最近自动备份</b><small>${escapeHtml(createdAt)}</small></span><button class="button button--quiet" type="button" data-action="preview-last-backup">预览恢复</button></div>` : ''}
@@ -833,7 +839,7 @@ function previewMaaImport(imported) {
     <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
       <header class="modal__header"><h2>MAA 干员识别导入</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
       <div class="modal__body">
-        <p>已识别 MAA 的干员列表。将导入拥有状态、精英阶段、等级和潜能；MAA 当前不提供技能等级、专精和模组信息，因此这些字段以及本工具中的目标状态都会保留。</p>
+        <p>已识别 MAA 的干员列表。将导入拥有状态、精英阶段、等级和潜能。MAA 不提供技能等级、专精和模组状态：首次导入按技能 1、未专精、未解锁模组记录；已有本地技能、专精、模组及培养目标会保留。</p>
         <div class="import-summary"><div><b>${entries.length}</b><small>匹配干员</small></div><div><b>${owned}</b><small>拥有干员</small></div><div><b>${unknown.length}</b><small>未匹配记录</small></div></div>
         ${unknown.length ? `<div class="import-warning"><b>未匹配：</b>${unknown.slice(0, 8).map((item) => escapeHtml(item.name || item.id || '未知')).join('、')}${unknown.length > 8 ? ` 等 ${unknown.length} 项` : ''}</div>` : ''}
         <p class="modal-note">“合并”只更新文件中出现的干员；“替换拥有列表”会把未出现在 MAA 拥有列表中的本机干员标记为未拥有，但不会删除培养目标。</p>

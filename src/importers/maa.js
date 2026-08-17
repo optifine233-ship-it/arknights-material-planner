@@ -58,7 +58,7 @@ export function parseMaaOperatorExport(input, gameData) {
   const root = parsedJson(input);
   const payload = findOperBoxPayload(root) || directOperatorListPayload(root);
   if (!payload || (!Array.isArray(payload.all_opers) && !Array.isArray(payload.own_opers))) {
-    throw new Error('未找到 MAA 干员识别数组，也未找到 all_opers 或 own_opers。');
+    throw new Error('未找到可识别的 MAA 干员列表。请复制 MAA“干员识别”的完整结果。');
   }
 
   const indexes = gameDataIndexes(gameData);
