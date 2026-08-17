@@ -186,6 +186,9 @@ const unresolvedMaterials = [];
 
 for (const name of referencedMaterials) {
   const info = materialInfo[name];
+  const iconId = info?.iconId || materialMeta[name]?.iconId || '';
+  const wikiIcon = materialIcons.get(name) || materialMeta[name]?.iconFallback || materialMeta[name]?.icon || '';
+  const stableIcon = iconId ? `https://torappu.prts.wiki/assets/item_icon/${encodeURIComponent(iconId)}.png` : '';
   if (info && Number.isInteger(info.tier)) rarity[name] = info.tier;
   if (name.includes('芯片') && !name.includes('双芯片')) {
     // PRTS also describes profession-to-profession chip conversion as a recipe.
@@ -202,9 +205,10 @@ for (const name of referencedMaterials) {
   materialMeta[name] = {
     ...(materialMeta[name] || {}),
     id: info?.id || materialMeta[name]?.id || '',
-    iconId: info?.iconId || materialMeta[name]?.iconId || '',
+    iconId,
     category: info?.category || materialMeta[name]?.category || '',
-    icon: materialIcons.get(name) || materialMeta[name]?.icon || '',
+    icon: stableIcon || wikiIcon,
+    iconFallback: stableIcon && wikiIcon && wikiIcon !== stableIcon ? wikiIcon : '',
     source: `https://prts.wiki/w/${encodeURIComponent(name)}`
   };
 }

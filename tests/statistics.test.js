@@ -49,7 +49,7 @@ const state = {
       current: {
         elite: 2,
         level: 2,
-        skillLevel: 2,
+        skillLevel: 7,
         mastery: { s1: 1, s2: 0, s3: 0 },
         modules: { 长模组名称: 3 }
       },
@@ -63,6 +63,7 @@ const state = {
     },
     乙: {
       owned: true,
+      potential: 6,
       current: {
         elite: 1,
         level: 1,
@@ -91,6 +92,11 @@ test('账号概况、职业分布和计划数量来自同一份状态', () => {
   assert.equal(stats.overview.masteryStages, 1);
   assert.equal(stats.overview.unlockedModules, 1);
   assert.equal(stats.overview.level3Modules, 1);
+  assert.equal(stats.overview.skill7, 1);
+  assert.equal(stats.overview.maxPotential, 1);
+  assert.deepEqual(stats.progress.eliteStages, { e0: 0, e1: 1, e2: 1 });
+  assert.deepEqual(stats.progress.masterySkills, { m0: 5, m1: 1, m2: 0, m3: 0 });
+  assert.equal(stats.progress.plannedOperators, 2);
   assert.equal(stats.plan.operatorCount, 2);
   assert.equal(stats.distributions.profession.近卫.owned, 1);
   assert.equal(stats.distributions.profession.近卫.elite2, 1);
@@ -108,4 +114,6 @@ test('理论已投入和未来计划分别计算且不混在一起', () => {
   assert.deepEqual(stats.plan.items.map((item) => item.kind), ['level', 'level', 'promotion']);
   assert.equal(stats.operatorInvestments[0].name, '甲');
   assert.ok(stats.operatorInvestments[0].lmd > 0);
+  assert.ok(stats.invested.materialRanking.some((row) => row.name === '近卫芯片'));
+  assert.ok(stats.invested.materialRanking.every((row, index, values) => index === 0 || values[index - 1].qty >= row.qty));
 });

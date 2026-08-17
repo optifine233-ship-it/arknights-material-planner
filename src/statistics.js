@@ -6,11 +6,15 @@ import {
 import { createCultivationState } from './storage.js';
 
 function summarizeItems(items) {
+  const materials = sumDirectMaterials(items);
   return {
     items,
     totalExp: items.reduce((sum, item) => sum + (item.exp || 0), 0),
     totalLmd: items.reduce((sum, item) => sum + (item.lmd || 0), 0),
-    materials: sumDirectMaterials(items),
+    materials,
+    materialRanking: Object.entries(materials)
+      .map(([name, qty]) => ({ name, qty }))
+      .sort((a, b) => b.qty - a.qty || a.name.localeCompare(b.name, 'zh-CN')),
     operatorCount: new Set(items.map((item) => item.operatorName)).size,
     byKind: items.reduce((groups, item) => {
       groups[item.kind] = (groups[item.kind] || 0) + 1;
@@ -44,6 +48,11 @@ export function calculateStatistics(gameData, userState) {
   let masteryStages = 0;
   let unlockedModules = 0;
   let level3Modules = 0;
+  let skill7 = 0;
+  let maxPotential = 0;
+  const eliteStages = { e0: 0, e1: 0, e2: 0 };
+  const masterySkills = { m0: 0, m1: 0, m2: 0, m3: 0 };
+  const moduleStages = { m0: 0, m1: 0, m2: 0, m3: 0 };
 
   for (const operatorName of gameData.OPS_ORDER || Object.keys(gameData.OPS || {})) {
     const operator = gameData.OPS?.[operatorName];
@@ -54,10 +63,19 @@ export function calculateStatistics(gameData, userState) {
     const current = progress.current || createCultivationState();
     const isElite2 = current.elite >= 2;
     if (isElite2) elite2 += 1;
+    eliteStages[`e${Math.min(2, current.elite || 0)}`] += 1;
+    if (current.skillLevel >= 7) skill7 += 1;
+    if ((progress.potential || 0) >= 6) maxPotential += 1;
     masteryStages += Object.values(current.mastery || {}).reduce((sum, stage) => sum + stage, 0);
-    const moduleStages = Object.values(current.modules || {});
-    unlockedModules += moduleStages.filter((stage) => stage > 0).length;
-    level3Modules += moduleStages.filter((stage) => stage >= 3).length;
+    for (const stage of Object.values(current.mastery || {})) {
+      masterySkills[`m${Math.min(3, stage || 0)}`] += 1;
+    }
+    const currentModuleStages = Object.values(current.modules || {});
+    unlockedModules += currentModuleStages.filter((stage) => stage > 0).length;
+    level3Modules += currentModuleStages.filter((stage) => stage >= 3).length;
+    for (const stage of currentModuleStages) {
+      moduleStages[`m${Math.min(3, stage || 0)}`] += 1;
+    }
 
     const distributionValues = {
       owned: 1,
@@ -94,7 +112,15 @@ export function calculateStatistics(gameData, userState) {
       elite2Ratio: owned ? elite2 / owned : 0,
       masteryStages,
       unlockedModules,
-      level3Modules
+      level3Modules,
+      skill7,
+      maxPotential
+    },
+    progress: {
+      eliteStages,
+      masterySkills,
+      moduleStages,
+      plannedOperators: plannedOperators.size
     },
     invested: summarizeItems(investedItems),
     plan: summarizeItems(planItems),

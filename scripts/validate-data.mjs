@@ -45,6 +45,9 @@ for (const material of referencedMaterials) {
   if (!Object.hasOwn(data.MAT_RARITY || {}, material)) {
     errors.push(`材料 ${material} 缺少层级定义。`);
   }
+  if (!data.MATERIAL_META?.[material]?.iconId) {
+    errors.push(`材料 ${material} 缺少可生成稳定图标地址的 iconId。`);
+  }
 }
 
 function detectCycle(material, trail = []) {

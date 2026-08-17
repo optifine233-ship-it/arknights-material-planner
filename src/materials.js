@@ -41,6 +41,10 @@ export function compareMaterials(a, b, gameData, sortMode = 'default') {
   if (sortMode === 'tier') return tierB - tierA || a.localeCompare(b, 'zh-CN');
   const categoryA = MATERIAL_CATEGORIES[getMaterialCategory(a)];
   const categoryB = MATERIAL_CATEGORIES[getMaterialCategory(b)];
+  if (categoryA === MATERIAL_CATEGORIES.chip && categoryB === MATERIAL_CATEGORIES.chip) {
+    if (a === '芯片助剂') return -1;
+    if (b === '芯片助剂') return 1;
+  }
   return categoryA.order - categoryB.order || tierB - tierA || a.localeCompare(b, 'zh-CN');
 }
 

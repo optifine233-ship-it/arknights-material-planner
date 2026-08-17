@@ -62,10 +62,10 @@ let pendingImportKind = null;
 let toastTimer = null;
 let filters = {
   operatorSearch: '',
-  profession: '全部',
-  subprofession: 'all',
-  position: 'all',
-  rarity: 'all',
+  professions: [],
+  subprofessions: [],
+  positions: [],
+  rarities: [],
   operatorScope: 'all',
   inventorySearch: ''
 };
@@ -76,6 +76,18 @@ function encoded(value) {
 
 function decoded(value) {
   return decodeURIComponent(String(value));
+}
+
+function filterValues(key) {
+  return Array.isArray(filters[key]) ? filters[key] : [];
+}
+
+function renderFilterButtons(key, values, labeler = (value) => value) {
+  const selected = filterValues(key);
+  return `
+    <button type="button" class="matrix-filter ${selected.length ? '' : 'is-active'}" data-action="clear-operator-filter" data-filter="${key}">不限</button>
+    ${values.map((value) => `<button type="button" class="matrix-filter ${selected.includes(String(value)) ? 'is-active' : ''}" data-action="toggle-operator-filter" data-filter="${key}" data-value="${encoded(value)}">${escapeHtml(labeler(value))}</button>`).join('')}
+  `;
 }
 
 function getProgress(operatorName) {
@@ -156,10 +168,10 @@ function renderOperators(items) {
     const operator = gameData.OPS[name];
     const progress = getProgress(name);
     if (filters.operatorSearch && !name.toLowerCase().includes(filters.operatorSearch.toLowerCase())) return false;
-    if (filters.profession !== '全部' && operator.p !== filters.profession) return false;
-    if (filters.subprofession !== 'all' && operator.sp !== filters.subprofession) return false;
-    if (filters.position !== 'all' && operator.pos !== filters.position) return false;
-    if (filters.rarity !== 'all' && String(operator.r + 1) !== filters.rarity) return false;
+    if (filterValues('professions').length && !filterValues('professions').includes(operator.p)) return false;
+    if (filterValues('subprofessions').length && !filterValues('subprofessions').includes(operator.sp)) return false;
+    if (filterValues('positions').length && !filterValues('positions').includes(operator.pos)) return false;
+    if (filterValues('rarities').length && !filterValues('rarities').includes(String(operator.r + 1))) return false;
     if (filters.operatorScope === 'owned' && !progress.owned) return false;
     if (filters.operatorScope === 'planned' && !planned.has(name)) return false;
     return true;
@@ -168,29 +180,25 @@ function renderOperators(items) {
 
   return `
     <section class="view-intro">
-      <div><h2>建立你的干员状态</h2><p>选择干员后填写目前状态与培养目标。星级只作为标签，职业才是主要浏览入口；之后可在计划页逐项核对材料。</p></div>
+      <div><h2>干员档案</h2><p>记录持有干员的当前状态，并为需要培养的干员设置目标。</p></div>
       <div class="view-intro__stat"><strong>${ownedCount}</strong><small>OWNED OPERATORS</small></div>
     </section>
     ${renderOnboarding()}
-    <section class="toolbar-panel" aria-label="干员筛选">
-      <label class="field field--grow"><span>搜索干员</span><input id="operator-search" type="search" value="${escapeHtml(filters.operatorSearch)}" placeholder="输入干员名称"></label>
-      <label class="field"><span>显示范围</span><select id="operator-scope">
-        ${selectOptions(['all', 'owned', 'planned'], filters.operatorScope, (value) => ({ all: '全部干员', owned: '我的干员', planned: '培养计划中' })[value])}
-      </select></label>
-      <label class="field"><span>星级</span><select id="operator-rarity">
-        ${selectOptions(['all', '6', '5', '4', '3'], filters.rarity, (value) => value === 'all' ? '全部星级' : `${value} 星`)}
-      </select></label>
-      <label class="field"><span>分支</span><select id="operator-subprofession">
-        ${selectOptions(['all', ...subprofessions], filters.subprofession, (value) => value === 'all' ? '全部分支' : value)}
-      </select></label>
-      <label class="field"><span>部署位置</span><select id="operator-position">
-        ${selectOptions(['all', ...positions], filters.position, (value) => value === 'all' ? '全部位置' : value)}
-      </select></label>
-      <div class="field" style="flex:1 1 100%"><span>职业</span><div class="filter-chips">
-        ${['全部', ...PROFESSIONS].map((profession) => `<button type="button" class="filter-chip ${filters.profession === profession ? 'is-active' : ''}" data-action="filter-profession" data-profession="${profession}">${profession}</button>`).join('')}
-      </div></div>
+    <section class="operator-filter-panel" aria-label="干员筛选">
+      <header class="operator-filter-panel__header">
+        <label class="field operator-search"><span>搜索干员</span><input id="operator-search" type="search" value="${escapeHtml(filters.operatorSearch)}" placeholder="输入干员名称"></label>
+        <div class="scope-switch" aria-label="显示范围">${['all', 'owned', 'planned'].map((scope) => `<button type="button" class="${filters.operatorScope === scope ? 'is-active' : ''}" data-action="set-operator-scope" data-scope="${scope}">${({ all: '全部干员', owned: '我的干员', planned: '计划中' })[scope]}</button>`).join('')}</div>
+        <div class="filter-result"><strong>${names.length}</strong><span>名干员</span></div>
+        <button class="button button--quiet" type="button" data-action="reset-operator-filters">重置筛选</button>
+      </header>
+      <div class="filter-matrix">
+        <div class="filter-matrix__row"><span class="filter-matrix__label">职业</span><div class="filter-matrix__options filter-matrix__options--profession">${renderFilterButtons('professions', PROFESSIONS)}</div></div>
+        <div class="filter-matrix__row filter-matrix__row--branches"><span class="filter-matrix__label">分支</span><details open><summary>分支职业 <small>${filterValues('subprofessions').length ? `已选 ${filterValues('subprofessions').length} 项` : '不限'}</small></summary><div class="filter-matrix__options">${renderFilterButtons('subprofessions', subprofessions)}</div></details></div>
+        <div class="filter-matrix__row"><span class="filter-matrix__label">星级</span><div class="filter-matrix__options filter-matrix__options--compact">${renderFilterButtons('rarities', ['6','5','4','3','2','1'], (value) => `${value}★`)}</div></div>
+        <div class="filter-matrix__row"><span class="filter-matrix__label">位置</span><div class="filter-matrix__options filter-matrix__options--compact">${renderFilterButtons('positions', positions)}</div></div>
+      </div>
     </section>
-    ${names.length ? `<div class="operator-grid">${names.map((name) => renderOperatorCard(name, planned.get(name) || [])).join('')}</div>` : emptyState('没有符合条件的干员', '调整职业、星级或显示范围后再试。')}
+    ${names.length ? `<div class="operator-grid">${names.map((name) => renderOperatorCard(name, planned.get(name) || [])).join('')}</div>` : emptyState('没有符合条件的干员', '请调整筛选条件。')}
   `;
 }
 
@@ -215,10 +223,11 @@ function renderOperatorCard(name, items) {
     <button type="button" class="operator-card ${progress.owned ? 'is-owned' : ''}" data-action="open-operator" data-operator="${encoded(name)}">
       ${operatorPortrait(name, operator)}
       <span class="operator-card__body">
-        <span class="operator-card__meta"><span class="rarity-stars">${'★'.repeat(operator.r + 1)}</span> / ${escapeHtml(operator.p)} · ${escapeHtml(operator.sp || '未分类')}</span>
+        <span class="operator-card__rarity">${operator.r + 1}★</span>
+        <span class="operator-card__meta">${escapeHtml(operator.p)} · ${escapeHtml(operator.sp || '未分类')}</span>
         <h3>${escapeHtml(name)}</h3>
         <span class="operator-card__profession">${escapeHtml(operator.pos || '')}${operator.pos ? ' · ' : ''}${currentText}</span>
-        <span class="operator-card__status"><span>${items.length ? `${items.length} 项待培养` : '无培养计划'}</span><b>${items.length ? 'PLAN' : 'OPEN'}</b></span>
+        <span class="operator-card__status"><span>${items.length ? `${items.length} 项待培养` : '无培养计划'}</span><b>${items.length ? '计划中' : '设置'}</b></span>
       </span>
     </button>
   `;
@@ -229,10 +238,10 @@ function renderPlan(items) {
   const totalExp = items.reduce((sum, item) => sum + item.exp, 0);
   const totalLmd = items.reduce((sum, item) => sum + item.lmd, 0);
   if (!items.length) {
-    return `${renderViewIntro('把目标拆成可核对的升级项', '每个强化项都会保留直接材料与基准层材料，所有小计能够与总表对账。', '0', 'ACTIVE OPERATORS')}${emptyState('培养队列为空', '先在干员档案中填写当前状态和目标状态。', '<button class="button button--signal" type="button" data-action="go-view" data-view="operators">选择干员</button>')}`;
+    return `${renderViewIntro('培养计划', '这里会列出当前状态到目标状态之间的全部强化项。', '0', 'ACTIVE OPERATORS')}${emptyState('还没有培养计划', '请先为干员设置目标状态。', '<button class="button button--signal" type="button" data-action="go-view" data-view="operators">前往干员档案</button>')}`;
   }
   return `
-    ${renderViewIntro('逐项核对培养需求', '展开任意项目即可查看直接材料和分解后的基准层材料。模组名称始终完整显示。', String(groups.size), 'ACTIVE OPERATORS')}
+    ${renderViewIntro('培养计划', '按干员查看升级、精英化、技能、专精和模组需求。', String(groups.size), 'ACTIVE OPERATORS')}
     <div class="summary-strip">
       ${summaryCell('UPGRADE ITEMS', items.length, '独立强化项')}
       ${summaryCell('OPERATORS', groups.size, '涉及干员')}
@@ -247,14 +256,15 @@ function renderPlanOperator(name, items) {
   const exp = items.reduce((sum, item) => sum + item.exp, 0);
   const lmd = items.reduce((sum, item) => sum + item.lmd, 0);
   return `
-    <article class="plan-operator">
-      <header class="plan-operator__header">
+    <details class="plan-operator" open>
+      <summary class="plan-operator__header">
         <div><h3>${escapeHtml(name)}</h3><p>${items.length} 个强化项 · EXP ${formatNumber(exp)} · LMD ${formatNumber(lmd)}</p></div>
         <b>${escapeHtml(gameData.OPS[name]?.p || '')} / ${gameData.OPS[name]?.r + 1}★</b>
-        <button class="button button--small" type="button" data-action="open-operator" data-operator="${encoded(name)}">编辑目标</button>
-      </header>
+        <span class="plan-operator__toggle" aria-hidden="true"></span>
+      </summary>
+      <div class="plan-operator__tools"><button class="button button--small" type="button" data-action="open-operator" data-operator="${encoded(name)}">编辑目标</button></div>
       <div class="upgrade-list">${renderUpgradeItems(items)}</div>
-    </article>
+    </details>
   `;
 }
 
@@ -270,9 +280,9 @@ function renderUpgradeItems(items) {
       <details class="upgrade-item">
         <summary><span class="upgrade-kind">${KIND_LABELS[item.kind] || item.kind}</span><span class="upgrade-label">${escapeHtml(item.label)}</span>${cost ? `<span class="upgrade-cost-inline">${cost}</span>` : ''}</summary>
         <div class="upgrade-item__body">
-          <span class="breakdown-label">DIRECT / 直接需求</span>
+          <span class="breakdown-label">DIRECT / 直接材料</span>
           ${renderMaterialChips(item.materials)}
-          <span class="breakdown-label">BASELINE / 分解到展示基准层</span>
+          <span class="breakdown-label">BASELINE / 折算材料</span>
           ${renderMaterialChips(Object.entries(base).map(([name, qty]) => ({ name, qty })))}
         </div>
       </details>
@@ -281,8 +291,8 @@ function renderUpgradeItems(items) {
 }
 
 function renderMaterialChips(materials) {
-  if (!materials?.length) return '<span style="color:var(--structure);font-size:11px">无材料</span>';
-  return `<div class="material-chip-list">${materials.map((material) => `<span class="material-chip">${materialIcon(material.name, gameData, { size: 'sm' })}<span>${escapeHtml(material.name)}</span><b>×${formatNumber(material.qty)}</b></span>`).join('')}</div>`;
+  if (!materials?.length) return '<span class="no-materials">无材料</span>';
+  return `<div class="material-chip-list">${materials.map((material) => `<span class="material-chip" title="${escapeHtml(material.name)}">${materialIcon(material.name, gameData, { size: 'sm' })}<span>${escapeHtml(material.name)}</span><b>×${formatNumber(material.qty)}</b></span>`).join('')}</div>`;
 }
 
 function renderInventory() {
@@ -292,7 +302,7 @@ function renderInventory() {
   const groups = groupMaterialNames(names, gameData, grouping);
   const stocked = Object.values(userState.inventory).filter((qty) => qty > 0).length;
   return `
-    ${renderViewIntro('登记现有物资', '库存按用途分类；T2 材料也会参与合成抵扣，但缺口主表仍以 T3 为普通材料的最低展示层。', stocked, 'STOCKED TYPES')}
+    ${renderViewIntro('材料库存', '填写现有材料数量，缺口统计会自动扣除库存。', stocked, 'STOCKED TYPES')}
     <section class="toolbar-panel">
       <label class="field field--grow"><span>搜索资源</span><input id="inventory-search" type="search" value="${escapeHtml(filters.inventorySearch)}" placeholder="输入材料名称"></label>
       <label class="field"><span>分组方式</span><select id="material-grouping">${selectOptions(['purpose', 'tier'], grouping, (value) => value === 'purpose' ? '按用途分类' : '按品质分类')}</select></label>
@@ -301,18 +311,32 @@ function renderInventory() {
     ${groups.map((group) => `
       <section class="section-block">
         ${sectionIndex(group.code, group.label, group.names.length, group.tone)}
-        <div class="inventory-grid">${group.names.map((name) => renderInventoryItem(name)).join('')}</div>
+        ${renderInventoryGroup(group, grouping)}
       </section>
     `).join('')}
   `;
 }
 
+function renderInventoryGroup(group, grouping) {
+  if (group.key !== 'material' || grouping !== 'purpose') {
+    return `<div class="inventory-grid">${group.names.map((name) => renderInventoryItem(name)).join('')}</div>`;
+  }
+  const tierLabels = { 4: 'T5 / 金色材料', 3: 'T4 / 紫色材料', 2: 'T3 / 蓝色材料', 1: 'T2 / 绿色材料', 0: 'T1 / 基础材料' };
+  const tiers = [...new Set(group.names.map((name) => gameData.MAT_RARITY[name] ?? 0))].sort((a, b) => b - a);
+  return `<div class="material-tier-groups">${tiers.map((tier) => {
+    const tierNames = group.names.filter((name) => (gameData.MAT_RARITY[name] ?? 0) === tier);
+    return `<section class="material-tier-group material-tier-group--${tier}"><header><b>${tierLabels[tier] || `T${tier + 1}`}</b><span>${tierNames.length} 种</span></header><div class="inventory-grid">${tierNames.map((name) => renderInventoryItem(name)).join('')}</div></section>`;
+  }).join('')}</div>`;
+}
+
 function renderInventoryItem(name) {
   const tier = gameData.MAT_RARITY[name] ?? 0;
+  const category = getMaterialCategory(name);
+  const tierLabel = category === 'material' ? `T${tier + 1}` : (tier ? `T${tier + 1}` : MATERIAL_CATEGORIES[category].code);
   return `
-    <label class="inventory-item">
+    <label class="inventory-item inventory-item--tier-${tier}">
       ${materialIcon(name, gameData)}
-      <span class="inventory-item__name"><b title="${escapeHtml(name)}">${escapeHtml(name)}</b><small>${tier ? `T${tier + 1}` : MATERIAL_CATEGORIES[getMaterialCategory(name)].code}</small></span>
+      <span class="inventory-item__name"><b title="${escapeHtml(name)}">${escapeHtml(name)}</b><small>${tierLabel}</small></span>
       <input class="inventory-input" type="number" inputmode="numeric" min="0" value="${userState.inventory[name] || 0}" data-action="inventory-change" data-material="${encoded(name)}" aria-label="${escapeHtml(name)}库存">
     </label>
   `;
@@ -362,7 +386,7 @@ function renderGaps(items) {
   const lmdShortage = Math.max(0, summary.totalLmd - lmdStock);
 
   return `
-    ${renderViewIntro('把计划变成缺口清单', '先使用同名成品库存，再统一分配 T2 材料进行整数合成。所有抵扣共享同一份库存。', shortageKinds, 'SHORTAGE TYPES')}
+    ${renderViewIntro('材料缺口', '汇总培养计划扣除库存后的剩余需求。', shortageKinds, 'SHORTAGE TYPES')}
     <div class="summary-strip">
       ${summaryCell('OPERATORS', new Set(items.map((item) => item.operatorName)).size, '培养计划中')}
       ${summaryCell('MATERIAL GAPS', shortageKinds, '有缺口的资源', shortageKinds ? 'danger' : '')}
@@ -374,7 +398,7 @@ function renderGaps(items) {
       <label class="field"><span>分组方式</span><select id="gap-grouping">${selectOptions(['purpose', 'tier', 'shortage'], userState.settings.gapGrouping || 'purpose', (value) => ({ purpose: '按用途分类', tier: '按品质分类', shortage: '按缺口从大到小' })[value])}</select></label>
     </section>
     ${items.length ? renderResourceGap(summary, expStock, lmdStock) : ''}
-    ${groups.length ? groups.map((group) => renderGapGroup(group, items)).join('') : emptyState(items.length ? '当前范围内没有材料' : '还没有培养计划', items.length ? '切换显示范围可查看已足量或全部材料。' : '先在干员档案中设置目标状态。')}
+    ${groups.length ? groups.map((group) => renderGapGroup(group, items)).join('') : emptyState(items.length ? '当前范围内没有材料' : '还没有培养计划', items.length ? '可以切换显示范围查看其他材料。' : '请先为干员设置目标状态。')}
   `;
 }
 
@@ -456,11 +480,23 @@ function renderStatistics() {
   const distributionRows = Object.entries(stats.distributions[distributionMode] || {});
   const maxOwned = Math.max(1, ...distributionRows.map(([, value]) => value.owned));
   const distributionTitle = ({ profession: '职业', subprofession: '分支职业', rarity: '星级' })[distributionMode];
+  const materialSummary = computeMaterialSummary(stats.plan.items, userState.inventory, gameData);
+  const materialPlanRows = materialSummary.rows.filter((row) => row.required > 0);
+  const coveredMaterialTypes = materialPlanRows.filter((row) => row.shortage === 0).length;
+  const expStock = Object.entries(gameData.EXP_ITEMS || {}).reduce((sum, [name, value]) => sum + (userState.inventory[name] || 0) * value, 0);
+  const lmdStock = userState.inventory.龙门币 || 0;
+  const expCoverage = stats.plan.totalExp ? Math.min(1, expStock / stats.plan.totalExp) : 1;
+  const lmdCoverage = stats.plan.totalLmd ? Math.min(1, lmdStock / stats.plan.totalLmd) : 1;
+  const materialCoverage = materialPlanRows.length ? coveredMaterialTypes / materialPlanRows.length : 1;
+  const expRanking = [...stats.operatorInvestments].sort((a, b) => b.exp - a.exp || b.lmd - a.lmd).slice(0, 6);
   return `
-    ${renderViewIntro('从账号全局看养成投入', '“已投入”由当前养成状态反推，是理论值而不是游戏消费流水；未来计划与库存缺口始终单独计算。', overview.owned, 'OWNED OPERATORS')}
+    ${renderViewIntro('账号养成统计', '汇总当前养成状态、培养分布、理论投入与计划覆盖情况。', overview.owned, 'OWNED OPERATORS')}
+    <div class="statistics-note">理论投入根据当前养成状态反推，不代表游戏内的实际消费记录。</div>
     <div class="stat-card-grid">
       ${statCard('OWNED', overview.owned, '已拥有干员')}
       ${statCard('ELITE 2', overview.elite2, `${Math.round(overview.elite2Ratio * 100)}% 精二率`)}
+      ${statCard('SKILL 7', overview.skill7, '技能等级 7')}
+      ${statCard('POTENTIAL 6', overview.maxPotential, '满潜干员')}
       ${statCard('MASTERY', overview.masteryStages, '累计专精阶段')}
       ${statCard('MODULE', overview.unlockedModules, `${overview.level3Modules} 个三级模组`)}
       ${statCard('INVESTED LMD', formatNumber(stats.invested.totalLmd), '理论已投入')}
@@ -470,11 +506,26 @@ function renderStatistics() {
       <section class="panel-card"><div class="panel-heading"><h2>${distributionTitle}养成分布</h2><label class="field"><span>观察维度</span><select id="statistics-grouping">${selectOptions(['profession', 'subprofession', 'rarity'], distributionMode, (value) => ({ profession: '按职业', subprofession: '按分支职业', rarity: '按星级' })[value])}</select></label></div><div class="distribution-list">
         ${distributionRows.length ? distributionRows.map(([name, value]) => `<div class="distribution-row"><b>${escapeHtml(name)}</b><div class="bar-track"><i style="width:${Math.max(4, value.owned / maxOwned * 100)}%"></i></div><span>${value.elite2}/${value.owned} 精二 · ${value.planned} 计划中</span></div>`).join('') : '<p>还没有已拥有干员。</p>'}
       </div></section>
-      <section class="panel-card"><h2>理论投入排行</h2><div class="ranking-list">
+      <section class="panel-card"><h2>养成阶段</h2>
+        <div class="progress-stat-group"><h3>精英阶段</h3><div class="progress-stat-grid">${[['e0','未精英'],['e1','精英一'],['e2','精英二']].map(([key, label]) => `<div><b>${stats.progress.eliteStages[key]}</b><span>${label}</span></div>`).join('')}</div></div>
+        <div class="progress-stat-group"><h3>专精技能</h3><div class="progress-stat-grid progress-stat-grid--four">${[['m0','未专精'],['m1','专精一'],['m2','专精二'],['m3','专精三']].map(([key, label]) => `<div><b>${stats.progress.masterySkills[key]}</b><span>${label}</span></div>`).join('')}</div></div>
+        <div class="plan-operator-count"><b>${stats.progress.plannedOperators}</b><span>名干员有培养计划</span></div>
+      </section>
+    </div>
+    <section class="panel-card stats-section"><h2>计划覆盖情况</h2><div class="coverage-grid">
+      ${renderCoverageRow('普通与特殊材料', materialCoverage, `${coveredMaterialTypes}/${materialPlanRows.length} 种已足量`)}
+      ${renderCoverageRow('作战记录', expCoverage, `库存 ${formatNumber(expStock)} / 需要 ${formatNumber(stats.plan.totalExp)} EXP`)}
+      ${renderCoverageRow('龙门币', lmdCoverage, `库存 ${formatNumber(lmdStock)} / 需要 ${formatNumber(stats.plan.totalLmd)}`)}
+    </div></section>
+    <div class="stats-columns stats-section">
+      <section class="panel-card"><h2>理论投入 · 龙门币</h2><div class="ranking-list">
         ${stats.operatorInvestments.slice(0, 10).map((row, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2, '0')}</span><span><b>${escapeHtml(row.name)}</b><small>${escapeHtml(row.profession)} · ${row.rarity}★ · ${row.upgradeItems} 项</small></span><strong>LMD ${formatNumber(row.lmd)}</strong></div>`).join('') || '<p>还没有可统计的养成状态。</p>'}
       </div></section>
+      <section class="panel-card"><h2>理论投入 · 经验</h2><div class="ranking-list">
+        ${expRanking.map((row, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2, '0')}</span><span><b>${escapeHtml(row.name)}</b><small>${escapeHtml(row.profession)} · ${row.rarity}★</small></span><strong>EXP ${formatNumber(row.exp)}</strong></div>`).join('') || '<p>还没有可统计的养成状态。</p>'}
+      </div></section>
     </div>
-    <section class="panel-card" style="margin-top:18px"><h2>理论投入与未来计划</h2>
+    <section class="panel-card stats-section"><h2>理论投入与未来计划</h2>
       <div class="summary-strip" style="margin:0">
         ${summaryCell('INVESTED EXP', formatNumber(stats.invested.totalExp), '根据当前状态反推')}
         ${summaryCell('INVESTED ITEMS', stats.invested.items.length, '已完成强化项')}
@@ -482,7 +533,20 @@ function renderStatistics() {
         ${summaryCell('PLAN ITEMS', stats.plan.items.length, '未来强化项')}
       </div>
     </section>
+    <div class="stats-columns stats-section">
+      ${renderMaterialRanking('理论投入最多的材料', stats.invested.materialRanking)}
+      ${renderMaterialRanking('培养计划需求最多的材料', stats.plan.materialRanking)}
+    </div>
   `;
+}
+
+function renderCoverageRow(label, ratio, detail) {
+  const percentage = Math.round(Math.max(0, Math.min(1, ratio)) * 100);
+  return `<div class="coverage-row"><div><b>${escapeHtml(label)}</b><strong>${percentage}%</strong></div><div class="coverage-track"><i style="width:${percentage}%"></i></div><span>${escapeHtml(detail)}</span></div>`;
+}
+
+function renderMaterialRanking(title, rows) {
+  return `<section class="panel-card"><h2>${escapeHtml(title)}</h2><div class="material-ranking">${rows.slice(0, 10).map((row, index) => `<div><span>${String(index + 1).padStart(2, '0')}</span>${materialIcon(row.name, gameData, { size: 'sm' })}<b>${escapeHtml(row.name)}</b><strong>×${formatNumber(row.qty)}</strong></div>`).join('') || '<p>暂无材料记录。</p>'}</div></section>`;
 }
 
 function renderViewIntro(title, body, value, label) {
@@ -523,7 +587,7 @@ function renderOperatorDrawer(operatorName) {
           </div>
           ${(operator.md || []).length ? `<div class="module-progress"><span class="progress-subtitle">MODULE / 模组状态</span>${operator.md.map((module) => renderModuleProgress(operatorName, module, progress)).join('')}</div>` : ''}
           <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="button button--quiet" type="button" data-action="target-current" data-operator="${encoded(operatorName)}">目标设为当前</button><button class="button button--signal" type="button" data-action="target-max" data-operator="${encoded(operatorName)}">目标设为全满</button></div>
-          <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : emptyState('已经达到目标', '提高目标等级、技能、专精或模组后，这里会显示逐项材料。')}</section>
+          <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : emptyState('当前状态已达到目标', '调整目标后，这里会显示新增的强化项。')}</section>
         </div>
       </aside>
     </div>
@@ -751,6 +815,7 @@ function handleClick(event) {
     userState.settings.activeView = currentView;
     persist();
     render();
+    window.scrollTo(0, 0);
     $('#workspace').focus();
     return;
   }
@@ -759,14 +824,37 @@ function handleClick(event) {
   if (action === 'go-view') {
     currentView = button.dataset.view;
     render();
+    window.scrollTo(0, 0);
   }
   if (action === 'dismiss-onboarding') {
     userState.settings.onboardingDismissed = true;
     persist();
     render();
   }
-  if (action === 'filter-profession') {
-    filters.profession = button.dataset.profession;
+  if (action === 'toggle-operator-filter') {
+    const key = button.dataset.filter;
+    const value = decoded(button.dataset.value);
+    const selected = filterValues(key);
+    filters[key] = selected.includes(value)
+      ? selected.filter((item) => item !== value)
+      : [...selected, value];
+    render();
+  }
+  if (action === 'clear-operator-filter') {
+    filters[button.dataset.filter] = [];
+    render();
+  }
+  if (action === 'set-operator-scope') {
+    filters.operatorScope = button.dataset.scope;
+    render();
+  }
+  if (action === 'reset-operator-filters') {
+    filters.operatorSearch = '';
+    filters.professions = [];
+    filters.subprofessions = [];
+    filters.positions = [];
+    filters.rarities = [];
+    filters.operatorScope = 'all';
     render();
   }
   if (action === 'open-operator') openOperator(decoded(button.dataset.operator));
