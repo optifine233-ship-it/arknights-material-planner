@@ -36,6 +36,21 @@ test('识别 MAA OperBox 回调中的稳定 ID、拥有状态和当前等级', (
   assert.deepEqual(result.unknown.map((entry) => entry.id), ['char_unknown']);
 });
 
+test('可以直接解析粘贴的 MAA 干员识别 JSON 文本', () => {
+  const pasted = JSON.stringify({
+    details: {
+      all_opers: [{ id: 'char_017_huang', name: '煌', own: true }],
+      own_opers: [{ id: 'char_017_huang', name: '煌', elite: 2, level: 70, potential: 4, own: true }]
+    }
+  });
+
+  const result = parseMaaOperatorExport(pasted, gameData);
+
+  assert.equal(result.operators.煌.current.elite, 2);
+  assert.equal(result.operators.煌.current.level, 70);
+  assert.equal(result.operators.煌.potential, 4);
+});
+
 test('应用 MAA 导入时保留其无法识别的技能、专精和模组状态', () => {
   const existing = {
     schemaVersion: 2,

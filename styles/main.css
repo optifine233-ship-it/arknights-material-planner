@@ -619,11 +619,19 @@ summary:focus-visible {
 
 .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-content: center; padding: 20px; background: rgba(20,26,32,.58); }
 .modal { width: min(560px, 94vw); max-height: 90vh; overflow-y: auto; background: var(--paper); box-shadow: 0 24px 80px rgba(0,0,0,.28); }
+.modal--import { width: min(680px, 94vw); }
 .modal__header { padding: 17px 19px; background: var(--ink); color: #fff; display: flex; justify-content: space-between; gap: 12px; align-items: center; }
 .modal__header h2 { margin: 0; font: 800 22px/1 var(--display); }
 .modal__body { padding: 19px; }
 .modal__body p { color: var(--structure); line-height: 1.65; }
 .modal__actions { padding: 13px 19px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 8px; }
+.modal__actions--split { justify-content: space-between; }
+.modal__actions--split > span { display: flex; gap: 8px; }
+.import-json-field { display: grid; gap: 7px; margin-top: 15px; }
+.import-json-field > span { color: var(--structure); font: 800 10px/1 var(--utility); letter-spacing: .04em; }
+.import-json-field textarea { width: 100%; min-height: 260px; resize: vertical; padding: 14px; border: 1px solid var(--structure-light); border-left: 4px solid var(--signal); background: #fff; color: var(--ink); font: 500 13px/1.55 var(--utility); tab-size: 2; }
+.import-json-field textarea:focus { outline: 2px solid rgba(47,151,181,.3); outline-offset: 1px; border-color: var(--accent); }
+.import-json-field small { color: var(--structure); font-size: 11px; }
 .import-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 14px 0; }
 .import-summary div { padding: 10px; background: var(--fog); }
 .import-summary b { display: block; font: 900 22px/1 var(--display); }
@@ -631,7 +639,9 @@ summary:focus-visible {
 .import-warning { padding: 10px 12px; margin: 12px 0; border-left: 3px solid var(--danger); background: #f6e7e3; font-size: 12px; line-height: 1.6; }
 .modal-note { color: var(--structure); font-size: 11px; line-height: 1.65; }
 .restore-card { display: flex; justify-content: space-between; gap: 12px; padding: 12px; margin-top: 12px; border-left: 3px solid var(--signal); background: var(--fog); }
+.restore-card > span { display: grid; gap: 4px; }
 .restore-card span { color: var(--structure); font-size: 11px; }
+.restore-card b { color: var(--ink); font-size: 13px; }
 
 .toast { position: fixed; z-index: 100; right: 20px; bottom: 20px; max-width: min(420px, calc(100vw - 40px)); padding: 11px 14px; background: var(--ink); color: #fff; box-shadow: var(--shadow); transform: translateY(18px); opacity: 0; pointer-events: none; transition: 160ms ease; }
 .toast.is-visible { transform: translateY(0); opacity: 1; }
@@ -663,6 +673,10 @@ summary:focus-visible {
   .command-actions { gap: 5px; }
   .save-state { display: none; }
   .command-actions .button { min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .modal__actions--split { align-items: stretch; flex-direction: column; }
+  .modal__actions--split > span { display: grid; grid-template-columns: 1fr 1fr; }
+  .modal__actions--split > .button { width: 100%; }
+  .import-json-field textarea { min-height: 220px; }
   .workspace { padding: 16px 12px 26px; }
   .view-intro { align-items: flex-start; }
   .view-intro__stat { display: none; }

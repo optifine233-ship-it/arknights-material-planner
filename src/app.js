@@ -695,17 +695,41 @@ function confirmClearInventory() {
 
 function openImportMenu() {
   const backup = loadBackup(localStorage, gameData);
-  if (!backup) {
-    $('#import-file').click();
+  const createdAt = backup?.createdAt ? new Date(backup.createdAt).toLocaleString('zh-CN') : '时间未知';
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal modal--import" role="dialog" aria-modal="true" aria-labelledby="import-dialog-title">
+      <header class="modal__header"><h2 id="import-dialog-title">导入数据</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button></header>
+      <div class="modal__body">
+        <p>粘贴 MAA 干员识别结果，即可检查并导入。也支持本工具导出的备份 JSON。</p>
+        <label class="import-json-field" for="import-json">
+          <span>MAA 识别结果 / JSON</span>
+          <textarea id="import-json" spellcheck="false" autocomplete="off" placeholder="在此粘贴包含 all_opers 或 own_opers 的 MAA 识别结果…"></textarea>
+          <small>粘贴后点击“预览导入”，或按 Ctrl + Enter。</small>
+        </label>
+        ${backup ? `<div class="restore-card"><span><b>最近自动备份</b><small>${escapeHtml(createdAt)}</small></span><button class="button button--quiet" type="button" data-action="preview-last-backup">预览恢复</button></div>` : ''}
+      </div>
+      <footer class="modal__actions modal__actions--split">
+        <button class="button" type="button" data-action="select-import-file">选择 JSON 文件</button>
+        <span><button class="button" type="button" data-action="close-modal">取消</button><button class="button button--dark" type="button" data-action="preview-pasted-import">预览导入</button></span>
+      </footer>
+    </section></div>`;
+  requestAnimationFrame(() => $('#import-json')?.focus());
+}
+
+function previewPastedImport() {
+  const input = $('#import-json');
+  const text = input?.value.trim() || '';
+  if (!text) {
+    showToast('请先粘贴 MAA 干员识别结果。', true);
+    input?.focus();
     return;
   }
-  const createdAt = backup.createdAt ? new Date(backup.createdAt).toLocaleString('zh-CN') : '时间未知';
-  $('#modal-root').innerHTML = `
-    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
-      <header class="modal__header"><h2>导入或恢复</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
-      <div class="modal__body"><p>可以读取本工具备份或 MAA 干员识别 JSON，也可以恢复最近一次清空或替换操作前自动保存的状态。</p><div class="restore-card"><b>最近自动备份</b><span>${escapeHtml(createdAt)}</span></div></div>
-      <footer class="modal__actions"><button class="button" type="button" data-action="select-import-file">选择 JSON 文件</button><button class="button button--dark" type="button" data-action="preview-last-backup">预览并恢复</button></footer>
-    </section></div>`;
+  try {
+    previewImportText(text);
+  } catch (error) {
+    showToast(error.message || '无法识别粘贴的数据。', true);
+    input?.focus();
+  }
 }
 
 function previewLastBackup() {
@@ -739,7 +763,7 @@ function previewProjectImport(state) {
   $('#modal-root').innerHTML = `
     <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
       <header class="modal__header"><h2>导入预览</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
-      <div class="modal__body"><p>文件格式与版本校验通过。合并会用文件中的同名记录覆盖本机记录；替换会先自动备份，再完整恢复这个文件。</p>
+      <div class="modal__body"><p>数据格式与版本校验通过。合并会用导入数据中的同名记录覆盖本机记录；替换会先自动备份，再完整恢复这份数据。</p>
         <div class="import-summary"><div><b>${owned}</b><small>拥有干员</small></div><div><b>${planned}</b><small>培养项目</small></div><div><b>${stocked}</b><small>有库存资源</small></div></div>
       </div>
       <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button" type="button" data-action="apply-import" data-mode="merge">合并</button><button class="button button--dark" type="button" data-action="apply-import" data-mode="replace">替换全部</button></footer>
@@ -774,7 +798,7 @@ function previewImportText(text) {
       previewMaaImport(parseMaaOperatorExport(text, gameData));
       return;
     } catch (maaError) {
-      throw new Error(`无法识别导入文件。项目备份：${projectError.message}；MAA：${maaError.message}`);
+      throw new Error(`无法识别导入内容。项目备份：${projectError.message}；MAA：${maaError.message}`);
     }
   }
 }
@@ -872,6 +896,7 @@ function handleClick(event) {
   }
   if (action === 'close-modal' && (event.target === button || button.matches('.button, .icon-button'))) closeModal();
   if (action === 'apply-import') applyImport(button.dataset.mode);
+  if (action === 'preview-pasted-import') previewPastedImport();
   if (action === 'select-import-file') {
     closeModal();
     $('#import-file').click();
@@ -985,6 +1010,11 @@ async function init() {
     $('#import-button').addEventListener('click', openImportMenu);
     $('#export-button').addEventListener('click', exportBackup);
     document.addEventListener('keydown', (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'Enter' && event.target.id === 'import-json') {
+        event.preventDefault();
+        previewPastedImport();
+        return;
+      }
       if (event.key === 'Escape') {
         if ($('#modal-root').children.length) closeModal();
         else if (selectedOperator) closeDrawer();
