@@ -12,6 +12,10 @@ PRTS 声明：除另有声明外，网站其他内容采用“知识共享署名
 
 MAA 导入器依据公开的 [MaaAssistantArknights](https://github.com/MaaAssistantArknights/MaaAssistantArknights) 数据字段实现。本项目仅承诺读取已测试的干员识别 JSON，不声称本项目导出的备份能够被 MAA 导入。
 
+## 稳定编号映射
+
+技能与模组稳定编号同步自公开的 [ArknightsGameData](https://github.com/Kengxxiao/ArknightsGameData) 游戏数据镜像，仅用于把森空岛脱敏快照准确对应到本站养成项目。该数据及相关游戏内容不属于本项目 MIT 代码许可范围。
+
 ## 非官方声明
 
 本项目为非商业性的玩家工具，与上海鹰角网络科技有限公司、PRTS Wiki、MAA 及其维护者均无隶属、合作、赞助或官方认可关系。所有公司名称、产品名称和商标归其各自权利人所有。

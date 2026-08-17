@@ -228,3 +228,36 @@ test('每日资源积累量会作为非负整数保存', () => {
   assert.equal(normalized.settings.statisticsDailyExp, 1234);
   assert.equal(normalized.settings.statisticsDailyLmd, 0);
 });
+
+test('补充模组稳定 ID 后迁移旧名称状态和材料统计排除项', () => {
+  const idData = {
+    ...gameData,
+    OPS: {
+      煌: {
+        ...gameData.OPS.煌,
+        md: [{ id: 'uniequip_002_huang', name: '过载的武器与过热的心脏', stages: [{ stage: 1 }, { stage: 2 }, { stage: 3 }] }]
+      }
+    },
+    OPS_ORDER: ['煌']
+  };
+  const normalized = normalizeUserState({
+    operators: {
+      煌: {
+        id: 'char_017_huang',
+        owned: true,
+        current: { modules: { '过载的武器与过热的心脏': 2, uniequip_002_huang: 1 } },
+        target: { modules: { '过载的武器与过热的心脏': 3 } }
+      }
+    },
+    settings: {
+      planSelection: {
+        preset: 'custom',
+        excludedItems: ['char_017_huang::module:过载的武器与过热的心脏:2']
+      }
+    }
+  }, idData);
+
+  assert.deepEqual(normalized.operators.煌.current.modules, { uniequip_002_huang: 2 });
+  assert.deepEqual(normalized.operators.煌.target.modules, { uniequip_002_huang: 3 });
+  assert.deepEqual(normalized.settings.planSelection.excludedItems, ['char_017_huang::module:uniequip_002_huang:2']);
+});

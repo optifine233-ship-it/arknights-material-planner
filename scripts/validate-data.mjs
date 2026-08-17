@@ -6,6 +6,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const data = JSON.parse(await readFile(resolve(root, 'data', 'game-data.json'), 'utf8'));
 const errors = [];
 const referencedMaterials = new Set();
+const moduleIds = new Map();
 
 function inspectMaterials(materials, context) {
   for (const material of materials || []) {
@@ -28,10 +29,14 @@ for (const [name, operator] of Object.entries(data.OPS || {})) {
   inspectMaterials(operator.e2, `${name} E2`);
   for (const stage of operator.sl || []) inspectMaterials(stage.mats, `${name} 技能${stage.level}`);
   for (const [skill, stages] of Object.entries(operator.ms || {})) {
+    if ((stages || []).length && !operator.skillIds?.[skill]) errors.push(`${name} ${skill} 缺少稳定技能 ID。`);
     for (const stage of stages || []) inspectMaterials(stage.mats, `${name} ${skill}专精${stage.stage}`);
   }
   for (const module of operator.md || []) {
     if (!module.name) errors.push(`${name} 存在无名称模组。`);
+    if (!module.id) errors.push(`${name} 的模组 ${module.name} 缺少稳定 ID。`);
+    else if (moduleIds.has(module.id)) errors.push(`模组 ID ${module.id} 同时用于 ${moduleIds.get(module.id)} 和 ${name}。`);
+    else moduleIds.set(module.id, name);
     for (const stage of module.stages || []) inspectMaterials(stage.mats, `${name} ${module.name} ${stage.stage}级`);
   }
 }

@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { parseMaterialWikitext, parseOperatorWikitext } from './lib/prts-parser.mjs';
+import { enrichOperatorProgressIds } from './lib/progress-id-enricher.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dataPath = resolve(root, 'data', 'game-data.json');
@@ -10,6 +11,11 @@ const versionPath = resolve(root, 'data', 'data-version.json');
 const apiEndpoint = 'https://prts.wiki/api.php';
 const userAgent = 'ArknightsMaterialPlanner/0.1 (data sync; https://github.com/)';
 const professionOrder = ['先锋', '近卫', '重装', '狙击', '术师', '医疗', '辅助', '特种'];
+const progressDataUrls = {
+  characters: 'https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json',
+  patches: 'https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json',
+  modules: 'https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/uniequip_table.json'
+};
 
 const baseData = JSON.parse(await readFile(dataPath, 'utf8'));
 
@@ -32,6 +38,12 @@ async function api(parameters, attempt = 1) {
     throw new Error(`PRTS API ${body.error.code}: ${body.error.info}`);
   }
   return body;
+}
+
+async function publicJson(url) {
+  const response = await fetch(url, { headers: { 'user-agent': userAgent, accept: 'application/json' } });
+  if (!response.ok) throw new Error(`公开游戏数据 ${response.status}: ${response.statusText}`);
+  return response.json();
 }
 
 function chunks(values, size) {
@@ -161,7 +173,22 @@ if (Object.keys(parsedOperators).length < 200) {
 }
 
 console.log(`成功解析 ${Object.keys(parsedOperators).length} 名干员，跳过 ${skippedOperators.length} 个页面。`);
-const referencedMaterials = collectReferencedMaterials(parsedOperators);
+console.log('补充技能与模组稳定 ID…');
+const [characterTable, patchTable, uniequipTable] = await Promise.all([
+  publicJson(progressDataUrls.characters),
+  publicJson(progressDataUrls.patches),
+  publicJson(progressDataUrls.modules)
+]);
+const enriched = enrichOperatorProgressIds(parsedOperators, {
+  characters: characterTable,
+  patchChars: patchTable.patchChars,
+  equipDict: uniequipTable.equipDict
+});
+if (enriched.report.missingSkills.length || enriched.report.ambiguousModules.length || enriched.report.missingModules.length) {
+  throw new Error(`有 ${enriched.report.missingSkills.length} 名干员缺少技能 ID，${enriched.report.ambiguousModules.length + enriched.report.missingModules.length} 个模组缺少唯一稳定 ID，拒绝覆盖现有数据。`);
+}
+const operatorsWithProgressIds = enriched.operators;
+const referencedMaterials = collectReferencedMaterials(operatorsWithProgressIds);
 for (const name of Object.keys(baseData.MAT_RARITY || {})) referencedMaterials.add(name);
 for (const name of baseData.SPECIAL_RESOURCES || []) referencedMaterials.add(name);
 
@@ -213,18 +240,18 @@ for (const name of referencedMaterials) {
   };
 }
 
-for (const [name, operator] of Object.entries(parsedOperators)) {
+for (const [name, operator] of Object.entries(operatorsWithProgressIds)) {
   operator.portrait = operatorPortraits.get(name) || '';
   operator.source = `https://prts.wiki/w/${encodeURIComponent(name)}`;
 }
 
-const sortedOperators = Object.entries(parsedOperators).sort(compareOperators);
+const sortedOperators = Object.entries(operatorsWithProgressIds).sort(compareOperators);
 const latestRevision = Math.max(
   0,
   ...Object.values(operatorRevisions),
   ...Object.values(materialRevisions)
 );
-const dataVersion = `prts-${latestRevision}`;
+const dataVersion = `prts-${latestRevision}-progress-1`;
 const generatedAt = baseData.dataVersion === dataVersion && baseData.generatedAt
   ? baseData.generatedAt
   : new Date().toISOString();
@@ -239,7 +266,8 @@ const output = {
     kind: 'prts-mediawiki-api',
     url: apiEndpoint,
     operatorCategory: 'Category:干员',
-    latestRevision
+    latestRevision,
+    progressIdSources: progressDataUrls
   },
   OPS: Object.fromEntries(sortedOperators),
   OPS_ORDER: sortedOperators.map(([name]) => name),
@@ -261,7 +289,8 @@ const output = {
     materials: referencedMaterials.size,
     skippedOperators,
     duplicateOperatorNames,
-    unresolvedMaterials
+    unresolvedMaterials,
+    unresolvedProgressIds: enriched.report
   }
 };
 

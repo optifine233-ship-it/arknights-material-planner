@@ -50,7 +50,16 @@ function maxEliteFor(operator, gameData) {
 }
 
 function clampCultivationState(rawState, operator, gameData) {
-  const state = createCultivationState(rawState);
+  const migratedModules = { ...(rawState?.modules || {}) };
+  for (const module of operator?.md || []) {
+    if (!module.id || !module.name || migratedModules[module.name] === undefined) continue;
+    migratedModules[module.id] = Math.max(
+      integer(migratedModules[module.id]),
+      integer(migratedModules[module.name])
+    );
+    delete migratedModules[module.name];
+  }
+  const state = createCultivationState({ ...rawState, modules: migratedModules });
   const maxElite = maxEliteFor(operator, gameData);
   state.elite = Math.min(state.elite, maxElite);
   const maxLevel = gameData?.MAX_LV?.[operator?.r]?.[`e${state.elite}`];
@@ -140,6 +149,18 @@ export function normalizeUserState(rawState = {}, gameData) {
       gameData
     );
   }
+  for (const [operatorName, operator] of Object.entries(gameData?.OPS || {})) {
+    const operatorId = String(operator.id || operatorName);
+    for (const module of operator.md || []) {
+      if (!module.id || !module.name) continue;
+      const oldPrefix = `${operatorId}::module:${module.name}:`;
+      const newPrefix = `${operatorId}::module:${module.id}:`;
+      state.settings.planSelection.excludedItems = state.settings.planSelection.excludedItems.map((item) => (
+        item.startsWith(oldPrefix) ? `${newPrefix}${item.slice(oldPrefix.length)}` : item
+      ));
+    }
+  }
+  state.settings.planSelection.excludedItems = [...new Set(state.settings.planSelection.excludedItems)];
   return state;
 }
 

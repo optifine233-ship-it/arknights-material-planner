@@ -27,6 +27,7 @@ import {
   setPlanOperatorSelected
 } from './plan-selection.js';
 import { applyMaaOperatorImport, parseMaaOperatorExport } from './importers/maa.js';
+import { applySklandImport, parseSklandCultivateSnapshot } from './importers/skland.js';
 import { loadGameData } from './data-loader.js';
 import {
   formatNumber,
@@ -69,6 +70,7 @@ let currentView = 'operators';
 let selectedOperator = null;
 let pendingImport = null;
 let pendingImportKind = null;
+let activeImportRoute = null;
 let toastTimer = null;
 const openPlanOperators = new Set();
 let filters = {
@@ -223,10 +225,23 @@ function renderOnboarding() {
   const hasStarted = Object.values(userState.operators).some((progress) => progress.owned)
     || Object.values(userState.inventory).some((quantity) => quantity > 0);
   if (hasStarted || userState.settings.onboardingDismissed) return '';
-  return `<section class="onboarding-panel">
-    <header><div><small>QUICK START</small><h2>三步建立你的后勤计划</h2></div><button class="icon-button icon-button--dark" type="button" data-action="dismiss-onboarding" aria-label="关闭新手引导">×</button></header>
-    <div class="onboarding-steps"><div><b>01</b><span><strong>选择干员</strong><small>填写目前状态与目标状态</small></span></div><div><b>02</b><span><strong>登记库存</strong><small>T2 材料也会自动参与抵扣</small></span></div><div><b>03</b><span><strong>查看缺口</strong><small>按资源或培养项核对需求</small></span></div></div>
+  return `<section class="onboarding-panel initialization-panel">
+    <header><div><small>INITIAL SETUP</small><h2>选择开始方式</h2><p>所有导入内容都会先预览，确认后才保存在当前浏览器。</p></div><button class="icon-button icon-button--dark" type="button" data-action="dismiss-onboarding" aria-label="关闭初始化提示">×</button></header>
+    <div class="initialization-routes">
+      ${initializationRouteCard('blank', '无需数据', '直接使用', '先看看功能，之后随时可以补充个人进度。', '直接进入')}
+      ${initializationRouteCard('skland', '进度最完整', '从森空岛导入', '导入等级、技能专精与模组状态。', '开始导入', true)}
+      ${initializationRouteCard('project', '完整恢复', '导入本站备份', '恢复此前导出的计划、库存和设置。', '选择备份')}
+      ${initializationRouteCard('maa', '基础识别', '导入 MAA 结果', '导入拥有状态、精英阶段、等级和潜能。', '粘贴结果')}
+    </div>
   </section>`;
+}
+
+function initializationRouteCard(route, badge, title, description, actionLabel, recommended = false) {
+  const action = route === 'blank' ? 'start-without-import' : 'open-import-route';
+  return `<article class="initialization-route ${recommended ? 'is-recommended' : ''}">
+    <span>${escapeHtml(badge)}</span><h3>${escapeHtml(title)}</h3><p>${escapeHtml(description)}</p>
+    <button type="button" data-action="${action}" data-route="${route}">${escapeHtml(actionLabel)}</button>
+  </article>`;
 }
 
 function renderOperatorCard(name, items) {
@@ -761,26 +776,53 @@ function confirmClearInventory() {
 function openImportMenu() {
   const backup = loadBackup(localStorage, gameData);
   const createdAt = backup?.createdAt ? new Date(backup.createdAt).toLocaleString('zh-CN') : '时间未知';
+  activeImportRoute = null;
   $('#modal-root').innerHTML = `
     <div class="modal-backdrop" data-action="close-modal"><section class="modal modal--import" role="dialog" aria-modal="true" aria-labelledby="import-dialog-title">
-      <header class="modal__header"><h2 id="import-dialog-title">导入数据</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button></header>
+      <header class="modal__header"><div><small>INITIAL SETUP</small><h2 id="import-dialog-title">选择开始方式</h2></div><button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button></header>
       <div class="modal__body">
-        <div class="import-paths">
-          <div><b>MAA 干员识别</b><span>在 MAA 完成干员识别后，复制识别结果并粘贴到下方。</span></div>
-          <div><b>本站备份</b><span>粘贴本站导出的备份内容，或直接选择 JSON 文件。</span></div>
+        <p class="import-intro">不需要个人数据也可以直接使用；需要导入时，所有内容都会先在本机预览。</p>
+        <div class="initialization-routes initialization-routes--modal">
+          ${initializationRouteCard('blank', '无需数据', '直接使用', '不导入任何内容，立即进入干员档案。', '直接进入')}
+          ${initializationRouteCard('skland', '进度最完整', '从森空岛导入', '等级、技能专精和模组状态；不导入账号身份。', '开始导入', true)}
+          ${initializationRouteCard('project', '完整恢复', '导入本站备份', '恢复计划、库存、当前进度和页面设置。', '选择备份')}
+          ${initializationRouteCard('maa', '基础识别', '导入 MAA 结果', '拥有状态、精英阶段、等级和潜能。', '粘贴结果')}
         </div>
-        <p class="import-limit"><b>MAA 识别范围：</b>可导入拥有状态、精英阶段、等级和潜能；不包含技能等级、专精和模组状态。首次导入的干员按技能 1、未专精、未解锁模组记录；已有本地技能、专精、模组及培养目标会保留。</p>
-        <label class="import-json-field" for="import-json">
-          <span>识别结果或备份内容</span>
-          <textarea id="import-json" spellcheck="false" autocomplete="off" placeholder="在这里粘贴 MAA 干员识别结果，或本站导出的备份内容…"></textarea>
-          <small>粘贴后点击“预览导入”，或按 Ctrl + Enter。</small>
-        </label>
         ${backup ? `<div class="restore-card"><span><b>最近自动备份</b><small>${escapeHtml(createdAt)}</small></span><button class="button button--quiet" type="button" data-action="preview-last-backup">预览恢复</button></div>` : ''}
       </div>
-      <footer class="modal__actions modal__actions--split">
-        <button class="button" type="button" data-action="select-import-file">选择 JSON 文件</button>
-        <span><button class="button" type="button" data-action="close-modal">取消</button><button class="button button--dark" type="button" data-action="preview-pasted-import">预览导入</button></span>
-      </footer>
+      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">关闭</button></footer>
+    </section></div>`;
+}
+
+function openImportRoute(route) {
+  const routes = {
+    skland: {
+      code: 'SKLAND / FULL PROGRESS', title: '从森空岛导入', field: '脱敏养成快照',
+      placeholder: '粘贴脚本下载的 skland-cultivation JSON…',
+      description: `<ol class="import-guide"><li><a class="button button--quiet" href="./userscripts/skland-cultivation-export.user.js" target="_blank" rel="noreferrer">安装本地导出脚本</a><span>需要 Tampermonkey 或 Violentmonkey。</span></li><li><a href="https://www.skland.com/" target="_blank" rel="noreferrer">登录森空岛 ↗</a><span>点击页面右下角“导出养成快照”。</span></li><li><b>回到这里导入 JSON</b><span>可选择下载文件，也可粘贴文件内容。</span></li></ol><p class="security-note"><b>本站不会要求森空岛 token、Cookie、手机号或验证码。</b>账号凭据只在森空岛网页内短暂使用；下载文件不含 UID、昵称和凭据。目前库存仍需在本站填写。</p>`
+    },
+    project: {
+      code: 'BACKUP / FULL RESTORE', title: '导入本站备份', field: '本站备份 JSON',
+      placeholder: '粘贴本站“导出备份”生成的 JSON…',
+      description: '<p class="import-limit"><b>完整恢复：</b>包含拥有状态、当前进度、培养目标、库存和页面设置。导入前会显示数量预览并自动保留一份本机备份。</p>'
+    },
+    maa: {
+      code: 'MAA / BASIC RECOGNITION', title: '导入 MAA 干员识别', field: 'MAA 干员识别结果',
+      placeholder: '在 MAA 完成“干员识别”后，直接粘贴复制结果…',
+      description: '<p class="import-limit"><b>识别范围：</b>拥有状态、精英阶段、等级和潜能。MAA 无法识别技能等级、专精和模组；首次导入按技能 1、未专精、未解锁模组记录，已有的详细进度和培养目标会保留。</p>'
+    }
+  };
+  const meta = routes[route];
+  if (!meta) return openImportMenu();
+  activeImportRoute = route;
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal modal--import" role="dialog" aria-modal="true" aria-labelledby="import-dialog-title">
+      <header class="modal__header"><div><small>${meta.code}</small><h2 id="import-dialog-title">${meta.title}</h2></div><button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button></header>
+      <div class="modal__body">
+        ${meta.description}
+        <label class="import-json-field" for="import-json"><span>${meta.field}</span><textarea id="import-json" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="${meta.placeholder}"></textarea><small>粘贴后点击“预览导入”，或按 Ctrl + Enter。</small></label>
+      </div>
+      <footer class="modal__actions modal__actions--split"><button class="button" type="button" data-action="back-import-menu">返回</button><span><button class="button" type="button" data-action="select-import-file">选择 JSON 文件</button><button class="button button--dark" type="button" data-action="preview-pasted-import">预览导入</button></span></footer>
     </section></div>`;
   requestAnimationFrame(() => $('#import-json')?.focus());
 }
@@ -789,7 +831,7 @@ function previewPastedImport() {
   const input = $('#import-json');
   const text = input?.value.trim() || '';
   if (!text) {
-    showToast('请先粘贴 MAA 干员识别结果。', true);
+    showToast('请先粘贴或选择要导入的 JSON。', true);
     input?.focus();
     return;
   }
@@ -858,29 +900,64 @@ function previewMaaImport(imported) {
     </section></div>`;
 }
 
-function previewImportText(text) {
+function previewSklandImport(imported) {
+  pendingImport = imported;
+  pendingImportKind = 'skland';
+  const entries = Object.values(imported.operators || {});
+  const unknown = imported.unknown || {};
+  const unknownCount = Object.values(unknown).reduce((sum, values) => sum + values.length, 0);
+  const detailed = entries.filter((progress) => (
+    Object.values(progress.current.mastery || {}).some(Boolean)
+    || Object.values(progress.current.modules || {}).some(Boolean)
+  )).length;
+  const unknownLabels = [
+    ['干员', unknown.operators], ['技能', unknown.skills], ['模组', unknown.modules], ['物品', unknown.items]
+  ].filter(([, values]) => values?.length).map(([label, values]) => `${label} ${values.length} 项`);
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="skland-preview-title">
+      <header class="modal__header"><h2 id="skland-preview-title">森空岛导入预览</h2><button class="icon-button" type="button" data-action="close-modal" aria-label="关闭">×</button></header>
+      <div class="modal__body">
+        <p>将合并拥有状态、精英阶段、等级、潜能、技能等级、专精和模组状态。现有培养目标不会降低；无法识别的技能或模组不会覆盖本机记录。</p>
+        <div class="import-summary"><div><b>${entries.length}</b><small>匹配干员</small></div><div><b>${detailed}</b><small>含专精或模组</small></div><div><b>${unknownCount}</b><small>未匹配记录</small></div></div>
+        ${unknownCount ? `<div class="import-warning"><b>未匹配内容不会导入：</b>${escapeHtml(unknownLabels.join('、'))}</div>` : ''}
+        <p class="modal-note">只更新快照中明确出现的干员，不会把其他干员标记为未拥有，也不会改动库存。操作前会自动保存一份本机备份。</p>
+      </div>
+      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button button--dark" type="button" data-action="apply-import" data-mode="merge">确认合并</button></footer>
+    </section></div>`;
+}
+
+function previewImportText(text, route = activeImportRoute) {
+  if (route === 'skland') return previewSklandImport(parseSklandCultivateSnapshot(text, gameData));
+  if (route === 'project') return previewProjectImport(parseProjectImport(text, gameData));
+  if (route === 'maa') return previewMaaImport(parseMaaOperatorExport(text, gameData));
   try {
     previewProjectImport(parseProjectImport(text, gameData));
     return;
   } catch (projectError) {
-    try {
-      previewMaaImport(parseMaaOperatorExport(text, gameData));
-      return;
-    } catch (maaError) {
-      throw new Error(`无法识别导入内容。项目备份：${projectError.message}；MAA：${maaError.message}`);
+    try { previewSklandImport(parseSklandCultivateSnapshot(text, gameData)); return; } catch (sklandError) {
+      try { previewMaaImport(parseMaaOperatorExport(text, gameData)); return; } catch (maaError) {
+        throw new Error(`无法识别导入内容。本站备份：${projectError.message}；森空岛：${sklandError.message}；MAA：${maaError.message}`);
+      }
     }
   }
 }
 
 function applyImport(mode) {
   if (!pendingImport) return;
-  createBackup(localStorage, userState);
-  if (pendingImportKind === 'maa') {
-    userState = applyMaaOperatorImport(userState, pendingImport, mode, gameData);
-  } else if (mode === 'replace') {
-    userState = normalizeUserState(pendingImport, gameData);
-  } else {
-    userState = mergeProjectImport(userState, pendingImport, gameData);
+  try {
+    createBackup(localStorage, userState);
+    if (pendingImportKind === 'maa') {
+      userState = applyMaaOperatorImport(userState, pendingImport, mode, gameData);
+    } else if (pendingImportKind === 'skland') {
+      userState = applySklandImport(userState, pendingImport, mode, gameData);
+    } else if (mode === 'replace') {
+      userState = normalizeUserState(pendingImport, gameData);
+    } else {
+      userState = mergeProjectImport(userState, pendingImport, gameData);
+    }
+  } catch (error) {
+    showToast(error.message || '无法应用导入数据。', true);
+    return;
   }
   pendingImport = null;
   pendingImportKind = null;
@@ -893,6 +970,7 @@ function closeModal() {
   $('#modal-root').innerHTML = '';
   pendingImport = null;
   pendingImportKind = null;
+  activeImportRoute = null;
 }
 
 function handleClick(event) {
@@ -920,6 +998,14 @@ function handleClick(event) {
     persist();
     render();
   }
+  if (action === 'start-without-import') {
+    userState.settings.onboardingDismissed = true;
+    persist();
+    closeModal();
+    render();
+  }
+  if (action === 'open-import-route') openImportRoute(button.dataset.route);
+  if (action === 'back-import-menu') openImportMenu();
   if (action === 'toggle-operator-filter') {
     const key = button.dataset.filter;
     const value = decoded(button.dataset.value);
@@ -976,7 +1062,6 @@ function handleClick(event) {
   if (action === 'apply-import') applyImport(button.dataset.mode);
   if (action === 'preview-pasted-import') previewPastedImport();
   if (action === 'select-import-file') {
-    closeModal();
     $('#import-file').click();
   }
   if (action === 'preview-last-backup') previewLastBackup();
@@ -1109,7 +1194,8 @@ function handleChange(event) {
   }
   if (control.id === 'import-file' && control.files?.[0]) {
     const file = control.files[0];
-    file.text().then(previewImportText).catch((error) => showToast(error.message || '导入文件无法读取。', true));
+    const route = activeImportRoute;
+    file.text().then((text) => previewImportText(text, route)).catch((error) => showToast(error.message || '导入文件无法读取。', true));
     control.value = '';
   }
 }

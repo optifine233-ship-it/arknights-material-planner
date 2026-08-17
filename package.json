@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node scripts/dev-server.mjs",
     "extract:legacy": "node scripts/extract-legacy-data.mjs",
+    "enrich:progress": "node scripts/enrich-progress-ids.mjs",
     "sync:prts": "node scripts/sync-prts.mjs",
     "test": "node --test",
     "check": "npm test && node scripts/validate-data.mjs"
