@@ -6,6 +6,13 @@ import { createHash, createHmac, webcrypto } from 'node:crypto';
 
 const source = await readFile(new URL('../userscripts/skland-cultivation-export.user.js', import.meta.url), 'utf8');
 
+function exposeForTest(exports) {
+  const replacement = `  globalThis.__sklandTest = { ${exports} };\n})();`;
+  const instrumented = source.replace(/  mount\(\);\r?\n\}\)\(\);\s*$/, replacement);
+  assert.notEqual(instrumented, source, '测试挂钩应替换脚本的页面挂载入口');
+  return instrumented;
+}
+
 test('森空岛导出脚本权限与联网域名保持最小化', () => {
   assert.match(source, /@match\s+https:\/\/www\.skland\.com\/\*/);
   assert.match(source, /@connect\s+zonai\.skland\.com/);
@@ -31,10 +38,7 @@ test('导出格式只包含养成字段且明确不含账号身份', () => {
 });
 
 test('脚本内签名实现通过固定 MD5 与 HMAC-SHA256 向量', async () => {
-  const instrumented = source.replace(
-    '  mount();\n})();',
-    '  globalThis.__sklandTest = { md5Hex, sign, credentialFromStorage, sanitizeCultivation };\n})();'
-  );
+  const instrumented = exposeForTest('md5Hex, sign, credentialFromStorage, sanitizeCultivation');
   const context = { TextEncoder, crypto: webcrypto, localStorage: { getItem: () => '' } };
   vm.runInNewContext(instrumented, context);
   assert.equal(context.__sklandTest.md5Hex('abc'), '900150983cd24fb0d6963f7d28e17f72');
@@ -57,10 +61,7 @@ test('脚本内签名实现通过固定 MD5 与 HMAC-SHA256 向量', async () =>
 });
 
 test('脚本从森空岛 JSON 或编码存储中只提取凭据值', () => {
-  const instrumented = source.replace(
-    '  mount();\n})();',
-    '  globalThis.__sklandTest = { credentialFromStorage };\n})();'
-  );
+  const instrumented = exposeForTest('credentialFromStorage');
   const context = {
     TextEncoder,
     crypto: webcrypto,
@@ -71,10 +72,7 @@ test('脚本从森空岛 JSON 或编码存储中只提取凭据值', () => {
 });
 
 test('脚本只为字段完整的养成响应生成安全合并快照', () => {
-  const instrumented = source.replace(
-    '  mount();\n})();',
-    '  globalThis.__sklandTest = { sanitizeCultivation };\n})();'
-  );
+  const instrumented = exposeForTest('sanitizeCultivation');
   const context = { TextEncoder, crypto: webcrypto };
   vm.runInNewContext(instrumented, context);
   const raw = {
