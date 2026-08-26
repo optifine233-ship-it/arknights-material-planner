@@ -3,6 +3,13 @@ import { normalizePlanSelection } from './plan-selection.js';
 export const USER_DATA_SCHEMA_VERSION = 2;
 export const USER_DATA_STORAGE_KEY = 'arknights-material-planner:user-data:v2';
 export const USER_DATA_BACKUP_KEY = 'arknights-material-planner:backup';
+export class UserDataConflictError extends Error {
+  constructor() {
+    super('检测到另一标签页已经更新了本地数据。');
+    this.name = 'UserDataConflictError';
+    this.code = 'USER_DATA_CONFLICT';
+  }
+}
 
 function number(value, fallback = 0) {
   const parsed = Number(value);
@@ -241,7 +248,10 @@ export function migrateLegacySnapshot(snapshot = {}, gameData) {
   return state;
 }
 
-export function saveUserState(storage, state) {
+export function saveUserState(storage, state, options = {}) {
+  if (Object.hasOwn(options, 'expectedRaw') && storage.getItem(USER_DATA_STORAGE_KEY) !== options.expectedRaw) {
+    throw new UserDataConflictError();
+  }
   const value = {
     ...state,
     schemaVersion: USER_DATA_SCHEMA_VERSION,

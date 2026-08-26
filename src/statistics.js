@@ -4,6 +4,7 @@ import {
   sumDirectMaterials
 } from './calculator.js';
 import { createCultivationState } from './storage.js';
+import { availableSkillLevels, effectiveMasteryStages } from './operator-capabilities.js';
 
 function summarizeItems(items) {
   const materials = sumDirectMaterials(items);
@@ -82,11 +83,12 @@ export function calculateStatistics(gameData, userState, scopedPlanItems = null)
     const isElite2 = current.elite >= 2;
     if (isElite2) elite2 += 1;
     eliteStages[`e${Math.min(2, current.elite || 0)}`] += 1;
-    if (current.skillLevel >= 7) skill7 += 1;
+    if (availableSkillLevels(operator).includes(7) && current.skillLevel >= 7) skill7 += 1;
     if ((progress.potential || 0) >= 6) maxPotential += 1;
-    masteryStages += Object.values(current.mastery || {}).reduce((sum, stage) => sum + stage, 0);
-    for (const stage of Object.values(current.mastery || {})) {
-      masterySkills[`m${Math.min(3, stage || 0)}`] += 1;
+    const masteryStagesForOperator = effectiveMasteryStages(operator, current);
+    masteryStages += masteryStagesForOperator.reduce((sum, stage) => sum + stage, 0);
+    for (const stage of masteryStagesForOperator) {
+      masterySkills[`m${stage}`] += 1;
     }
     const currentModuleStages = Object.values(current.modules || {});
     unlockedModules += currentModuleStages.filter((stage) => stage > 0).length;

@@ -97,7 +97,7 @@ test('账号概况、职业分布和计划数量来自同一份状态', () => {
   assert.equal(stats.overview.skill7, 1);
   assert.equal(stats.overview.maxPotential, 1);
   assert.deepEqual(stats.progress.eliteStages, { e0: 0, e1: 1, e2: 1 });
-  assert.deepEqual(stats.progress.masterySkills, { m0: 5, m1: 1, m2: 0, m3: 0 });
+  assert.deepEqual(stats.progress.masterySkills, { m0: 0, m1: 1, m2: 0, m3: 0 });
   assert.equal(stats.progress.plannedOperators, 2);
   assert.equal(stats.plan.operatorCount, 2);
   assert.equal(stats.distributions.profession.近卫.owned, 1);
@@ -167,4 +167,18 @@ test('资源账汇总全部已拥有干员的投入、库存、计划缺口和�
   });
   assert.equal(covered.resources.exp.shortage, 0);
   assert.equal(covered.resources.exp.estimatedDays, 0);
+});
+
+test('不存在的技能等级和专精状态不会进入账号统计', () => {
+  const invalidState = structuredClone(state);
+  invalidState.operators.甲.current.mastery.s2 = 3;
+  invalidState.operators.甲.current.mastery.s3 = 2;
+  invalidState.operators.乙.current.skillLevel = 7;
+  invalidState.operators.乙.current.mastery = { s1: 3, s2: 3, s3: 3 };
+
+  const stats = calculateStatistics(gameData, invalidState);
+
+  assert.equal(stats.overview.masteryStages, 1);
+  assert.equal(stats.overview.skill7, 1);
+  assert.deepEqual(stats.progress.masterySkills, { m0: 0, m1: 1, m2: 0, m3: 0 });
 });

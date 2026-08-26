@@ -99,3 +99,19 @@ test('解析材料层级、稳定 ID 与加工站配方', () => {
     recipe: [{ name: '异铁', qty: 4 }]
   });
 });
+
+test('拒绝非法职业、位置和缺失星级，不把外部文本当可信枚举', () => {
+  const parsed = parseOperatorWikitext(`
+{{CharinfoV2
+|干员名=危险样例
+|干员id=char_danger
+|职业=</p><img src=x onerror=alert(1)>
+|分支=测试分支
+|位置=<script>alert(1)</script>
+}}
+`, '危险样例');
+
+  assert.equal(parsed.operator.r, -1);
+  assert.equal(parsed.operator.p, '');
+  assert.equal(parsed.operator.pos, '');
+});

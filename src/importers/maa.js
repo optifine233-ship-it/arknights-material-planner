@@ -67,10 +67,11 @@ export function parseMaaOperatorExport(input, gameData) {
   const allOperators = Array.isArray(payload.all_opers) ? payload.all_opers : [];
   const ownedOperators = Array.isArray(payload.own_opers) ? payload.own_opers : [];
 
+  const matchedAll = new Set();
   for (const raw of allOperators) {
     const name = resolveName(raw, indexes);
     if (!name) {
-      if (raw.own) unknown.push({ id: String(raw.id || ''), name: String(raw.name || '') });
+      unknown.push({ id: String(raw.id || ''), name: String(raw.name || '') });
       continue;
     }
     operators[name] = {
@@ -79,6 +80,7 @@ export function parseMaaOperatorExport(input, gameData) {
       potential: integer(raw.potential),
       current: raw.own ? { elite: integer(raw.elite), level: Math.max(1, integer(raw.level, 1)) } : null
     };
+    matchedAll.add(name);
   }
 
   for (const raw of ownedOperators) {
@@ -97,6 +99,9 @@ export function parseMaaOperatorExport(input, gameData) {
       }
     };
   }
+  if (!Object.keys(operators).length) {
+    throw new Error('MAA 干员列表中没有匹配到本站干员，未进行导入。');
+  }
 
   return {
     format: 'maa-oper-box',
@@ -104,6 +109,7 @@ export function parseMaaOperatorExport(input, gameData) {
     unsupportedFields: ['skillLevel', 'mastery', 'modules'],
     operators,
     unknown,
+    canReplace: allOperators.length > 0 && matchedAll.size === Object.keys(gameData.OPS || {}).length,
     sourceCounts: {
       all: allOperators.length,
       owned: ownedOperators.length
@@ -113,6 +119,10 @@ export function parseMaaOperatorExport(input, gameData) {
 
 export function applyMaaOperatorImport(existingState, imported, mode, gameData) {
   const next = normalizeUserState(existingState, gameData);
+
+  if (mode === 'replace' && (!imported?.canReplace || !Object.keys(imported.operators || {}).length)) {
+    throw new Error('这份 MAA 结果不包含可核对的完整干员列表，不能替换现有拥有状态。');
+  }
 
   if (mode === 'replace') {
     for (const progress of Object.values(next.operators)) progress.owned = false;

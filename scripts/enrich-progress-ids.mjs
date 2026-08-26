@@ -1,6 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 
+import { createSnapshotVersion } from './lib/data-quality.mjs';
 import { enrichOperatorProgressIds } from './lib/progress-id-enricher.mjs';
 
 const [characterPath, patchPath, modulePath, dataPath = 'data/game-data.json'] = process.argv.slice(2);
@@ -30,8 +31,13 @@ if (enriched.report.missingSkills.length || enriched.report.ambiguousModules.len
 gameData.OPS = enriched.operators;
 gameData.syncReport = { ...(gameData.syncReport || {}), unresolvedProgressIds: enriched.report };
 gameData.source = { ...(gameData.source || {}), progressIdSources };
-gameData.dataVersion = `${String(gameData.dataVersion || 'local').replace(/-progress-1$/, '')}-progress-1`;
-gameData.generatedAt = new Date().toISOString();
+const previousVersion = gameData.dataVersion;
+const nextVersion = createSnapshotVersion(gameData, gameData.source.latestRevision);
+const generatedAt = previousVersion === nextVersion && gameData.generatedAt
+  ? gameData.generatedAt
+  : new Date().toISOString();
+gameData.dataVersion = nextVersion;
+gameData.generatedAt = generatedAt;
 const resolvedDataPath = resolve(dataPath);
 await writeFile(resolvedDataPath, `${JSON.stringify(gameData, null, 2)}\n`, 'utf8');
 const versionPath = resolve(dirname(resolvedDataPath), 'data-version.json');

@@ -12,6 +12,7 @@ import {
   normalizeUserState,
   parseProjectImport,
   saveUserState,
+  UserDataConflictError,
   USER_DATA_STORAGE_KEY
 } from '../src/storage.js';
 
@@ -94,6 +95,26 @@ test('保存和读取新版用户数据', () => {
   assert.equal(loaded.state.operators.能天使.target.level, 80);
   assert.equal(loaded.state.inventory.糖组, 4);
 });
+test('保存前若另一标签页已经更新数据则拒绝静默覆盖', () => {
+  const storage = memoryStorage();
+  saveUserState(storage, { operators: {}, inventory: {}, settings: {} });
+  const baselineRaw = storage.getItem(USER_DATA_STORAGE_KEY);
+  const externalRaw = JSON.stringify({
+    schemaVersion: 2,
+    updatedAt: 'external',
+    operators: { 煌: { owned: true } },
+    inventory: {},
+    settings: {}
+  });
+  storage.setItem(USER_DATA_STORAGE_KEY, externalRaw);
+
+  assert.throws(
+    () => saveUserState(storage, { operators: {}, inventory: {}, settings: {} }, { expectedRaw: baselineRaw }),
+    UserDataConflictError
+  );
+  assert.equal(storage.getItem(USER_DATA_STORAGE_KEY), externalRaw);
+});
+
 
 test('导入新的当前状态时保留并抬高已有目标状态', () => {
   const existing = migrateLegacySnapshot({

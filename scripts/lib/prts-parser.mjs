@@ -156,10 +156,10 @@ export function parseOperatorWikitext(source, fallbackName = '') {
     name,
     operator: {
       id: String(info.干员id || '').trim(),
-      r: parseQuantity(info.稀有度),
-      p: String(info.职业 || '').trim(),
+      r: boundedInteger(info.稀有度, 0, 5),
+      p: allowedEnum(info.职业, ALLOWED_PROFESSIONS),
       sp: String(info.分支 || '').trim(),
-      pos: String(info.位置 || '').trim(),
+      pos: allowedEnum(info.位置, ALLOWED_POSITIONS),
       obtain: String(obtain.获得方式 || '').trim(),
       e1: withoutLmd(extractMaterialCosts(elite.精1)),
       e2: withoutLmd(extractMaterialCosts(elite.精2)),
@@ -191,8 +191,23 @@ export function parseMaterialWikitext(source, fallbackName = '') {
     name,
     id: String(info.itemId || info.id || '').trim(),
     iconId: String(info.iconId || '').trim(),
-    tier: parseQuantity(info.稀有度),
+    tier: boundedInteger(info.稀有度, 0, 5),
     category: String(info.分类 || '').trim(),
     recipe
   };
+}
+
+const ALLOWED_PROFESSIONS = new Set(['先锋', '近卫', '重装', '狙击', '术师', '医疗', '辅助', '特种']);
+const ALLOWED_POSITIONS = new Set(['近战位', '远程位']);
+
+function boundedInteger(rawValue, minimum, maximum, fallback = -1) {
+  const normalized = String(rawValue ?? '').trim();
+  if (!normalized) return fallback;
+  const value = Number(normalized);
+  return Number.isInteger(value) && value >= minimum && value <= maximum ? value : fallback;
+}
+
+function allowedEnum(rawValue, allowed) {
+  const value = String(rawValue || '').trim();
+  return allowed.has(value) ? value : '';
 }

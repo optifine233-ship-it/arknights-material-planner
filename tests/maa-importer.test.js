@@ -34,6 +34,7 @@ test('识别 MAA OperBox 回调中的稳定 ID、拥有状态和当前等级', (
   assert.equal(result.operators.煌.potential, 3);
   assert.equal(result.operators.能天使.owned, false);
   assert.deepEqual(result.unknown.map((entry) => entry.id), ['char_unknown']);
+  assert.equal(result.canReplace, true);
 });
 
 test('可以直接解析粘贴的 MAA 干员识别 JSON 文本', () => {
@@ -125,4 +126,46 @@ test('不接受无法定位 all_opers 或 own_opers 的普通 JSON', () => {
     assert.doesNotMatch(error.message, /all_opers|own_opers/);
     return true;
   });
+});
+
+test('空列表或全部无法匹配时拒绝导入，防止零匹配覆盖', () => {
+  assert.throws(
+    () => parseMaaOperatorExport({ all_opers: [], own_opers: [] }, gameData),
+    /没有匹配到本站干员/
+  );
+  assert.throws(
+    () => parseMaaOperatorExport({ all_opers: [{ id: 'char_unknown', own: true }] }, gameData),
+    /没有匹配到本站干员/
+  );
+});
+
+test('只有已拥有列表的 MAA 结果只能合并，不能替换完整拥有状态', () => {
+  const imported = parseMaaOperatorExport([
+    { id: 'char_017_huang', name: '煌', elite: 2, level: 70, own: true }
+  ], gameData);
+
+  assert.equal(imported.canReplace, false);
+  assert.throws(
+    () => applyMaaOperatorImport({}, imported, 'replace', gameData),
+    /不能替换现有拥有状态/
+  );
+});
+
+test('完整列表全部未知时，即使已拥有列表有匹配也不得替换', () => {
+  const imported = parseMaaOperatorExport({
+    all_opers: [{ id: 'char_unknown', name: '未知干员', own: false }],
+    own_opers: [{ id: 'char_017_huang', name: '煌', elite: 2, level: 70, own: true }]
+  }, gameData);
+
+  assert.equal(imported.canReplace, false);
+  assert.throws(() => applyMaaOperatorImport({}, imported, 'replace', gameData), /不能替换现有拥有状态/);
+});
+
+test('只覆盖部分本站干员的 all_opers 结果不得替换完整拥有状态', () => {
+  const imported = parseMaaOperatorExport({
+    all_opers: [{ id: 'char_017_huang', name: '煌', own: true }]
+  }, gameData);
+
+  assert.equal(imported.canReplace, false);
+  assert.throws(() => applyMaaOperatorImport({}, imported, 'replace', gameData), /不能替换现有拥有状态/);
 });

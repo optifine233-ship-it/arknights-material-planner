@@ -15,7 +15,9 @@ import {
   normalizeOperatorProgress,
   normalizeUserState,
   parseProjectImport,
-  saveUserState
+  saveUserState,
+  USER_DATA_STORAGE_KEY,
+  UserDataConflictError
 } from './storage.js';
 import { calculateStatistics } from './statistics.js';
 import {
@@ -29,6 +31,7 @@ import {
 import { applyMaaOperatorImport, parseMaaOperatorExport } from './importers/maa.js';
 import { applySklandImport, parseSklandCultivateSnapshot } from './importers/skland.js';
 import { loadGameData } from './data-loader.js';
+import { createRequestGate } from './request-gate.js';
 import {
   formatNumber,
   getAllInventoryMaterials,
@@ -36,6 +39,7 @@ import {
   groupMaterialNames,
   MATERIAL_CATEGORIES
 } from './materials.js';
+import { availableMasterySkills, availableSkillLevels } from './operator-capabilities.js';
 import {
   emptyState,
   escapeHtml,
@@ -66,11 +70,13 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 let gameData;
 let userState;
+let lastStoredUserDataRaw = null;
 let currentView = 'operators';
 let selectedOperator = null;
 let pendingImport = null;
 let pendingImportKind = null;
 let activeImportRoute = null;
+const importFileGate = createRequestGate();
 let toastTimer = null;
 const openPlanOperators = new Set();
 let filters = {
@@ -114,12 +120,48 @@ function getProgress(operatorName) {
 
 function persist(message = '') {
   userState = normalizeUserState(userState, gameData);
-  userState = saveUserState(localStorage, userState);
+  try {
+    userState = saveUserState(localStorage, userState, { expectedRaw: lastStoredUserDataRaw });
+    lastStoredUserDataRaw = localStorage.getItem(USER_DATA_STORAGE_KEY);
+  } catch (error) {
+    if (error instanceof UserDataConflictError || error?.code === 'USER_DATA_CONFLICT') {
+      openStorageConflict();
+      return false;
+    }
+    throw error;
+  }
   const saveState = $('#save-state');
   if (saveState) {
     saveState.innerHTML = '<i></i>已保存 ' + new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
   }
   if (message) showToast(message);
+  return true;
+}
+
+function openStorageConflict() {
+  $('#modal-root').innerHTML = `
+    <div class="modal-backdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="storage-conflict-title">
+      <header class="modal__header"><div><small>LOCAL DATA / CONFLICT</small><h2 id="storage-conflict-title">另一标签页已更新数据</h2></div></header>
+      <div class="modal__body"><p>为避免覆盖另一标签页的修改，本页已暂停保存。可以载入最新数据，或明确使用本页内容覆盖；覆盖前会自动备份另一标签页的版本。</p></div>
+      <footer class="modal__actions"><button class="button" type="button" data-action="reload-external-state">载入最新数据</button><button class="button button--dark" type="button" data-action="overwrite-external-state">使用本页内容</button></footer>
+    </section></div>`;
+}
+
+function reloadExternalState() {
+  userState = loadUserState(localStorage, gameData).state;
+  lastStoredUserDataRaw = localStorage.getItem(USER_DATA_STORAGE_KEY);
+  currentView = VIEW_META[userState.settings.activeView] ? userState.settings.activeView : 'operators';
+  closeModal();
+  render();
+  showToast('已载入另一标签页保存的最新数据。');
+}
+
+function overwriteExternalState() {
+  const externalState = loadUserState(localStorage, gameData).state;
+  createBackup(localStorage, externalState);
+  lastStoredUserDataRaw = localStorage.getItem(USER_DATA_STORAGE_KEY);
+  closeModal();
+  if (persist('已使用本页内容覆盖，并备份了另一标签页的数据。')) render();
 }
 
 function showToast(message, error = false) {
@@ -658,12 +700,12 @@ function renderOperatorDrawer(operatorName) {
   return `
     <div class="drawer-backdrop" data-action="close-drawer">
       <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" data-drawer-panel>
-        <header class="drawer__header"><div><p>${operator.p} / ${operator.r + 1} STAR OPERATOR</p><h2 id="drawer-title">${escapeHtml(operatorName)}</h2></div><button class="icon-button" type="button" data-action="close-drawer" aria-label="关闭">×</button></header>
+        <header class="drawer__header"><div><p>${escapeHtml(operator.p)} / ${operator.r + 1} STAR OPERATOR</p><h2 id="drawer-title">${escapeHtml(operatorName)}</h2></div><button class="icon-button" type="button" data-action="close-drawer" aria-label="关闭">×</button></header>
         <div class="drawer__body">
           <div class="owned-toggle"><div><b>我拥有这名干员</b><small>未拥有的干员仍可浏览，但不会进入账号统计。</small></div><label class="field potential-field"><span>潜能</span><select data-action="potential-change" data-operator="${encoded(operatorName)}">${selectOptions([0,1,2,3,4,5,6], progress.potential, (value) => value ? `潜能 ${value}` : '未记录')}</select></label><label class="switch"><input type="checkbox" ${progress.owned ? 'checked' : ''} data-action="toggle-owned" data-operator="${encoded(operatorName)}"><span></span></label></div>
           <div class="progress-grid">
-            ${renderProgressPanel('current', '目前状态', progress.current, eliteValues, currentMax, operatorName)}
-            ${renderProgressPanel('target', '目标状态', progress.target, eliteValues, targetMax, operatorName)}
+            ${renderProgressPanel('current', '目前状态', progress.current, eliteValues, currentMax, operatorName, operator)}
+            ${renderProgressPanel('target', '目标状态', progress.target, eliteValues, targetMax, operatorName, operator)}
           </div>
           ${(operator.md || []).length ? `<div class="module-progress"><span class="progress-subtitle">MODULE / 模组状态</span>${operator.md.map((module) => renderModuleProgress(operatorName, module, progress)).join('')}</div>` : ''}
           <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="button button--quiet" type="button" data-action="target-current" data-operator="${encoded(operatorName)}">目标设为当前</button><button class="button button--signal" type="button" data-action="target-max" data-operator="${encoded(operatorName)}">目标设为全满</button></div>
@@ -674,18 +716,19 @@ function renderOperatorDrawer(operatorName) {
   `;
 }
 
-function renderProgressPanel(scope, title, state, eliteValues, maxLevel, operatorName) {
+function renderProgressPanel(scope, title, state, eliteValues, maxLevel, operatorName, operator) {
   const encodedName = encoded(operatorName);
+  const skillLevels = availableSkillLevels(operator);
+  const masterySkills = availableMasterySkills(operator);
   return `
     <section class="progress-panel">
       <h3>${title}<small>${scope.toUpperCase()}</small></h3>
       <div class="form-grid">
         <label class="field"><span>精英阶段</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="elite">${selectOptions(eliteValues, state.elite, (value) => `精英 ${value}`)}</select></label>
         <label class="field"><span>等级 / ${maxLevel}</span><input type="number" min="1" max="${maxLevel}" value="${state.level}" data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="level"></label>
-        <label class="field" style="grid-column:1/-1"><span>技能等级</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="skillLevel">${selectOptions([1,2,3,4,5,6,7], state.skillLevel, (value) => `技能 ${value}`)}</select></label>
+        ${skillLevels.length > 1 ? `<label class="field" style="grid-column:1/-1"><span>技能等级</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="skillLevel">${selectOptions(skillLevels, state.skillLevel, (value) => `技能 ${value}`)}</select></label>` : ''}
       </div>
-      <p class="progress-subtitle">MASTERY / 专精阶段</p>
-      <div class="triple-select">${['s1','s2','s3'].map((skill, index) => `<label class="field"><span>S${index + 1}</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="mastery" data-key="${skill}">${selectOptions([0,1,2,3], state.mastery[skill], (value) => value ? `专 ${value}` : '未专精')}</select></label>`).join('')}</div>
+      ${masterySkills.length ? `<p class="progress-subtitle">MASTERY / 专精阶段</p><div class="triple-select">${masterySkills.map((skill) => `<label class="field"><span>S${Number(skill.slice(1))}</span><select data-action="progress-change" data-operator="${encodedName}" data-scope="${scope}" data-field="mastery" data-key="${skill}">${selectOptions([0,1,2,3], state.mastery[skill], (value) => value ? `专 ${value}` : '未专精')}</select></label>`).join('')}</div>` : ''}
     </section>
   `;
 }
@@ -759,7 +802,7 @@ function openMaterialSources(name) {
   $('#modal-root').innerHTML = `
     <div class="modal-backdrop" data-action="close-modal"><section class="modal" role="dialog" aria-modal="true">
       <header class="modal__header"><h2>${escapeHtml(name)} · 材料来源</h2><button class="icon-button" type="button" data-action="close-modal">×</button></header>
-      <div class="modal__body">${sources.length ? `<div class="ranking-list">${sources.map((source, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2,'0')}</span><span><b>${escapeHtml(source.item.operatorName)} · ${escapeHtml(source.item.label)}</b><small>${source.direct ? `直接 ×${source.direct}` : `经 ${source.via.join('、')} 分解`}</small></span><strong>×${source.baseline || source.direct}</strong></div>`).join('')}</div>` : '<p>当前计划中没有这个材料的直接或间接来源。</p>'}</div>
+      <div class="modal__body">${sources.length ? `<div class="ranking-list">${sources.map((source, index) => `<div class="ranking-row"><span>${String(index + 1).padStart(2,'0')}</span><span><b>${escapeHtml(source.item.operatorName)} · ${escapeHtml(source.item.label)}</b><small>${source.direct ? `直接 ×${source.direct}` : `经 ${escapeHtml(source.via.join('、'))} 分解`}</small></span><strong>×${source.baseline || source.direct}</strong></div>`).join('')}</div>` : '<p>当前计划中没有这个材料的直接或间接来源。</p>'}</div>
       <footer class="modal__actions"><button class="button button--dark" type="button" data-action="close-modal">关闭</button></footer>
     </section></div>`;
 }
@@ -774,6 +817,7 @@ function confirmClearInventory() {
 }
 
 function openImportMenu() {
+  importFileGate.cancel();
   const backup = loadBackup(localStorage, gameData);
   const createdAt = backup?.createdAt ? new Date(backup.createdAt).toLocaleString('zh-CN') : '时间未知';
   activeImportRoute = null;
@@ -795,6 +839,7 @@ function openImportMenu() {
 }
 
 function openImportRoute(route) {
+  importFileGate.cancel();
   const routes = {
     skland: {
       code: 'SKLAND / FULL PROGRESS', title: '从森空岛导入', field: '脱敏养成快照',
@@ -836,6 +881,7 @@ function previewPastedImport() {
     return;
   }
   try {
+    importFileGate.cancel();
     previewImportText(text);
   } catch (error) {
     showToast(error.message || '无法识别粘贴的数据。', true);
@@ -894,9 +940,9 @@ function previewMaaImport(imported) {
         <p>已识别 MAA 的干员列表。将导入拥有状态、精英阶段、等级和潜能。MAA 不提供技能等级、专精和模组状态：首次导入按技能 1、未专精、未解锁模组记录；已有本地技能、专精、模组及培养目标会保留。</p>
         <div class="import-summary"><div><b>${entries.length}</b><small>匹配干员</small></div><div><b>${owned}</b><small>拥有干员</small></div><div><b>${unknown.length}</b><small>未匹配记录</small></div></div>
         ${unknown.length ? `<div class="import-warning"><b>未匹配：</b>${unknown.slice(0, 8).map((item) => escapeHtml(item.name || item.id || '未知')).join('、')}${unknown.length > 8 ? ` 等 ${unknown.length} 项` : ''}</div>` : ''}
-        <p class="modal-note">“合并”只更新文件中出现的干员；“替换拥有列表”会把未出现在 MAA 拥有列表中的本机干员标记为未拥有，但不会删除培养目标。</p>
+        <p class="modal-note">${imported.canReplace ? '“合并”只更新文件中出现的干员；“替换拥有列表”会把未出现在完整 MAA 列表中的本机干员标记为未拥有，但不会删除培养目标。' : '这份结果只包含已拥有干员，不能据此判断其他干员是否未拥有，因此仅支持合并。'}</p>
       </div>
-      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button" type="button" data-action="apply-import" data-mode="merge">合并</button><button class="button button--dark" type="button" data-action="apply-import" data-mode="replace">替换拥有列表</button></footer>
+      <footer class="modal__actions"><button class="button" type="button" data-action="close-modal">取消</button><button class="button button--dark" type="button" data-action="apply-import" data-mode="merge">合并</button>${imported.canReplace ? '<button class="button" type="button" data-action="apply-import" data-mode="replace">替换拥有列表</button>' : ''}</footer>
     </section></div>`;
 }
 
@@ -967,6 +1013,7 @@ function applyImport(mode) {
 }
 
 function closeModal() {
+  importFileGate.cancel();
   $('#modal-root').innerHTML = '';
   pendingImport = null;
   pendingImportKind = null;
@@ -1000,12 +1047,15 @@ function handleClick(event) {
   }
   if (action === 'start-without-import') {
     userState.settings.onboardingDismissed = true;
-    persist();
-    closeModal();
-    render();
+    if (persist()) {
+      closeModal();
+      render();
+    }
   }
   if (action === 'open-import-route') openImportRoute(button.dataset.route);
   if (action === 'back-import-menu') openImportMenu();
+  if (action === 'reload-external-state') reloadExternalState();
+  if (action === 'overwrite-external-state') overwriteExternalState();
   if (action === 'toggle-operator-filter') {
     const key = button.dataset.filter;
     const value = decoded(button.dataset.value);
@@ -1195,7 +1245,14 @@ function handleChange(event) {
   if (control.id === 'import-file' && control.files?.[0]) {
     const file = control.files[0];
     const route = activeImportRoute;
-    file.text().then((text) => previewImportText(text, route)).catch((error) => showToast(error.message || '导入文件无法读取。', true));
+    const requestToken = importFileGate.begin();
+    file.text().then((text) => {
+      if (!importFileGate.isCurrent(requestToken) || activeImportRoute !== route) return;
+      previewImportText(text, route);
+    }).catch((error) => {
+      if (!importFileGate.isCurrent(requestToken)) return;
+      showToast(error.message || '导入文件无法读取。', true);
+    });
     control.value = '';
   }
 }
@@ -1215,9 +1272,14 @@ async function init() {
     const loaded = loadUserState(localStorage, gameData);
     userState = loaded.state;
     currentView = VIEW_META[userState.settings.activeView] ? userState.settings.activeView : 'operators';
+    lastStoredUserDataRaw = localStorage.getItem(USER_DATA_STORAGE_KEY);
 
     const dataVersion = loadedData.manifest?.dataVersion || String(gameData.generatedAt || '').slice(0, 10) || 'LOCAL';
     $('#data-version').textContent = `DATA ${dataVersion}`;
+    window.addEventListener('storage', (event) => {
+      if (event.key !== USER_DATA_STORAGE_KEY || event.newValue === lastStoredUserDataRaw) return;
+      openStorageConflict();
+    });
     $('#data-count').textContent = `${gameData.OPS_ORDER.length} 名干员 / ${Object.keys(gameData.MAT_RARITY).length} 种资源`;
     $('#data-status-dot').title = loadedData.source === 'cache-offline' ? '离线使用最近一次缓存数据' : '已检查并载入最新发布数据';
     $('#boot-screen').hidden = true;

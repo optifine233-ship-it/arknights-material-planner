@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { parseMaterialWikitext, parseOperatorWikitext } from './lib/prts-parser.mjs';
+import { createSnapshotVersion, validateSynchronizedOperators } from './lib/data-quality.mjs';
 import { enrichOperatorProgressIds } from './lib/progress-id-enricher.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -172,6 +173,10 @@ if (Object.keys(parsedOperators).length < 200) {
   throw new Error(`解析出的正式干员只有 ${Object.keys(parsedOperators).length} 名，低于安全阈值，拒绝覆盖现有数据。`);
 }
 
+validateSynchronizedOperators(baseData.OPS, parsedOperators, {
+  duplicateOperatorNames
+});
+
 console.log(`成功解析 ${Object.keys(parsedOperators).length} 名干员，跳过 ${skippedOperators.length} 个页面。`);
 console.log('补充技能与模组稳定 ID…');
 const [characterTable, patchTable, uniequipTable] = await Promise.all([
@@ -216,7 +221,7 @@ for (const name of referencedMaterials) {
   const iconId = info?.iconId || materialMeta[name]?.iconId || '';
   const wikiIcon = materialIcons.get(name) || materialMeta[name]?.iconFallback || materialMeta[name]?.icon || '';
   const stableIcon = iconId ? `https://torappu.prts.wiki/assets/item_icon/${encodeURIComponent(iconId)}.png` : '';
-  if (info && Number.isInteger(info.tier)) rarity[name] = info.tier;
+  if (info && Number.isInteger(info.tier) && info.tier >= 0 && info.tier <= 5) rarity[name] = info.tier;
   if (name.includes('芯片') && !name.includes('双芯片')) {
     // PRTS also describes profession-to-profession chip conversion as a recipe.
     // It is probabilistic exchange, not a downward crafting path, and would
@@ -251,17 +256,13 @@ const latestRevision = Math.max(
   ...Object.values(operatorRevisions),
   ...Object.values(materialRevisions)
 );
-const dataVersion = `prts-${latestRevision}-progress-1`;
-const generatedAt = baseData.dataVersion === dataVersion && baseData.generatedAt
-  ? baseData.generatedAt
-  : new Date().toISOString();
 const ordinaryMaterials = Object.keys(rarity).filter((name) => (materialInfo[name]?.category || materialMeta[name]?.category) === '材料');
 
 const output = {
   ...baseData,
   schemaVersion: 2,
-  dataVersion,
-  generatedAt,
+  dataVersion: '',
+  generatedAt: '',
   source: {
     kind: 'prts-mediawiki-api',
     url: apiEndpoint,
@@ -294,6 +295,13 @@ const output = {
   }
 };
 
+const dataVersion = createSnapshotVersion(output, latestRevision);
+const generatedAt = baseData.dataVersion === dataVersion && baseData.generatedAt
+  ? baseData.generatedAt
+  : new Date().toISOString();
+output.dataVersion = dataVersion;
+
+output.generatedAt = generatedAt;
 const version = {
   schemaVersion: 1,
   dataVersion,
