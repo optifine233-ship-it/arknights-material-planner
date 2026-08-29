@@ -32,6 +32,7 @@ import { applyMaaOperatorImport, parseMaaOperatorExport } from './importers/maa.
 import { applySklandImport, parseSklandCultivateSnapshot } from './importers/skland.js';
 import { loadGameData } from './data-loader.js';
 import { createRequestGate } from './request-gate.js';
+import { replaceDrawerBody } from './drawer-refresh.js';
 import {
   formatNumber,
   getAllInventoryMaterials,
@@ -40,6 +41,7 @@ import {
   MATERIAL_CATEGORIES
 } from './materials.js';
 import { availableMasterySkills, availableSkillLevels } from './operator-capabilities.js';
+import { formatModuleName } from './modules.js';
 import {
   emptyState,
   escapeHtml,
@@ -73,6 +75,7 @@ let userState;
 let lastStoredUserDataRaw = null;
 let currentView = 'operators';
 let selectedOperator = null;
+let drawerWorkspaceDirty = false;
 let pendingImport = null;
 let pendingImportKind = null;
 let activeImportRoute = null;
@@ -689,6 +692,20 @@ function statCard(label, value, note) {
 function renderOperatorDrawer(operatorName) {
   const operator = gameData.OPS[operatorName];
   if (!operator) return '';
+
+  return `
+    <div class="drawer-backdrop" data-action="close-drawer">
+      <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" data-drawer-panel>
+        <header class="drawer__header"><div><p>${escapeHtml(operator.p)} / ${operator.r + 1} STAR OPERATOR</p><h2 id="drawer-title">${escapeHtml(operatorName)}</h2></div><button class="icon-button" type="button" data-action="close-drawer" aria-label="关闭">×</button></header>
+        <div class="drawer__body">${renderOperatorDrawerBody(operatorName)}</div>
+      </aside>
+    </div>
+  `;
+}
+
+function renderOperatorDrawerBody(operatorName) {
+  const operator = gameData.OPS[operatorName];
+  if (!operator) return '';
   const progress = getProgress(operatorName);
   const items = buildOperatorUpgradeItems(operatorName, operator, progress, gameData);
   const resourceFree = isResourceFreeCultivationOperator(operator);
@@ -698,21 +715,13 @@ function renderOperatorDrawer(operatorName) {
   const targetMax = maxLevels[`e${progress.target.elite}`] || 1;
 
   return `
-    <div class="drawer-backdrop" data-action="close-drawer">
-      <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" data-drawer-panel>
-        <header class="drawer__header"><div><p>${escapeHtml(operator.p)} / ${operator.r + 1} STAR OPERATOR</p><h2 id="drawer-title">${escapeHtml(operatorName)}</h2></div><button class="icon-button" type="button" data-action="close-drawer" aria-label="关闭">×</button></header>
-        <div class="drawer__body">
-          <div class="owned-toggle"><div><b>我拥有这名干员</b><small>未拥有的干员仍可浏览，但不会进入账号统计。</small></div><label class="field potential-field"><span>潜能</span><select data-action="potential-change" data-operator="${encoded(operatorName)}">${selectOptions([0,1,2,3,4,5,6], progress.potential, (value) => value ? `潜能 ${value}` : '未记录')}</select></label><label class="switch"><input type="checkbox" ${progress.owned ? 'checked' : ''} data-action="toggle-owned" data-operator="${encoded(operatorName)}"><span></span></label></div>
-          <div class="progress-grid">
-            ${renderProgressPanel('current', '目前状态', progress.current, eliteValues, currentMax, operatorName, operator)}
-            ${renderProgressPanel('target', '目标状态', progress.target, eliteValues, targetMax, operatorName, operator)}
-          </div>
-          ${(operator.md || []).length ? `<div class="module-progress"><span class="progress-subtitle">MODULE / 模组状态</span>${operator.md.map((module) => renderModuleProgress(operatorName, module, progress)).join('')}</div>` : ''}
-          <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="button button--quiet" type="button" data-action="target-current" data-operator="${encoded(operatorName)}">目标设为当前</button><button class="button button--signal" type="button" data-action="target-max" data-operator="${encoded(operatorName)}">目标设为全满</button></div>
-          <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : resourceFree ? emptyState('特殊养成', '该干员可以记录养成状态，但不会产生材料、经验或龙门币需求。') : emptyState('当前状态已达到目标', '调整目标后，这里会显示新增的强化项。')}</section>
-        </div>
-      </aside>
+    <div class="progress-grid">
+      ${renderProgressPanel('current', '目前状态', progress.current, eliteValues, currentMax, operatorName, operator)}
+      ${renderProgressPanel('target', '目标状态', progress.target, eliteValues, targetMax, operatorName, operator)}
     </div>
+    ${(operator.md || []).length ? `<div class="module-progress"><span class="progress-subtitle">MODULE / 模组状态</span>${operator.md.map((module) => renderModuleProgress(operatorName, module, progress)).join('')}</div>` : ''}
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end"><button class="button button--quiet" type="button" data-action="target-current" data-operator="${encoded(operatorName)}">目标设为当前</button><button class="button button--signal" type="button" data-action="target-max" data-operator="${encoded(operatorName)}">目标设为全满</button></div>
+    <section class="drawer-plan"><h3>从当前到目标 · ${items.length} 项</h3>${items.length ? `<div class="plan-operator"><div class="upgrade-list">${renderUpgradeItems(items)}</div></div>` : resourceFree ? emptyState('特殊养成', '该干员可以记录养成状态，但不会产生材料、经验或龙门币需求。') : emptyState('当前状态已达到目标', '调整目标后，这里会显示新增的强化项。')}</section>
   `;
 }
 
@@ -734,15 +743,17 @@ function renderProgressPanel(scope, title, state, eliteValues, maxLevel, operato
 }
 
 function renderModuleProgress(operatorName, module, progress) {
+  const moduleLabel = formatModuleName(module);
   const key = String(module.id || module.name);
   const current = progress.current.modules[key] || 0;
   const target = progress.target.modules[key] || 0;
   const stages = [0, ...(module.stages || []).map((stage) => stage.stage)];
-  return `<div class="module-row"><b>${escapeHtml(module.name)}</b><select aria-label="${escapeHtml(module.name)}当前等级" data-action="progress-change" data-operator="${encoded(operatorName)}" data-scope="current" data-field="module" data-key="${encoded(key)}">${selectOptions(stages, current, (value) => value ? `${value}级` : '未解锁')}</select><span>→</span><select aria-label="${escapeHtml(module.name)}目标等级" data-action="progress-change" data-operator="${encoded(operatorName)}" data-scope="target" data-field="module" data-key="${encoded(key)}">${selectOptions(stages, target, (value) => value ? `${value}级` : '未解锁')}</select></div>`;
+  return `<div class="module-row"><b>${escapeHtml(moduleLabel)}</b><select aria-label="${escapeHtml(moduleLabel)}当前等级" data-action="progress-change" data-operator="${encoded(operatorName)}" data-scope="current" data-field="module" data-key="${encoded(key)}">${selectOptions(stages, current, (value) => value ? `${value}级` : '未解锁')}</select><span>→</span><select aria-label="${escapeHtml(moduleLabel)}目标等级" data-action="progress-change" data-operator="${encoded(operatorName)}" data-scope="target" data-field="module" data-key="${encoded(key)}">${selectOptions(stages, target, (value) => value ? `${value}级` : '未解锁')}</select></div>`;
 }
 
 function openOperator(operatorName) {
   selectedOperator = operatorName;
+  drawerWorkspaceDirty = false;
   $('#drawer-root').innerHTML = renderOperatorDrawer(operatorName);
   document.body.style.overflow = 'hidden';
 }
@@ -751,12 +762,22 @@ function closeDrawer() {
   selectedOperator = null;
   $('#drawer-root').innerHTML = '';
   document.body.style.overflow = '';
+  if (drawerWorkspaceDirty) render();
+  drawerWorkspaceDirty = false;
 }
 
-function rerenderAfterProgressChange() {
+function rerenderAfterProgressChange(activeControl = null) {
   persist();
-  render();
-  if (selectedOperator) $('#drawer-root').innerHTML = renderOperatorDrawer(selectedOperator);
+  const items = allPlanItems();
+  renderShellCounts(items, selectedPlanItems(items));
+  drawerWorkspaceDirty = true;
+  if (selectedOperator) {
+    replaceDrawerBody(
+      $('[data-drawer-panel]'),
+      renderOperatorDrawerBody(selectedOperator),
+      activeControl
+    );
+  }
 }
 
 function updateProgress(control) {
@@ -773,10 +794,10 @@ function updateProgress(control) {
   else progress[scope][field] = value;
 
   userState.operators[operatorName] = normalizeOperatorProgress(progress, operator, gameData);
-  rerenderAfterProgressChange();
+  rerenderAfterProgressChange(control);
 }
 
-function setTarget(operatorName, mode) {
+function setTarget(operatorName, mode, activeControl = null) {
   const operator = gameData.OPS[operatorName];
   const progress = getProgress(operatorName);
   progress.owned = true;
@@ -794,7 +815,7 @@ function setTarget(operatorName, mode) {
     };
   }
   userState.operators[operatorName] = normalizeOperatorProgress(progress, operator, gameData);
-  rerenderAfterProgressChange();
+  rerenderAfterProgressChange(activeControl);
 }
 
 function openMaterialSources(name) {
@@ -1097,8 +1118,8 @@ function handleClick(event) {
   }
   if (action === 'open-operator') openOperator(decoded(button.dataset.operator));
   if (action === 'close-drawer' && (event.target === button || button.matches('.icon-button'))) closeDrawer();
-  if (action === 'target-current') setTarget(decoded(button.dataset.operator), 'current');
-  if (action === 'target-max') setTarget(decoded(button.dataset.operator), 'max');
+  if (action === 'target-current') setTarget(decoded(button.dataset.operator), 'current', button);
+  if (action === 'target-max') setTarget(decoded(button.dataset.operator), 'max', button);
   if (action === 'show-material-sources') openMaterialSources(decoded(button.dataset.material));
   if (action === 'confirm-clear-inventory') confirmClearInventory();
   if (action === 'clear-inventory') {
@@ -1227,21 +1248,6 @@ function handleChange(event) {
     }
   }
   if (control.dataset.action === 'progress-change') updateProgress(control);
-  if (control.dataset.action === 'toggle-owned') {
-    const operatorName = decoded(control.dataset.operator);
-    const progress = getProgress(operatorName);
-    progress.owned = control.checked;
-    userState.operators[operatorName] = progress;
-    rerenderAfterProgressChange();
-  }
-  if (control.dataset.action === 'potential-change') {
-    const operatorName = decoded(control.dataset.operator);
-    const progress = getProgress(operatorName);
-    progress.potential = Math.max(0, Math.min(6, Number(control.value) || 0));
-    progress.owned = true;
-    userState.operators[operatorName] = progress;
-    rerenderAfterProgressChange();
-  }
   if (control.id === 'import-file' && control.files?.[0]) {
     const file = control.files[0];
     const route = activeImportRoute;

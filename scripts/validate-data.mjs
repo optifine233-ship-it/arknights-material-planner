@@ -45,6 +45,7 @@ for (const [name, operator] of Object.entries(data.OPS || {})) {
   }
   for (const module of operator.md || []) {
     if (!module.name || containsMarkup(module.name)) errors.push(`${name} 存在非法模组名称。`);
+    if (module.type && (containsMarkup(module.type) || String(module.type).length > 32)) errors.push(`${name} 的模组 ${module.name} 存在非法类型。`);
     if (!module.id) errors.push(`${name} 的模组 ${module.name} 缺少稳定 ID。`);
     else if (moduleIds.has(module.id)) errors.push(`模组 ID ${module.id} 同时用于 ${moduleIds.get(module.id)} 和 ${name}。`);
     else moduleIds.set(module.id, name);

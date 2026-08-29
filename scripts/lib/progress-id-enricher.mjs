@@ -12,6 +12,15 @@ function skillIdsFor(operatorId, characters, patchChars) {
   return result;
 }
 
+function moduleTypeForEquip(equip) {
+  const family = String(equip?.typeName1 || '').trim().toUpperCase();
+  let suffix = String(equip?.typeName2 || '').trim().toUpperCase();
+  if (equip?.isSpecialEquip) suffix = 'α';
+  else if (suffix === 'D') suffix = 'Δ';
+  if (!family || !suffix) return '';
+  return `${family}-${suffix}`;
+}
+
 export function enrichOperatorProgressIds(operators, sources = {}) {
   const output = clone(operators || {});
   const report = { missingSkills: [], missingModules: [], ambiguousModules: [] };
@@ -20,7 +29,10 @@ export function enrichOperatorProgressIds(operators, sources = {}) {
   for (const equip of Object.values(sources.equipDict || {})) {
     if (equip?.type !== 'ADVANCED' || !equip.uniEquipId || !equip.uniEquipName) continue;
     const matches = modulesByName.get(equip.uniEquipName) || [];
-    matches.push(String(equip.uniEquipId));
+    matches.push({
+      id: String(equip.uniEquipId),
+      type: moduleTypeForEquip(equip)
+    });
     modulesByName.set(equip.uniEquipName, matches);
   }
 
@@ -32,7 +44,10 @@ export function enrichOperatorProgressIds(operators, sources = {}) {
 
     for (const module of operator.md || []) {
       const matches = modulesByName.get(module.name) || [];
-      if (matches.length === 1) module.id = matches[0];
+      if (matches.length === 1) {
+        module.id = matches[0].id;
+        if (!module.type && matches[0].type) module.type = matches[0].type;
+      }
       else if (matches.length > 1) {
         report.ambiguousModules.push({ operatorId: String(operator.id || ''), name: module.name });
       } else {

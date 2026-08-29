@@ -142,6 +142,7 @@ export function parseOperatorWikitext(source, fallbackName = '') {
     const params = moduleTemplate.params;
     if (String(params.基础证章 || '').toLowerCase() === 'yes') continue;
     const moduleName = String(params.名称 || '').trim();
+    const moduleType = String(params.类型 || '').trim();
     if (!moduleName || params.材料消耗 === undefined) continue;
     const stages = [];
     for (let stage = 1; stage <= 3; stage += 1) {
@@ -149,7 +150,7 @@ export function parseOperatorWikitext(source, fallbackName = '') {
       if (raw === undefined) continue;
       stages.push({ stage, mats: withoutLmd(extractMaterialCosts(raw)) });
     }
-    if (stages.length) modules.push({ name: moduleName, stages });
+    if (stages.length) modules.push({ name: moduleName, ...(moduleType ? { type: moduleType } : {}), stages });
   }
 
   return {

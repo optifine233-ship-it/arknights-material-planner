@@ -1,3 +1,5 @@
+import { formatModuleName } from './modules.js';
+
 const DEFAULT_MODULE_LMD = {
   3: [20000, 25000, 30000],
   4: [40000, 50000, 60000],
@@ -191,7 +193,7 @@ export function buildOperatorUpgradeItems(operatorName, operator, progress, game
         kind: 'module',
         key: `module:${moduleKey}:${stage}`,
         selectionKey: `module:${moduleSelectionKey}:${stage}`,
-        label: `${module.name} · ${stage}级`,
+        label: `${formatModuleName(module)} · ${stage}级`,
         stage,
         materials: moduleStage.mats,
         lmd: moduleLmd[operator.r]?.[stage - 1] || 0,

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T17:19:45.530Z",
+  "generatedAt": "2026-08-26T16:34:59.139Z",
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
@@ -349,7 +349,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vigil"
+          "id": "uniequip_002_vigil",
+          "type": "TAC-X"
         },
         {
           "name": "时光不再",
@@ -402,7 +403,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_vigil"
+          "id": "uniequip_003_vigil",
+          "type": "TAC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/df/%E5%A4%B4%E5%83%8F_%E4%BC%BA%E5%A4%9C.png",
@@ -749,7 +751,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_saga"
+          "id": "uniequip_003_saga",
+          "type": "SOL-X"
         },
         {
           "name": "身向云泥",
@@ -802,7 +805,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_saga"
+          "id": "uniequip_002_saga",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/6d/%E5%A4%B4%E5%83%8F_%E5%B5%AF%E5%B3%A8.png",
@@ -1149,7 +1153,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bpipe"
+          "id": "uniequip_002_bpipe",
+          "type": "CHG-X"
         },
         {
           "name": "“棍棒与口袋”",
@@ -1202,7 +1207,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_bpipe"
+          "id": "uniequip_003_bpipe",
+          "type": "CHG-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/de/%E5%A4%B4%E5%83%8F_%E9%A3%8E%E7%AC%9B.png",
@@ -1549,7 +1555,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_closur"
+          "id": "uniequip_002_closur",
+          "type": "TAC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a5/%E5%A4%B4%E5%83%8F_%E5%8F%AF%E9%9C%B2%E5%B8%8C%E5%B0%94.png",
@@ -2189,7 +2196,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mlyss"
+          "id": "uniequip_002_mlyss",
+          "type": "TAC-X"
         },
         {
           "name": "落叶四季",
@@ -2242,7 +2250,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_mlyss"
+          "id": "uniequip_003_mlyss",
+          "type": "TAC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3a/%E5%A4%B4%E5%83%8F_%E7%BC%AA%E5%B0%94%E8%B5%9B%E6%80%9D.png",
@@ -2589,7 +2598,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sleach"
+          "id": "uniequip_002_sleach",
+          "type": "BEA-X"
         },
         {
           "name": "“友谊万岁”",
@@ -2642,7 +2652,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_sleach"
+          "id": "uniequip_003_sleach",
+          "type": "BEA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/96/%E5%A4%B4%E5%83%8F_%E7%90%B4%E6%9F%B3.png",
@@ -2989,7 +3000,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vulpis"
+          "id": "uniequip_002_vulpis",
+          "type": "SOL-X"
         },
         {
           "name": "剑舞",
@@ -3042,7 +3054,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_vulpis"
+          "id": "uniequip_003_vulpis",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/79/%E5%A4%B4%E5%83%8F_%E5%BF%8D%E5%86%AC.png",
@@ -3389,7 +3402,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_siege"
+          "id": "uniequip_002_siege",
+          "type": "SOL-X"
         },
         {
           "name": "“初诺”",
@@ -3442,7 +3456,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_siege"
+          "id": "uniequip_003_siege",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/ba/%E5%A4%B4%E5%83%8F_%E6%8E%A8%E8%BF%9B%E4%B9%8B%E7%8E%8B.png",
@@ -3789,7 +3804,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_flamtl"
+          "id": "uniequip_003_flamtl",
+          "type": "SOL-X"
         },
         {
           "name": "红松的起点",
@@ -3842,7 +3858,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_flamtl"
+          "id": "uniequip_002_flamtl",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c8/%E5%A4%B4%E5%83%8F_%E7%84%B0%E5%B0%BE.png",
@@ -4189,7 +4206,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ines"
+          "id": "uniequip_002_ines",
+          "type": "AGE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8c/%E5%A4%B4%E5%83%8F_%E4%BC%8A%E5%86%85%E4%B8%9D.png",
@@ -4536,7 +4554,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_irene"
+          "id": "uniequip_003_irene",
+          "type": "SWO-X"
         },
         {
           "name": "厚重的经卷",
@@ -4589,7 +4608,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_irene"
+          "id": "uniequip_002_irene",
+          "type": "SWO-Y"
         },
         {
           "name": "艾丽妮特限证章",
@@ -4622,7 +4642,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_irene"
+          "id": "uniequip_004_irene",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/5/57/%E5%A4%B4%E5%83%8F_%E8%89%BE%E4%B8%BD%E5%A6%AE.png",
@@ -4969,7 +4990,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_gvial2"
+          "id": "uniequip_002_gvial2",
+          "type": "CEN-X"
         },
         {
           "name": "好锯多磨",
@@ -5022,7 +5044,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_gvial2"
+          "id": "uniequip_003_gvial2",
+          "type": "CEN-Y"
         },
         {
           "name": "百炼嘉维尔特限证章",
@@ -5055,7 +5078,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_gvial2"
+          "id": "uniequip_004_gvial2",
+          "type": "RA-α"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1b/%E5%A4%B4%E5%83%8F_%E7%99%BE%E7%82%BC%E5%98%89%E7%BB%B4%E5%B0%94.png",
@@ -5402,7 +5426,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_demetr"
+          "id": "uniequip_002_demetr",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/83/%E5%A4%B4%E5%83%8F_%E8%B4%9D%E6%B4%9B%E5%86%85.png",
@@ -5749,7 +5774,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chen"
+          "id": "uniequip_002_chen",
+          "type": "SWO-X"
         },
         {
           "name": "往昔时光",
@@ -5802,7 +5828,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_chen"
+          "id": "uniequip_003_chen",
+          "type": "SWO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cf/%E5%A4%B4%E5%83%8F_%E9%99%88.png",
@@ -6149,7 +6176,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chen3"
+          "id": "uniequip_002_chen3",
+          "type": "AFT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d0/%E5%A4%B4%E5%83%8F_%E8%B5%A4%E5%88%83%E6%98%8E%E9%9C%84%E9%99%88.png",
@@ -6496,7 +6524,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_qiubai"
+          "id": "uniequip_002_qiubai",
+          "type": "LOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8a/%E5%A4%B4%E5%83%8F_%E4%BB%87%E7%99%BD.png",
@@ -6843,7 +6872,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_oblvns"
+          "id": "uniequip_002_oblvns",
+          "type": "LOR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cb/%E5%A4%B4%E5%83%8F_%E4%B8%B0%E5%B7%9D%E7%A5%A5%E5%AD%90.png",
@@ -7190,7 +7220,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hodrer"
+          "id": "uniequip_002_hodrer",
+          "type": "CRU-X"
         },
         {
           "name": "笔迹",
@@ -7243,7 +7274,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_hodrer"
+          "id": "uniequip_003_hodrer",
+          "type": "CRU-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f8/%E5%A4%B4%E5%83%8F_%E8%B5%AB%E5%BE%B7%E9%9B%B7.png",
@@ -7590,7 +7622,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_helage"
+          "id": "uniequip_002_helage",
+          "type": "SBL-X"
         },
         {
           "name": "“热的雪”",
@@ -7643,7 +7676,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_helage"
+          "id": "uniequip_003_helage",
+          "type": "SBL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cd/%E5%A4%B4%E5%83%8F_%E8%B5%AB%E6%8B%89%E6%A0%BC.png",
@@ -7990,7 +8024,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_huang"
+          "id": "uniequip_002_huang",
+          "type": "CEN-X"
         },
         {
           "name": "“稍后回来”",
@@ -8043,7 +8078,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_huang"
+          "id": "uniequip_003_huang",
+          "type": "CEN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/30/%E5%A4%B4%E5%83%8F_%E7%85%8C.png",
@@ -8390,7 +8426,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_thorns"
+          "id": "uniequip_002_thorns",
+          "type": "LOR-X"
         },
         {
           "name": "沙蚀",
@@ -8443,7 +8480,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_thorns"
+          "id": "uniequip_003_thorns",
+          "type": "LOR-Δ"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2a/%E5%A4%B4%E5%83%8F_%E6%A3%98%E5%88%BA.png",
@@ -8790,7 +8828,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_blkkgt"
+          "id": "uniequip_002_blkkgt",
+          "type": "SWO-X"
         },
         {
           "name": "新合同",
@@ -8843,7 +8882,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_blkkgt"
+          "id": "uniequip_003_blkkgt",
+          "type": "SWO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0f/%E5%A4%B4%E5%83%8F_%E9%94%8F.png",
@@ -9190,7 +9230,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mlynar"
+          "id": "uniequip_002_mlynar",
+          "type": "LIB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/08/%E5%A4%B4%E5%83%8F_%E7%8E%9B%E6%81%A9%E7%BA%B3.png",
@@ -9537,7 +9578,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_headb2"
+          "id": "uniequip_002_headb2",
+          "type": "HAM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/81/%E5%A4%B4%E5%83%8F_%E6%80%92%E6%BD%AE%E5%87%9B%E5%86%AC.png",
@@ -9884,7 +9926,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_pallas"
+          "id": "uniequip_002_pallas",
+          "type": "INS-X"
         },
         {
           "name": "“赫里亚之辉”",
@@ -9937,7 +9980,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_pallas"
+          "id": "uniequip_003_pallas",
+          "type": "INS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ad/%E5%A4%B4%E5%83%8F_%E5%B8%95%E6%8B%89%E6%96%AF.png",
@@ -10284,7 +10328,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_pepe"
+          "id": "uniequip_002_pepe",
+          "type": "HAM-X"
         },
         {
           "name": "佩佩特限证章",
@@ -10317,7 +10362,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_pepe"
+          "id": "uniequip_003_pepe",
+          "type": "RA-α"
         }
       ],
       "portrait": "https://media.prts.wiki/8/85/%E5%A4%B4%E5%83%8F_%E4%BD%A9%E4%BD%A9.png",
@@ -10664,7 +10710,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_f12yin"
+          "id": "uniequip_003_f12yin",
+          "type": "FGT-X"
         },
         {
           "name": "“自由的代价”",
@@ -10717,7 +10764,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_f12yin"
+          "id": "uniequip_002_f12yin",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ec/%E5%A4%B4%E5%83%8F_%E5%B1%B1.png",
@@ -11064,7 +11112,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_excu2"
+          "id": "uniequip_002_excu2",
+          "type": "REA-X"
         },
         {
           "name": "已知悉",
@@ -11117,7 +11166,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_excu2"
+          "id": "uniequip_003_excu2",
+          "type": "REA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/7e/%E5%A4%B4%E5%83%8F_%E5%9C%A3%E7%BA%A6%E9%80%81%E8%91%AC%E4%BA%BA.png",
@@ -11464,7 +11514,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_surtr"
+          "id": "uniequip_002_surtr",
+          "type": "AFT-X"
         },
         {
           "name": "旅游必需品",
@@ -11517,7 +11568,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_surtr"
+          "id": "uniequip_003_surtr",
+          "type": "AFT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e1/%E5%A4%B4%E5%83%8F_%E5%8F%B2%E5%B0%94%E7%89%B9%E5%B0%94.png",
@@ -11864,7 +11916,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_leizi2"
+          "id": "uniequip_002_leizi2",
+          "type": "LIB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/5c/%E5%A4%B4%E5%83%8F_%E5%8F%B8%E9%9C%86%E6%83%8A%E8%9B%B0.png",
@@ -12211,7 +12264,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_skadi"
+          "id": "uniequip_003_skadi",
+          "type": "DRE-X"
         },
         {
           "name": "潮湿的剑袋",
@@ -12264,7 +12318,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_skadi"
+          "id": "uniequip_002_skadi",
+          "type": "DRE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/53/%E5%A4%B4%E5%83%8F_%E6%96%AF%E5%8D%A1%E8%92%82.png",
@@ -12611,7 +12666,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vvana"
+          "id": "uniequip_002_vvana",
+          "type": "AFT-Δ"
         },
         {
           "name": "“最后一行”",
@@ -12664,7 +12720,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_vvana"
+          "id": "uniequip_003_vvana",
+          "type": "AFT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4a/%E5%A4%B4%E5%83%8F_%E8%96%87%E8%96%87%E5%AE%89%E5%A8%9C.png",
@@ -13011,7 +13068,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_siege2"
+          "id": "uniequip_002_siege2",
+          "type": "AFT-X"
         },
         {
           "name": "秩序圣“球”",
@@ -13064,7 +13122,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_siege2"
+          "id": "uniequip_003_siege2",
+          "type": "AFT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/68/%E5%A4%B4%E5%83%8F_%E7%BB%B4%E5%A8%9C%C2%B7%E7%BB%B4%E5%A4%9A%E5%88%A9%E4%BA%9A.png",
@@ -13411,7 +13470,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ulpia"
+          "id": "uniequip_002_ulpia",
+          "type": "CRU-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/33/%E5%A4%B4%E5%83%8F_%E4%B9%8C%E5%B0%94%E6%AF%94%E5%AE%89.png",
@@ -13758,7 +13818,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nearl2"
+          "id": "uniequip_002_nearl2",
+          "type": "DRE-X"
         },
         {
           "name": "“骑士家族”",
@@ -13811,7 +13872,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_nearl2"
+          "id": "uniequip_003_nearl2",
+          "type": "DRE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/03/%E5%A4%B4%E5%83%8F_%E8%80%80%E9%AA%91%E5%A3%AB%E4%B8%B4%E5%85%89.png",
@@ -14158,7 +14220,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_svrash"
+          "id": "uniequip_002_svrash",
+          "type": "LOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/27/%E5%A4%B4%E5%83%8F_%E9%93%B6%E7%81%B0.png",
@@ -14505,7 +14568,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_etlchi"
+          "id": "uniequip_002_etlchi",
+          "type": "REA-X"
         },
         {
           "name": "玫瑰色故事集",
@@ -14558,7 +14622,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_etlchi"
+          "id": "uniequip_003_etlchi",
+          "type": "REA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4c/%E5%A4%B4%E5%83%8F_%E9%9A%90%E5%BE%B7%E6%9D%A5%E5%B8%8C.png",
@@ -14905,7 +14970,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lessng"
+          "id": "uniequip_002_lessng",
+          "type": "DRE-X"
         },
         {
           "name": "苦修者的抗压训练",
@@ -14958,7 +15024,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_lessng"
+          "id": "uniequip_003_lessng",
+          "type": "DRE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/72/%E5%A4%B4%E5%83%8F_%E6%AD%A2%E9%A2%82.png",
@@ -15305,7 +15372,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chyue"
+          "id": "uniequip_002_chyue",
+          "type": "FGT-X"
         },
         {
           "name": "“朔”",
@@ -15358,7 +15426,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_chyue"
+          "id": "uniequip_003_chyue",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/09/%E5%A4%B4%E5%83%8F_%E9%87%8D%E5%B2%B3.png",
@@ -15705,7 +15774,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_zuole"
+          "id": "uniequip_002_zuole",
+          "type": "SBL-X"
         },
         {
           "name": "秉烛人的记录",
@@ -15758,7 +15828,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_zuole"
+          "id": "uniequip_003_zuole",
+          "type": "SBL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e0/%E5%A4%B4%E5%83%8F_%E5%B7%A6%E4%B9%90.png",
@@ -16105,7 +16176,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_judge"
+          "id": "uniequip_002_judge",
+          "type": "UNY-X"
         },
         {
           "name": "“无罪”",
@@ -16158,7 +16230,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_judge"
+          "id": "uniequip_003_judge",
+          "type": "UNY-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1c/%E5%A4%B4%E5%83%8F_%E6%96%A5%E7%BD%AA.png",
@@ -16505,7 +16578,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_jesca2"
+          "id": "uniequip_002_jesca2",
+          "type": "SPT-X"
         },
         {
           "name": "未曾风化",
@@ -16558,7 +16632,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_jesca2"
+          "id": "uniequip_003_jesca2",
+          "type": "SPT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/14/%E5%A4%B4%E5%83%8F_%E6%B6%A4%E7%81%AB%E6%9D%B0%E8%A5%BF%E5%8D%A1.png",
@@ -16905,7 +16980,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_horn"
+          "id": "uniequip_002_horn",
+          "type": "FOR-X"
         },
         {
           "name": "旧日新装",
@@ -16958,7 +17034,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_horn"
+          "id": "uniequip_003_horn",
+          "type": "FOR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3f/%E5%A4%B4%E5%83%8F_%E5%8F%B7%E8%A7%92.png",
@@ -17329,7 +17406,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mudrok"
+          "id": "uniequip_002_mudrok",
+          "type": "UNY-X"
         },
         {
           "name": "沃土的愿景",
@@ -17382,7 +17460,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_mudrok"
+          "id": "uniequip_003_mudrok",
+          "type": "UNY-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/06/%E5%A4%B4%E5%83%8F_%E6%B3%A5%E5%B2%A9.png",
@@ -17729,7 +17808,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nian"
+          "id": "uniequip_002_nian",
+          "type": "PRO-X"
         },
         {
           "name": "“请勿叩门”",
@@ -17782,7 +17862,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_nian"
+          "id": "uniequip_003_nian",
+          "type": "PRO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9c/%E5%A4%B4%E5%83%8F_%E5%B9%B4.png",
@@ -18129,7 +18210,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_demkni"
+          "id": "uniequip_002_demkni",
+          "type": "GUA-X"
         },
         {
           "name": "科技新星",
@@ -18182,7 +18264,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_demkni"
+          "id": "uniequip_003_demkni",
+          "type": "GUA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ee/%E5%A4%B4%E5%83%8F_%E5%A1%9E%E9%9B%B7%E5%A8%85.png",
@@ -18529,7 +18612,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_zumama"
+          "id": "uniequip_002_zumama",
+          "type": "HES-X"
         },
         {
           "name": "“小小的丑东西”",
@@ -18582,7 +18666,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_zumama"
+          "id": "uniequip_003_zumama",
+          "type": "HES-Y"
         },
         {
           "name": "森蚺特限证章",
@@ -18615,7 +18700,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_zumama"
+          "id": "uniequip_004_zumama",
+          "type": "RA-α"
         }
       ],
       "portrait": "https://media.prts.wiki/7/74/%E5%A4%B4%E5%83%8F_%E6%A3%AE%E8%9A%BA.png",
@@ -18962,7 +19048,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_thumpy"
+          "id": "uniequip_002_thumpy",
+          "type": "PRP-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0c/%E5%A4%B4%E5%83%8F_%E7%8F%8A%E6%AF%94.png",
@@ -19309,7 +19396,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_shu"
+          "id": "uniequip_002_shu",
+          "type": "GUA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f2/%E5%A4%B4%E5%83%8F_%E9%BB%8D.png",
@@ -19656,7 +19744,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_blemsh"
+          "id": "uniequip_003_blemsh",
+          "type": "GUA-X"
         },
         {
           "name": "工匠团的回响",
@@ -19709,7 +19798,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_blemsh"
+          "id": "uniequip_002_blemsh",
+          "type": "GUA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f7/%E5%A4%B4%E5%83%8F_%E7%91%95%E5%85%89.png",
@@ -20056,7 +20146,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rmixer"
+          "id": "uniequip_002_rmixer",
+          "type": "SPT-X"
         },
         {
           "name": "“老朋友”",
@@ -20109,7 +20200,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_rmixer"
+          "id": "uniequip_003_rmixer",
+          "type": "SPT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/13/%E5%A4%B4%E5%83%8F_%E4%BF%A1%E4%BB%B0%E6%90%85%E6%8B%8C%E6%9C%BA.png",
@@ -20456,7 +20548,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_hsguma"
+          "id": "uniequip_003_hsguma",
+          "type": "PRO-X"
         },
         {
           "name": "友人们的赠礼",
@@ -20509,7 +20602,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hsguma"
+          "id": "uniequip_002_hsguma",
+          "type": "PRO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/07/%E5%A4%B4%E5%83%8F_%E6%98%9F%E7%86%8A.png",
@@ -20856,7 +20950,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_yu"
+          "id": "uniequip_002_yu",
+          "type": "PRP-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/66/%E5%A4%B4%E5%83%8F_%E4%BD%99.png",
@@ -21203,7 +21298,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hsgma2"
+          "id": "uniequip_002_hsgma2",
+          "type": "AST-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e5/%E5%A4%B4%E5%83%8F_%E6%96%A9%E4%B8%9A%E6%98%9F%E7%86%8A.png",
@@ -21550,7 +21646,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_phenxi"
+          "id": "uniequip_003_phenxi",
+          "type": "ART-X"
         },
         {
           "name": "“律外”特种弹药配给组",
@@ -21603,7 +21700,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_phenxi"
+          "id": "uniequip_002_phenxi",
+          "type": "ART-Y"
         },
         {
           "name": "菲亚梅塔特限证章",
@@ -21636,7 +21734,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_phenxi"
+          "id": "uniequip_004_phenxi",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b8/%E5%A4%B4%E5%83%8F_%E8%8F%B2%E4%BA%9A%E6%A2%85%E5%A1%94.png",
@@ -21983,7 +22082,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_shwaz"
+          "id": "uniequip_002_shwaz",
+          "type": "ARC-X"
         },
         {
           "name": "老剃刀",
@@ -22036,7 +22136,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_shwaz"
+          "id": "uniequip_003_shwaz",
+          "type": "ARC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d4/%E5%A4%B4%E5%83%8F_%E9%BB%91.png",
@@ -22383,7 +22484,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_bgsnow"
+          "id": "uniequip_003_bgsnow",
+          "type": "ARC-X"
         },
         {
           "name": "打字机色带",
@@ -22436,7 +22538,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bgsnow"
+          "id": "uniequip_002_bgsnow",
+          "type": "ARC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1b/%E5%A4%B4%E5%83%8F_%E9%B8%BF%E9%9B%AA.png",
@@ -22783,7 +22886,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ash"
+          "id": "uniequip_003_ash",
+          "type": "MAR-X"
         },
         {
           "name": "破墙榴弹战术收纳包",
@@ -22836,7 +22940,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ash"
+          "id": "uniequip_002_ash",
+          "type": "MAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/64/%E5%A4%B4%E5%83%8F_%E7%81%B0%E7%83%AC.png",
@@ -23183,7 +23288,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chen2"
+          "id": "uniequip_002_chen2",
+          "type": "RPR-X"
         },
         {
           "name": "假期的最后一天",
@@ -23236,7 +23342,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_chen2"
+          "id": "uniequip_003_chen2",
+          "type": "RPR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/df/%E5%A4%B4%E5%83%8F_%E5%81%87%E6%97%A5%E5%A8%81%E9%BE%99%E9%99%88.png",
@@ -23583,7 +23690,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_archet"
+          "id": "uniequip_003_archet",
+          "type": "MAR-X"
         },
         {
           "name": "“明天的种子”",
@@ -23636,7 +23744,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_archet"
+          "id": "uniequip_002_archet",
+          "type": "MAR-Y"
         },
         {
           "name": "空弦特限证章",
@@ -23669,7 +23778,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_archet"
+          "id": "uniequip_004_archet",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/b/bb/%E5%A4%B4%E5%83%8F_%E7%A9%BA%E5%BC%A6.png",
@@ -24016,7 +24126,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ray"
+          "id": "uniequip_002_ray",
+          "type": "HUN-X"
         },
         {
           "name": "证明什么？",
@@ -24069,7 +24180,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ray"
+          "id": "uniequip_003_ray",
+          "type": "HUN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/6a/%E5%A4%B4%E5%83%8F_%E8%8E%B1%E4%BC%8A.png",
@@ -24416,7 +24528,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lemuen"
+          "id": "uniequip_002_lemuen",
+          "type": "DEA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c5/%E5%A4%B4%E5%83%8F_%E8%95%BE%E7%BC%AA%E5%AE%89.png",
@@ -24763,7 +24876,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rosmon"
+          "id": "uniequip_002_rosmon",
+          "type": "BOM-X"
         },
         {
           "name": "迷迭香特限证章",
@@ -24796,7 +24910,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_rosmon"
+          "id": "uniequip_003_rosmon",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3b/%E5%A4%B4%E5%83%8F_%E8%BF%B7%E8%BF%AD%E9%A6%99.png",
@@ -25143,7 +25258,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_narant"
+          "id": "uniequip_002_narant",
+          "type": "LPS-X"
         },
         {
           "name": "“致我们的老大”",
@@ -25196,7 +25312,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_narant"
+          "id": "uniequip_003_narant",
+          "type": "LPS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/ba/%E5%A4%B4%E5%83%8F_%E5%A8%9C%E4%BB%81%E5%9B%BE%E4%BA%9A.png",
@@ -25543,7 +25660,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_angel"
+          "id": "uniequip_002_angel",
+          "type": "MAR-X"
         },
         {
           "name": "欢迎光临，企鹅物流",
@@ -25596,7 +25714,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_angel"
+          "id": "uniequip_003_angel",
+          "type": "MAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ad/%E5%A4%B4%E5%83%8F_%E8%83%BD%E5%A4%A9%E4%BD%BF.png",
@@ -25943,7 +26062,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_typhon"
+          "id": "uniequip_002_typhon",
+          "type": "SIE-X"
         },
         {
           "name": "冰原的影子",
@@ -25996,7 +26116,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_typhon"
+          "id": "uniequip_003_typhon",
+          "type": "SIE-Y"
         },
         {
           "name": "提丰特限证章",
@@ -26029,7 +26150,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_typhon"
+          "id": "uniequip_004_typhon",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/7/70/%E5%A4%B4%E5%83%8F_%E6%8F%90%E4%B8%B0.png",
@@ -26376,7 +26498,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wisdel"
+          "id": "uniequip_002_wisdel",
+          "type": "BOM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/66/%E5%A4%B4%E5%83%8F_%E7%BB%B4%E4%BB%80%E6%88%B4%E5%B0%94.png",
@@ -26723,7 +26846,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_orchd2"
+          "id": "uniequip_002_orchd2",
+          "type": "ARC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/20/%E5%A4%B4%E5%83%8F_%E7%84%B0%E7%8B%90%E9%BE%99%E6%A2%93%E5%85%B0.png",
@@ -27070,7 +27194,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_fartth"
+          "id": "uniequip_002_fartth",
+          "type": "DEA-X"
         },
         {
           "name": "支持者来信",
@@ -27123,7 +27248,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_fartth"
+          "id": "uniequip_003_fartth",
+          "type": "DEA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a1/%E5%A4%B4%E5%83%8F_%E8%BF%9C%E7%89%99.png",
@@ -27470,7 +27596,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_poca"
+          "id": "uniequip_002_poca",
+          "type": "SIE-X"
         },
         {
           "name": "“心”",
@@ -27523,7 +27650,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_poca"
+          "id": "uniequip_003_poca",
+          "type": "SIE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E6%97%A9%E9%9C%B2.png",
@@ -27870,7 +27998,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cqbw"
+          "id": "uniequip_002_cqbw",
+          "type": "ART-X"
         },
         {
           "name": "刺棱钝刃",
@@ -27923,7 +28052,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_cqbw"
+          "id": "uniequip_003_cqbw",
+          "type": "ART-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d6/%E5%A4%B4%E5%83%8F_W.png",
@@ -28270,7 +28400,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_amgoat"
+          "id": "uniequip_002_amgoat",
+          "type": "CCR-X"
         },
         {
           "name": "宠物大赛第一名",
@@ -28323,7 +28454,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_amgoat"
+          "id": "uniequip_003_amgoat",
+          "type": "CCR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cc/%E5%A4%B4%E5%83%8F_%E8%89%BE%E9%9B%85%E6%B3%95%E6%8B%89.png",
@@ -28670,7 +28802,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_gdglow"
+          "id": "uniequip_002_gdglow",
+          "type": "FUN-X"
         },
         {
           "name": "梦想终将实现",
@@ -28723,7 +28856,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_gdglow"
+          "id": "uniequip_003_gdglow",
+          "type": "FUN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ab/%E5%A4%B4%E5%83%8F_%E6%BE%84%E9%97%AA.png",
@@ -29070,7 +29204,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ebnhlz"
+          "id": "uniequip_002_ebnhlz",
+          "type": "MSC-X"
         },
         {
           "name": "“乐理阐释者”",
@@ -29123,7 +29258,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ebnhlz"
+          "id": "uniequip_003_ebnhlz",
+          "type": "MSC-Y"
         },
         {
           "name": "朽坏传承",
@@ -29176,7 +29312,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_ebnhlz"
+          "id": "uniequip_004_ebnhlz",
+          "type": "MSC-Δ"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1e/%E5%A4%B4%E5%83%8F_%E9%BB%91%E9%94%AE.png",
@@ -29523,7 +29660,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_whitw2"
+          "id": "uniequip_002_whitw2",
+          "type": "FUN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/04/%E5%A4%B4%E5%83%8F_%E8%8D%92%E8%8A%9C%E6%8B%89%E6%99%AE%E5%85%B0%E5%BE%B7.png",
@@ -29870,7 +30008,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_heyak"
+          "id": "uniequip_002_heyak",
+          "type": "CCR-X"
         },
         {
           "name": "羽蛇的时间博物馆",
@@ -29923,7 +30062,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_heyak"
+          "id": "uniequip_003_heyak",
+          "type": "CCR-Y"
         },
         {
           "name": "霍尔海雅特限证章",
@@ -29956,7 +30096,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_heyak"
+          "id": "uniequip_004_heyak",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9e/%E5%A4%B4%E5%83%8F_%E9%9C%8D%E5%B0%94%E6%B5%B7%E9%9B%85.png",
@@ -30303,7 +30444,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_billro"
+          "id": "uniequip_002_billro",
+          "type": "PLX-X"
         },
         {
           "name": "乡音",
@@ -30356,7 +30498,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_billro"
+          "id": "uniequip_003_billro",
+          "type": "PLX-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/dd/%E5%A4%B4%E5%83%8F_%E5%8D%A1%E6%B6%85%E5%88%A9%E5%AE%89.png",
@@ -30703,7 +30846,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cerber"
+          "id": "uniequip_002_cerber",
+          "type": "CCR-X"
         },
         {
           "name": "“我打的刀”",
@@ -30756,7 +30900,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_cerber"
+          "id": "uniequip_003_cerber",
+          "type": "CCR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4a/%E5%A4%B4%E5%83%8F_%E5%88%BB%E4%BF%84%E6%9F%8F.png",
@@ -31103,7 +31248,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lin"
+          "id": "uniequip_002_lin",
+          "type": "PLX-X"
         },
         {
           "name": "“情与义”",
@@ -31156,7 +31302,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_lin"
+          "id": "uniequip_003_lin",
+          "type": "PLX-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/aa/%E5%A4%B4%E5%83%8F_%E6%9E%97.png",
@@ -31503,7 +31650,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_logos"
+          "id": "uniequip_003_logos",
+          "type": "CCR-Y"
         },
         {
           "name": "来自河谷的笔盒",
@@ -31556,7 +31704,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_logos"
+          "id": "uniequip_002_logos",
+          "type": "CCR-Δ"
         }
       ],
       "portrait": "https://media.prts.wiki/4/44/%E5%A4%B4%E5%83%8F_%E9%80%BB%E5%90%84%E6%96%AF.png",
@@ -31903,7 +32052,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_marcil"
+          "id": "uniequip_002_marcil",
+          "type": "SPC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/84/%E5%A4%B4%E5%83%8F_%E7%8E%9B%E9%9C%B2%E8%A5%BF%E5%B0%94.png",
@@ -32250,7 +32400,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aphris"
+          "id": "uniequip_002_aphris",
+          "type": "BLA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/92/%E5%A4%B4%E5%83%8F_%E8%B0%AC%E5%9B%A0.png",
@@ -32597,7 +32748,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_mostma"
+          "id": "uniequip_003_mostma",
+          "type": "SPC-X"
         },
         {
           "name": "锁与匙之家",
@@ -32650,7 +32802,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mostma"
+          "id": "uniequip_002_mostma",
+          "type": "SPC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0b/%E5%A4%B4%E5%83%8F_%E8%8E%AB%E6%96%AF%E6%8F%90%E9%A9%AC.png",
@@ -32997,7 +33150,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nymph"
+          "id": "uniequip_002_nymph",
+          "type": "PRI-X"
         },
         {
           "name": "烦恼问诊匣",
@@ -33050,7 +33204,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_nymph"
+          "id": "uniequip_003_nymph",
+          "type": "PRI-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1a/%E5%A4%B4%E5%83%8F_%E5%A6%AE%E8%8A%99.png",
@@ -33397,7 +33552,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sbell2"
+          "id": "uniequip_002_sbell2",
+          "type": "PLX-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ab/%E5%A4%B4%E5%83%8F_%E5%9C%A3%E8%81%86%E5%88%9D%E9%9B%AA.png",
@@ -33744,7 +33900,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_necras"
+          "id": "uniequip_002_necras",
+          "type": "SOC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d9/%E5%A4%B4%E5%83%8F_%E6%AD%BB%E8%8A%92.png",
@@ -34091,7 +34248,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_veen"
+          "id": "uniequip_002_veen",
+          "type": "MSC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/56/%E5%A4%B4%E5%83%8F_%E7%BB%B4%E4%BC%8A.png",
@@ -34438,7 +34596,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_dusk"
+          "id": "uniequip_002_dusk",
+          "type": "SPC-X"
         },
         {
           "name": "“终夜无寐”",
@@ -34491,7 +34650,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_dusk"
+          "id": "uniequip_003_dusk",
+          "type": "SPC-Y"
         },
         {
           "name": "夕特限证章",
@@ -34524,7 +34684,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_dusk"
+          "id": "uniequip_004_dusk",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/6/6b/%E5%A4%B4%E5%83%8F_%E5%A4%95.png",
@@ -34871,7 +35032,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ifrit"
+          "id": "uniequip_002_ifrit",
+          "type": "BLA-X"
         },
         {
           "name": "“热成形记忆”",
@@ -34924,7 +35086,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ifrit"
+          "id": "uniequip_003_ifrit",
+          "type": "BLA-Δ"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ed/%E5%A4%B4%E5%83%8F_%E4%BC%8A%E8%8A%99%E5%88%A9%E7%89%B9.png",
@@ -35271,7 +35434,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_pasngr"
+          "id": "uniequip_002_pasngr",
+          "type": "CHA-X"
         },
         {
           "name": "王权金币",
@@ -35324,7 +35488,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_pasngr"
+          "id": "uniequip_003_pasngr",
+          "type": "CHA-Y"
         },
         {
           "name": "异客特限证章",
@@ -35357,7 +35522,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_pasngr"
+          "id": "uniequip_004_pasngr",
+          "type": "RA-α"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d2/%E5%A4%B4%E5%83%8F_%E5%BC%82%E5%AE%A2.png",
@@ -35704,7 +35870,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mantra"
+          "id": "uniequip_002_mantra",
+          "type": "PRI-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E7%9C%9F%E8%A8%80.png",
@@ -36051,7 +36218,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_blaze2"
+          "id": "uniequip_002_blaze2",
+          "type": "PRI-X"
         },
         {
           "name": "沟通小助手",
@@ -36104,7 +36272,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_blaze2"
+          "id": "uniequip_003_blaze2",
+          "type": "PRI-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c4/%E5%A4%B4%E5%83%8F_%E7%83%9B%E7%85%8C.png",
@@ -36451,7 +36620,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_agoat2"
+          "id": "uniequip_002_agoat2",
+          "type": "WDM-X"
         },
         {
           "name": "想要留下的生命",
@@ -36504,7 +36674,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_agoat2"
+          "id": "uniequip_003_agoat2",
+          "type": "WDM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f0/%E5%A4%B4%E5%83%8F_%E7%BA%AF%E7%83%AC%E8%89%BE%E9%9B%85%E6%B3%95%E6%8B%89.png",
@@ -36851,7 +37022,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kalts"
+          "id": "uniequip_002_kalts",
+          "type": "PHY-X"
         },
         {
           "name": "医者",
@@ -36904,7 +37076,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_kalts"
+          "id": "uniequip_003_kalts",
+          "type": "PHY-Y"
         },
         {
           "name": "凯尔希特限证章",
@@ -36937,7 +37110,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_kalts"
+          "id": "uniequip_004_kalts",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c5/%E5%A4%B4%E5%83%8F_%E5%87%AF%E5%B0%94%E5%B8%8C.png",
@@ -37577,7 +37751,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lumen"
+          "id": "uniequip_002_lumen",
+          "type": "WAH-X"
         },
         {
           "name": "“幸运”",
@@ -37630,7 +37805,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_lumen"
+          "id": "uniequip_003_lumen",
+          "type": "WAH-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/72/%E5%A4%B4%E5%83%8F_%E6%B5%81%E6%98%8E.png",
@@ -37977,7 +38153,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_shining"
+          "id": "uniequip_003_shining",
+          "type": "PHY-X"
         },
         {
           "name": "干枯剑鞘",
@@ -38030,7 +38207,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_shining"
+          "id": "uniequip_002_shining",
+          "type": "PHY-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/54/%E5%A4%B4%E5%83%8F_%E9%97%AA%E7%81%B5.png",
@@ -38377,7 +38555,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_titi"
+          "id": "uniequip_002_titi",
+          "type": "INC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/aa/%E5%A4%B4%E5%83%8F_%E7%BC%87%E7%BC%87.png",
@@ -38724,7 +38903,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_reed2"
+          "id": "uniequip_002_reed2",
+          "type": "INC-X"
         },
         {
           "name": "“独属自己的一隅”",
@@ -38777,7 +38957,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_reed2"
+          "id": "uniequip_003_reed2",
+          "type": "INC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/94/%E5%A4%B4%E5%83%8F_%E7%84%B0%E5%BD%B1%E8%8B%87%E8%8D%89.png",
@@ -39124,7 +39305,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cgbird"
+          "id": "uniequip_002_cgbird",
+          "type": "RIN-X"
         },
         {
           "name": "“莺歌”",
@@ -39177,7 +39359,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_cgbird"
+          "id": "uniequip_003_cgbird",
+          "type": "RIN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/64/%E5%A4%B4%E5%83%8F_%E5%A4%9C%E8%8E%BA.png",
@@ -39524,7 +39707,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_monstr"
+          "id": "uniequip_002_monstr",
+          "type": "XAH-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2a/%E5%A4%B4%E5%83%8F_Mon3tr.png",
@@ -39871,7 +40055,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_aglina"
+          "id": "uniequip_003_aglina",
+          "type": "DEC-X"
         },
         {
           "name": "重力校准模块",
@@ -39924,7 +40109,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aglina"
+          "id": "uniequip_002_aglina",
+          "type": "DEC-Y"
         },
         {
           "name": "安洁莉娜特限证章",
@@ -39957,7 +40143,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_aglina"
+          "id": "uniequip_004_aglina",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/c/ca/%E5%A4%B4%E5%83%8F_%E5%AE%89%E6%B4%81%E8%8E%89%E5%A8%9C.png",
@@ -40304,7 +40491,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ironmn"
+          "id": "uniequip_002_ironmn",
+          "type": "CRA-X"
         },
         {
           "name": "海布里印记",
@@ -40357,7 +40545,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ironmn"
+          "id": "uniequip_003_ironmn",
+          "type": "CRA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2e/%E5%A4%B4%E5%83%8F_%E7%99%BD%E9%93%81.png",
@@ -40704,7 +40893,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_slent2"
+          "id": "uniequip_002_slent2",
+          "type": "BLS-X"
         },
         {
           "name": "可控动量",
@@ -40757,7 +40947,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_slent2"
+          "id": "uniequip_003_slent2",
+          "type": "BLS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0d/%E5%A4%B4%E5%83%8F_%E6%B7%AC%E7%BE%BD%E8%B5%AB%E9%BB%98.png",
@@ -41128,7 +41319,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_phatm2"
+          "id": "uniequip_002_phatm2",
+          "type": "RIT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0d/%E5%A4%B4%E5%83%8F_%E9%85%92%E7%A5%9E.png",
@@ -41475,7 +41667,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_gnosis"
+          "id": "uniequip_002_gnosis",
+          "type": "UMD-X"
         },
         {
           "name": "一号项目模型",
@@ -41528,7 +41721,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_gnosis"
+          "id": "uniequip_003_gnosis",
+          "type": "UMD-Y"
         },
         {
           "name": "灵知特限证章",
@@ -41561,7 +41755,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_gnosis"
+          "id": "uniequip_004_gnosis",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9f/%E5%A4%B4%E5%83%8F_%E7%81%B5%E7%9F%A5.png",
@@ -41908,7 +42103,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lisa"
+          "id": "uniequip_002_lisa",
+          "type": "DEC-X"
         },
         {
           "name": "孩子们",
@@ -41961,7 +42157,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_lisa"
+          "id": "uniequip_003_lisa",
+          "type": "DEC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/55/%E5%A4%B4%E5%83%8F_%E9%93%83%E5%85%B0.png",
@@ -42308,7 +42505,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ling"
+          "id": "uniequip_002_ling",
+          "type": "SUM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2c/%E5%A4%B4%E5%83%8F_%E4%BB%A4.png",
@@ -42655,7 +42853,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mgllan"
+          "id": "uniequip_002_mgllan",
+          "type": "SUM-X"
         },
         {
           "name": "教学用龙腾无人机",
@@ -42708,7 +42907,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_mgllan"
+          "id": "uniequip_003_mgllan",
+          "type": "SUM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4d/%E5%A4%B4%E5%83%8F_%E9%BA%A6%E5%93%B2%E4%BC%A6.png",
@@ -43055,7 +43255,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cetsyr"
+          "id": "uniequip_002_cetsyr",
+          "type": "BAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/de/%E5%A4%B4%E5%83%8F_%E9%AD%94%E7%8E%8B.png",
@@ -43402,7 +43603,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nasti"
+          "id": "uniequip_002_nasti",
+          "type": "CRA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/97/%E5%A4%B4%E5%83%8F_%E5%A8%9C%E6%96%AF%E6%8F%90.png",
@@ -43749,7 +43951,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cello"
+          "id": "uniequip_002_cello",
+          "type": "RIT-X"
         },
         {
           "name": "音乐家的旅程",
@@ -43802,7 +44005,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_cello"
+          "id": "uniequip_003_cello",
+          "type": "RIT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/05/%E5%A4%B4%E5%83%8F_%E5%A1%91%E5%BF%83.png",
@@ -44149,7 +44353,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_halo2"
+          "id": "uniequip_002_halo2",
+          "type": "DEC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d0/%E5%A4%B4%E5%83%8F_%E6%BA%AF%E5%85%89%E6%98%9F%E6%BA%90.png",
@@ -44496,7 +44701,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_haruka"
+          "id": "uniequip_002_haruka",
+          "type": "BLS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ec/%E5%A4%B4%E5%83%8F_%E9%81%A5.png",
@@ -44843,7 +45049,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_skadi2"
+          "id": "uniequip_002_skadi2",
+          "type": "BAR-X"
         },
         {
           "name": "新生代",
@@ -44896,7 +45103,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_skadi2"
+          "id": "uniequip_003_skadi2",
+          "type": "BAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/80/%E5%A4%B4%E5%83%8F_%E6%B5%8A%E5%BF%83%E6%96%AF%E5%8D%A1%E8%92%82.png",
@@ -45243,7 +45451,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_haak"
+          "id": "uniequip_002_haak",
+          "type": "GEE-X"
         },
         {
           "name": "毒医残章",
@@ -45296,7 +45505,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_haak"
+          "id": "uniequip_003_haak",
+          "type": "GEE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/31/%E5%A4%B4%E5%83%8F_%E9%98%BF.png",
@@ -45643,7 +45853,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ascln"
+          "id": "uniequip_002_ascln",
+          "type": "AMB-X"
         },
         {
           "name": "“阿斯卡纶的眼睛”",
@@ -45696,7 +45907,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ascln"
+          "id": "uniequip_003_ascln",
+          "type": "AMB-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/76/%E5%A4%B4%E5%83%8F_%E9%98%BF%E6%96%AF%E5%8D%A1%E7%BA%B6.png",
@@ -46043,7 +46255,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ela"
+          "id": "uniequip_002_ela",
+          "type": "TRP-Δ"
         }
       ],
       "portrait": "https://media.prts.wiki/2/26/%E5%A4%B4%E5%83%8F_%E8%89%BE%E6%8B%89.png",
@@ -46390,7 +46603,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_doroth"
+          "id": "uniequip_003_doroth",
+          "type": "TRP-X"
         },
         {
           "name": "童话书",
@@ -46443,7 +46657,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_doroth"
+          "id": "uniequip_002_doroth",
+          "type": "TRP-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4f/%E5%A4%B4%E5%83%8F_%E5%A4%9A%E8%90%9D%E8%A5%BF.png",
@@ -46790,7 +47005,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_glady"
+          "id": "uniequip_002_glady",
+          "type": "HOK-X"
         },
         {
           "name": "淡金坠饰",
@@ -46843,7 +47059,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_glady"
+          "id": "uniequip_003_glady",
+          "type": "HOK-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0d/%E5%A4%B4%E5%83%8F_%E6%AD%8C%E8%95%BE%E8%92%82%E5%A8%85.png",
@@ -47190,7 +47407,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ghost2"
+          "id": "uniequip_002_ghost2",
+          "type": "PUM-X"
         },
         {
           "name": "未竟之美",
@@ -47243,7 +47461,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_ghost2"
+          "id": "uniequip_003_ghost2",
+          "type": "PUM-Y"
         },
         {
           "name": "归溟幽灵鲨特限证章",
@@ -47276,7 +47495,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_ghost2"
+          "id": "uniequip_004_ghost2",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/b/be/%E5%A4%B4%E5%83%8F_%E5%BD%92%E6%BA%9F%E5%B9%BD%E7%81%B5%E9%B2%A8.png",
@@ -47623,7 +47843,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_texas2"
+          "id": "uniequip_002_texas2",
+          "type": "EXE-Y"
         },
         {
           "name": "“新车和新生活”",
@@ -47676,7 +47897,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_texas2"
+          "id": "uniequip_003_texas2",
+          "type": "EXE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b8/%E5%A4%B4%E5%83%8F_%E7%BC%84%E9%BB%98%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF.png",
@@ -48023,7 +48245,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_phatom"
+          "id": "uniequip_002_phatom",
+          "type": "EXE-X"
         },
         {
           "name": "“如影随形”",
@@ -48076,7 +48299,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_phatom"
+          "id": "uniequip_003_phatom",
+          "type": "EXE-Y"
         },
         {
           "name": "傀影特限证章",
@@ -48109,7 +48333,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_phatom"
+          "id": "uniequip_004_phatom",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/8/83/%E5%A4%B4%E5%83%8F_%E5%82%80%E5%BD%B1.png",
@@ -48456,7 +48681,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lmlee"
+          "id": "uniequip_002_lmlee",
+          "type": "MER-X"
         },
         {
           "name": "“但思善恶”",
@@ -48509,7 +48735,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_lmlee"
+          "id": "uniequip_003_lmlee",
+          "type": "MER-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e5/%E5%A4%B4%E5%83%8F_%E8%80%81%E9%B2%A4.png",
@@ -48856,7 +49083,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_swire2"
+          "id": "uniequip_002_swire2",
+          "type": "MER-X"
         },
         {
           "name": "诗怀雅的龙门美食指南",
@@ -48909,7 +49137,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_swire2"
+          "id": "uniequip_003_swire2",
+          "type": "MER-Y"
         },
         {
           "name": "琳琅诗怀雅特限证章",
@@ -48942,7 +49171,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_swire2"
+          "id": "uniequip_004_swire2",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/7/74/%E5%A4%B4%E5%83%8F_%E7%90%B3%E7%90%85%E8%AF%97%E6%80%80%E9%9B%85.png",
@@ -49289,7 +49519,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_yato2"
+          "id": "uniequip_002_yato2",
+          "type": "EXE-X"
         },
         {
           "name": "罗德岛制式双刀",
@@ -49342,7 +49573,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_yato2"
+          "id": "uniequip_003_yato2",
+          "type": "EXE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e5/%E5%A4%B4%E5%83%8F_%E9%BA%92%E9%BA%9FR%E5%A4%9C%E5%88%80.png",
@@ -49689,7 +49921,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_crosly"
+          "id": "uniequip_002_crosly",
+          "type": "EXE-X"
         },
         {
           "name": "木炭画",
@@ -49742,7 +49975,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_crosly"
+          "id": "uniequip_003_crosly",
+          "type": "EXE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/12/%E5%A4%B4%E5%83%8F_%E5%BC%91%E5%90%9B%E8%80%85.png",
@@ -50089,7 +50323,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mizuki"
+          "id": "uniequip_002_mizuki",
+          "type": "AMB-X"
         },
         {
           "name": "深蓝之籽",
@@ -50142,7 +50377,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_mizuki"
+          "id": "uniequip_003_mizuki",
+          "type": "AMB-Y"
         },
         {
           "name": "水月特限证章",
@@ -50175,7 +50411,8 @@
               ]
             }
           ],
-          "id": "uniequip_004_mizuki"
+          "id": "uniequip_004_mizuki",
+          "type": "ISW-α"
         }
       ],
       "portrait": "https://media.prts.wiki/0/05/%E5%A4%B4%E5%83%8F_%E6%B0%B4%E6%9C%88.png",
@@ -50522,7 +50759,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wang"
+          "id": "uniequip_002_wang",
+          "type": "TRP-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/38/%E5%A4%B4%E5%83%8F_%E6%9C%9B.png",
@@ -50869,7 +51107,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_weedy"
+          "id": "uniequip_002_weedy",
+          "type": "PUS-X"
         },
         {
           "name": "新型仿生原型",
@@ -50922,7 +51161,8 @@
               ]
             }
           ],
-          "id": "uniequip_003_weedy"
+          "id": "uniequip_003_weedy",
+          "type": "PUS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/93/%E5%A4%B4%E5%83%8F_%E6%B8%A9%E8%92%82.png",
@@ -51269,7 +51509,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_angel2"
+          "id": "uniequip_002_angel2",
+          "type": "GEE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3a/%E5%A4%B4%E5%83%8F_%E6%96%B0%E7%BA%A6%E8%83%BD%E5%A4%A9%E4%BD%BF.png",
@@ -51616,7 +51857,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_thorn2"
+          "id": "uniequip_002_thorn2",
+          "type": "ALC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3b/%E5%A4%B4%E5%83%8F_%E5%BC%95%E6%98%9F%E6%A3%98%E5%88%BA.png",
@@ -52196,7 +52438,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_texas"
+          "id": "uniequip_002_texas",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/57/%E5%A4%B4%E5%83%8F_%E5%BE%B7%E5%85%8B%E8%90%A8%E6%96%AF.png",
@@ -52482,7 +52725,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mitm"
+          "id": "uniequip_002_mitm",
+          "type": "TAC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fd/%E5%A4%B4%E5%83%8F_%E6%B8%A1%E6%A1%A5.png",
@@ -52768,7 +53012,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_grani"
+          "id": "uniequip_002_grani",
+          "type": "CHG-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/29/%E5%A4%B4%E5%83%8F_%E6%A0%BC%E6%8B%89%E5%B0%BC.png",
@@ -53054,7 +53299,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rfalcn"
+          "id": "uniequip_002_rfalcn",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/45/%E5%A4%B4%E5%83%8F_%E7%BA%A2%E9%9A%BC.png",
@@ -53340,7 +53586,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_elysm"
+          "id": "uniequip_002_elysm",
+          "type": "BEA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/97/%E5%A4%B4%E5%83%8F_%E6%9E%81%E5%A2%83.png",
@@ -53626,7 +53873,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_jcinta"
+          "id": "uniequip_002_jcinta",
+          "type": "BEA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8b/%E5%A4%B4%E5%83%8F_%E5%98%89%E8%BE%9B%E5%A1%94.png",
@@ -53912,7 +54160,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chiave"
+          "id": "uniequip_002_chiave",
+          "type": "SOL-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2a/%E5%A4%B4%E5%83%8F_%E8%B4%BE%E7%BB%B4.png",
@@ -54198,7 +54447,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_fang2"
+          "id": "uniequip_002_fang2",
+          "type": "CHG-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/5a/%E5%A4%B4%E5%83%8F_%E5%8E%86%E9%98%B5%E9%94%90%E6%9E%AA%E8%8A%AC.png",
@@ -54484,7 +54734,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_headbr"
+          "id": "uniequip_002_headbr",
+          "type": "SOL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cd/%E5%A4%B4%E5%83%8F_%E5%87%9B%E5%86%AC.png",
@@ -54770,7 +55021,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_puzzle"
+          "id": "uniequip_002_puzzle",
+          "type": "AGE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/7/79/%E5%A4%B4%E5%83%8F_%E8%B0%9C%E5%9B%BE.png",
@@ -55056,7 +55308,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chilc"
+          "id": "uniequip_002_chilc",
+          "type": "AGE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/42/%E5%A4%B4%E5%83%8F_%E9%BD%90%E5%B0%94%E6%9F%A5%E5%85%8B.png",
@@ -55342,7 +55595,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_buildr"
+          "id": "uniequip_002_buildr",
+          "type": "SOL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0e/%E5%A4%B4%E5%83%8F_%E9%9D%92%E6%9E%B3.png",
@@ -55860,7 +56114,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wanqin"
+          "id": "uniequip_002_wanqin",
+          "type": "BEA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ad/%E5%A4%B4%E5%83%8F_%E4%B8%87%E9%A1%B7.png",
@@ -56146,7 +56401,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sddrag"
+          "id": "uniequip_002_sddrag",
+          "type": "CHG-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/7a/%E5%A4%B4%E5%83%8F_%E8%8B%87%E8%8D%89.png",
@@ -56432,7 +56688,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ctable"
+          "id": "uniequip_002_ctable",
+          "type": "AGE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/15/%E5%A4%B4%E5%83%8F_%E6%99%93%E6%AD%8C.png",
@@ -56718,7 +56975,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_surfer"
+          "id": "uniequip_002_surfer",
+          "type": "AGE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/65/%E5%A4%B4%E5%83%8F_%E5%AF%BB%E6%BE%9C.png",
@@ -57004,7 +57262,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wildmn"
+          "id": "uniequip_002_wildmn",
+          "type": "CHG-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9f/%E5%A4%B4%E5%83%8F_%E9%87%8E%E9%AC%83.png",
@@ -57290,7 +57549,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_blkngt"
+          "id": "uniequip_002_blkngt",
+          "type": "TAC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a1/%E5%A4%B4%E5%83%8F_%E5%A4%9C%E5%8D%8A.png",
@@ -57550,7 +57810,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_amiya2"
+          "id": "uniequip_002_amiya2",
+          "type": "AFT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/5b/%E5%A4%B4%E5%83%8F_%E9%98%BF%E7%B1%B3%E5%A8%85%28%E8%BF%91%E5%8D%AB%29.png",
@@ -57836,7 +58097,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_odda"
+          "id": "uniequip_002_odda",
+          "type": "HAM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/29/%E5%A4%B4%E5%83%8F_%E5%A5%A5%E8%BE%BE.png",
@@ -58122,7 +58384,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bibeak"
+          "id": "uniequip_002_bibeak",
+          "type": "SWO-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2f/%E5%A4%B4%E5%83%8F_%E6%9F%8F%E5%96%99.png",
@@ -58408,7 +58671,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_varkis"
+          "id": "uniequip_002_varkis",
+          "type": "CEN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e4/%E5%A4%B4%E5%83%8F_%E6%91%86%E6%B8%A1%E4%BA%BA.png",
@@ -58694,7 +58958,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_savage"
+          "id": "uniequip_002_savage",
+          "type": "CEN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/36/%E5%A4%B4%E5%83%8F_%E6%9A%B4%E8%A1%8C.png",
@@ -58980,7 +59245,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sophia"
+          "id": "uniequip_002_sophia",
+          "type": "INS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f8/%E5%A4%B4%E5%83%8F_%E9%9E%AD%E5%88%83.png",
@@ -59266,7 +59532,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_broca"
+          "id": "uniequip_002_broca",
+          "type": "CEN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/04/%E5%A4%B4%E5%83%8F_%E5%B8%83%E6%B4%9B%E5%8D%A1.png",
@@ -59552,7 +59819,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bryota"
+          "id": "uniequip_002_bryota",
+          "type": "INS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/95/%E5%A4%B4%E5%83%8F_%E8%8B%8D%E8%8B%94.png",
@@ -59838,7 +60106,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_akafyu"
+          "id": "uniequip_002_akafyu",
+          "type": "SBL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fe/%E5%A4%B4%E5%83%8F_%E8%B5%A4%E5%86%AC.png",
@@ -60124,7 +60393,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_dagda"
+          "id": "uniequip_002_dagda",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/dd/%E5%A4%B4%E5%83%8F_%E8%BE%BE%E6%A0%BC%E8%BE%BE.png",
@@ -60410,7 +60680,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_fuze"
+          "id": "uniequip_002_fuze",
+          "type": "CEN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/70/%E5%A4%B4%E5%83%8F_%E5%AF%BC%E7%81%AB%E7%B4%A2.png",
@@ -60696,7 +60967,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ayer"
+          "id": "uniequip_002_ayer",
+          "type": "LOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ea/%E5%A4%B4%E5%83%8F_%E6%96%AD%E5%B4%96.png",
@@ -60982,7 +61254,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chimes"
+          "id": "uniequip_002_chimes",
+          "type": "CRU-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4a/%E5%A4%B4%E5%83%8F_%E9%93%8E%E9%93%83.png",
@@ -61268,7 +61541,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_franka"
+          "id": "uniequip_002_franka",
+          "type": "DRE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2b/%E5%A4%B4%E5%83%8F_%E8%8A%99%E5%85%B0%E5%8D%A1.png",
@@ -61786,7 +62060,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_highmo"
+          "id": "uniequip_002_highmo",
+          "type": "REA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/6c/%E5%A4%B4%E5%83%8F_%E6%B5%B7%E6%B2%AB.png",
@@ -62072,7 +62347,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_noirc2"
+          "id": "uniequip_002_noirc2",
+          "type": "SBL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/81/%E5%A4%B4%E5%83%8F_%E7%81%AB%E9%BE%99S%E9%BB%91%E8%A7%92.png",
@@ -62358,7 +62634,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_whitew"
+          "id": "uniequip_002_whitew",
+          "type": "LOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/bf/%E5%A4%B4%E5%83%8F_%E6%8B%89%E6%99%AE%E5%85%B0%E5%BE%B7.png",
@@ -62644,7 +62921,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_laios"
+          "id": "uniequip_002_laios",
+          "type": "DRE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9c/%E5%A4%B4%E5%83%8F_%E8%8E%B1%E6%AC%A7%E6%96%AF.png",
@@ -62930,7 +63208,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_catap2"
+          "id": "uniequip_002_catap2",
+          "type": "MCN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fd/%E5%A4%B4%E5%83%8F_%E9%9B%B7%E7%8B%BC%E9%BE%99S%E7%A9%BA%E7%88%86.png",
@@ -63216,7 +63495,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_leto"
+          "id": "uniequip_002_leto",
+          "type": "LOR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/65/%E5%A4%B4%E5%83%8F_%E7%83%88%E5%A4%8F.png",
@@ -63734,7 +64014,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_takila"
+          "id": "uniequip_002_takila",
+          "type": "LIB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/42/%E5%A4%B4%E5%83%8F_%E9%BE%99%E8%88%8C%E5%85%B0.png",
@@ -64020,7 +64301,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_morgan"
+          "id": "uniequip_002_morgan",
+          "type": "DRE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fe/%E5%A4%B4%E5%83%8F_%E6%91%A9%E6%A0%B9.png",
@@ -64306,7 +64588,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_swire"
+          "id": "uniequip_002_swire",
+          "type": "INS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/50/%E5%A4%B4%E5%83%8F_%E8%AF%97%E6%80%80%E9%9B%85.png",
@@ -64592,7 +64875,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_flint"
+          "id": "uniequip_002_flint",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ac/%E5%A4%B4%E5%83%8F_%E7%87%A7%E7%9F%B3.png",
@@ -64878,7 +65162,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_astesi"
+          "id": "uniequip_002_astesi",
+          "type": "AFT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ee/%E5%A4%B4%E5%83%8F_%E6%98%9F%E6%9E%81.png",
@@ -65164,7 +65449,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_flameb"
+          "id": "uniequip_002_flameb",
+          "type": "DRE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d6/%E5%A4%B4%E5%83%8F_%E7%82%8E%E5%AE%A2.png",
@@ -65450,7 +65736,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rdoc"
+          "id": "uniequip_002_rdoc",
+          "type": "INS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/11/%E5%A4%B4%E5%83%8F_%E5%8C%BB%E7%94%9F.png",
@@ -65736,7 +66023,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tiger"
+          "id": "uniequip_002_tiger",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fe/%E5%A4%B4%E5%83%8F_%E5%9B%A0%E9%99%80%E7%BD%97.png",
@@ -66022,7 +66310,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ghost"
+          "id": "uniequip_002_ghost",
+          "type": "CEN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/28/%E5%A4%B4%E5%83%8F_%E5%B9%BD%E7%81%B5%E9%B2%A8.png",
@@ -66308,7 +66597,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_amoris"
+          "id": "uniequip_002_amoris",
+          "type": "HAM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/df/%E5%A4%B4%E5%83%8F_%E7%A5%90%E5%A4%A9%E5%AF%BA%E8%8B%A5%E9%BA%A6.png",
@@ -66594,7 +66884,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_crow"
+          "id": "uniequip_002_crow",
+          "type": "REA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b8/%E5%A4%B4%E5%83%8F_%E7%BE%BD%E6%AF%9B%E7%AC%94.png",
@@ -66880,7 +67171,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tachak"
+          "id": "uniequip_002_tachak",
+          "type": "SWO-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cb/%E5%A4%B4%E5%83%8F_%E6%88%98%E8%BD%A6.png",
@@ -67166,7 +67458,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sidero"
+          "id": "uniequip_002_sidero",
+          "type": "AFT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/84/%E5%A4%B4%E5%83%8F_%E9%93%B8%E9%93%81.png",
@@ -67452,7 +67745,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bison"
+          "id": "uniequip_002_bison",
+          "type": "PRO-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b2/%E5%A4%B4%E5%83%8F_%E6%8B%9C%E6%9D%BE.png",
@@ -67738,7 +68032,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_zebra"
+          "id": "uniequip_002_zebra",
+          "type": "PRO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f8/%E5%A4%B4%E5%83%8F_%E6%9A%B4%E9%9B%A8.png",
@@ -68024,7 +68319,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_pianst"
+          "id": "uniequip_002_pianst",
+          "type": "AST-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1c/%E5%A4%B4%E5%83%8F_%E8%BD%A6%E5%B0%94%E5%B0%BC.png",
@@ -68310,7 +68606,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_philae"
+          "id": "uniequip_002_philae",
+          "type": "PRP-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/00/%E5%A4%B4%E5%83%8F_%E8%8F%B2%E8%8E%B1.png",
@@ -68596,7 +68893,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hmau"
+          "id": "uniequip_002_hmau",
+          "type": "GUA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/41/%E5%A4%B4%E5%83%8F_%E5%90%BD.png",
@@ -68882,7 +69180,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ashlok"
+          "id": "uniequip_002_ashlok",
+          "type": "FOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/21/%E5%A4%B4%E5%83%8F_%E7%81%B0%E6%AF%AB.png",
@@ -69168,7 +69467,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_firwhl"
+          "id": "uniequip_002_firwhl",
+          "type": "FOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fa/%E5%A4%B4%E5%83%8F_%E7%81%AB%E5%93%A8.png",
@@ -69454,7 +69754,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hpsts"
+          "id": "uniequip_002_hpsts",
+          "type": "UNY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f1/%E5%A4%B4%E5%83%8F_%E7%81%AB%E7%A5%9E.png",
@@ -69740,7 +70041,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aurora"
+          "id": "uniequip_002_aurora",
+          "type": "HES-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/43/%E5%A4%B4%E5%83%8F_%E6%9E%81%E5%85%89.png",
@@ -70026,7 +70328,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_moeshd"
+          "id": "uniequip_002_moeshd",
+          "type": "PRO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ab/%E5%A4%B4%E5%83%8F_%E5%8F%AF%E9%A2%82.png",
@@ -70312,7 +70615,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_liskam"
+          "id": "uniequip_002_liskam",
+          "type": "SPT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f5/%E5%A4%B4%E5%83%8F_%E9%9B%B7%E8%9B%87.png",
@@ -70598,7 +70902,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tanya"
+          "id": "uniequip_002_tanya",
+          "type": "PRP-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d6/%E5%A4%B4%E5%83%8F_%E8%A3%82%E5%93%8D.png",
@@ -70884,7 +71189,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nearl"
+          "id": "uniequip_002_nearl",
+          "type": "GUA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1a/%E5%A4%B4%E5%83%8F_%E4%B8%B4%E5%85%89.png",
@@ -71170,7 +71476,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aprot2"
+          "id": "uniequip_002_aprot2",
+          "type": "AST-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fb/%E5%A4%B4%E5%83%8F_%E6%9A%AE%E8%90%BD.png",
@@ -71456,7 +71763,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sensi"
+          "id": "uniequip_002_sensi",
+          "type": "GUA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e7/%E5%A4%B4%E5%83%8F_%E6%A3%AE%E8%A5%BF.png",
@@ -71742,7 +72050,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_blitz"
+          "id": "uniequip_002_blitz",
+          "type": "SPT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c1/%E5%A4%B4%E5%83%8F_%E9%97%AA%E5%87%BB.png",
@@ -72028,7 +72337,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_baslin"
+          "id": "uniequip_002_baslin",
+          "type": "GUA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d8/%E5%A4%B4%E5%83%8F_%E6%B7%B1%E5%BE%8B.png",
@@ -72314,7 +72624,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_udflow"
+          "id": "uniequip_002_udflow",
+          "type": "SPT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/bd/%E5%A4%B4%E5%83%8F_%E6%B7%B1%E5%B7%A1.png",
@@ -72600,7 +72911,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_asbest"
+          "id": "uniequip_002_asbest",
+          "type": "AST-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/18/%E5%A4%B4%E5%83%8F_%E7%9F%B3%E6%A3%89.png",
@@ -72886,7 +73198,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cairn"
+          "id": "uniequip_002_cairn",
+          "type": "PRP-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/52/%E5%A4%B4%E5%83%8F_%E5%93%8D%E7%9F%B3.png",
@@ -73172,7 +73485,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cement"
+          "id": "uniequip_002_cement",
+          "type": "HES-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e8/%E5%A4%B4%E5%83%8F_%E6%B4%8B%E7%81%B0.png",
@@ -73458,7 +73772,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_branch"
+          "id": "uniequip_002_branch",
+          "type": "UNY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a0/%E5%A4%B4%E5%83%8F_%E6%8A%98%E6%A1%A0.png",
@@ -73744,7 +74059,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_erato"
+          "id": "uniequip_002_erato",
+          "type": "SIE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/34/%E5%A4%B4%E5%83%8F_%E5%9F%83%E6%8B%89%E6%89%98.png",
@@ -74030,7 +74346,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cuttle"
+          "id": "uniequip_002_cuttle",
+          "type": "DEA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/36/%E5%A4%B4%E5%83%8F_%E5%AE%89%E5%93%B2%E6%8B%89.png",
@@ -74316,7 +74633,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aosta"
+          "id": "uniequip_002_aosta",
+          "type": "RPR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/49/%E5%A4%B4%E5%83%8F_%E5%A5%A5%E6%96%AF%E5%A1%94.png",
@@ -74602,7 +74920,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_platnm"
+          "id": "uniequip_002_platnm",
+          "type": "MAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3b/%E5%A4%B4%E5%83%8F_%E7%99%BD%E9%87%91.png",
@@ -74888,7 +75207,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_coldst"
+          "id": "uniequip_002_coldst",
+          "type": "HUN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cf/%E5%A4%B4%E5%83%8F_%E5%86%B0%E9%85%BF.png",
@@ -75174,7 +75494,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_greyy2"
+          "id": "uniequip_002_greyy2",
+          "type": "BOM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e2/%E5%A4%B4%E5%83%8F_%E6%89%BF%E6%9B%A6%E6%A0%BC%E9%9B%B7%E4%BC%8A.png",
@@ -75460,7 +75781,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kroos2"
+          "id": "uniequip_002_kroos2",
+          "type": "MAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/39/%E5%A4%B4%E5%83%8F_%E5%AF%92%E8%8A%92%E5%85%8B%E6%B4%9B%E4%B8%9D.png",
@@ -75746,7 +76068,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_swllow"
+          "id": "uniequip_002_swllow",
+          "type": "MAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3b/%E5%A4%B4%E5%83%8F_%E7%81%B0%E5%96%89.png",
@@ -76032,7 +76355,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kichi"
+          "id": "uniequip_002_kichi",
+          "type": "RPR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fa/%E5%A4%B4%E5%83%8F_%E5%90%89%E6%98%9F.png",
@@ -76318,7 +76642,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bdhkgt"
+          "id": "uniequip_002_bdhkgt",
+          "type": "ART-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/81/%E5%A4%B4%E5%83%8F_%E6%88%AA%E4%BA%91.png",
@@ -76604,7 +76929,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ju"
+          "id": "uniequip_002_ju",
+          "type": "SIE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a8/%E5%A4%B4%E5%83%8F_%E7%9F%A9.png",
@@ -76890,7 +77216,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bluep"
+          "id": "uniequip_002_bluep",
+          "type": "MAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E8%93%9D%E6%AF%92.png",
@@ -77176,7 +77503,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_melnte"
+          "id": "uniequip_002_melnte",
+          "type": "ARC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ab/%E5%A4%B4%E5%83%8F_%E7%8E%AB%E6%8B%89.png",
@@ -77462,7 +77790,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_prove"
+          "id": "uniequip_002_prove",
+          "type": "ARC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/7/72/%E5%A4%B4%E5%83%8F_%E6%99%AE%E7%BD%97%E6%97%BA%E6%96%AF.png",
@@ -77748,7 +78077,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_toddi"
+          "id": "uniequip_002_toddi",
+          "type": "SIE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/34/%E5%A4%B4%E5%83%8F_%E7%86%94%E6%B3%89.png",
@@ -78034,7 +78364,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sesa"
+          "id": "uniequip_002_sesa",
+          "type": "ART-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e7/%E5%A4%B4%E5%83%8F_%E6%85%91%E7%A0%82.png",
@@ -78320,7 +78651,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_milu"
+          "id": "uniequip_002_milu",
+          "type": "DEA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/27/%E5%A4%B4%E5%83%8F_%E5%AE%88%E6%9E%97%E4%BA%BA.png",
@@ -78606,7 +78938,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_brigid"
+          "id": "uniequip_002_brigid",
+          "type": "LPS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3b/%E5%A4%B4%E5%83%8F_%E6%B0%B4%E7%81%AF%E5%BF%83.png",
@@ -78892,7 +79225,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aprl"
+          "id": "uniequip_002_aprl",
+          "type": "MAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d3/%E5%A4%B4%E5%83%8F_%E5%9B%9B%E6%9C%88.png",
@@ -79178,7 +79512,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_excu"
+          "id": "uniequip_002_excu",
+          "type": "RPR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/da/%E5%A4%B4%E5%83%8F_%E9%80%81%E8%91%AC%E4%BA%BA.png",
@@ -79696,7 +80031,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_snhunt"
+          "id": "uniequip_002_snhunt",
+          "type": "HUN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cc/%E5%A4%B4%E5%83%8F_%E9%9B%AA%E7%8C%8E.png",
@@ -79982,7 +80318,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_inside"
+          "id": "uniequip_002_inside",
+          "type": "MAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/85/%E5%A4%B4%E5%83%8F_%E9%9A%90%E7%8E%B0.png",
@@ -80268,7 +80605,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_meteo"
+          "id": "uniequip_002_meteo",
+          "type": "ART-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ea/%E5%A4%B4%E5%83%8F_%E9%99%A8%E6%98%9F.png",
@@ -80554,7 +80892,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lunacu"
+          "id": "uniequip_002_lunacu",
+          "type": "DEA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/db/%E5%A4%B4%E5%83%8F_%E5%AD%90%E6%9C%88.png",
@@ -80840,7 +81179,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_aroma"
+          "id": "uniequip_002_aroma",
+          "type": "BLA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f6/%E5%A4%B4%E5%83%8F_%E9%98%BF%E7%BD%97%E7%8E%9B.png",
@@ -81178,7 +81518,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_amiya"
+          "id": "uniequip_002_amiya",
+          "type": "CCR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/36/%E5%A4%B4%E5%83%8F_%E9%98%BF%E7%B1%B3%E5%A8%85.png",
@@ -81465,7 +81806,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_iris"
+          "id": "uniequip_002_iris",
+          "type": "MSC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9a/%E5%A4%B4%E5%83%8F_%E7%88%B1%E4%B8%BD%E4%B8%9D.png",
@@ -81751,7 +82093,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mint"
+          "id": "uniequip_002_mint",
+          "type": "PLX-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/30/%E5%A4%B4%E5%83%8F_%E8%96%84%E7%BB%BF.png",
@@ -82037,7 +82380,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_delphn"
+          "id": "uniequip_002_delphn",
+          "type": "MSC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/28/%E5%A4%B4%E5%83%8F_%E6%88%B4%E8%8F%B2%E6%81%A9.png",
@@ -82323,7 +82667,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_liesel"
+          "id": "uniequip_002_liesel",
+          "type": "SPC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/61/%E5%A4%B4%E5%83%8F_%E5%A4%8D%E5%A5%8F.png",
@@ -82609,7 +82954,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sntlla"
+          "id": "uniequip_002_sntlla",
+          "type": "SPC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cd/%E5%A4%B4%E5%83%8F_%E5%AF%92%E6%AA%80.png",
@@ -82895,7 +83241,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hamoni"
+          "id": "uniequip_002_hamoni",
+          "type": "MSC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ed/%E5%A4%B4%E5%83%8F_%E5%92%8C%E5%BC%A6.png",
@@ -83181,7 +83528,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_leizi"
+          "id": "uniequip_002_leizi",
+          "type": "CHA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/81/%E5%A4%B4%E5%83%8F_%E6%83%8A%E8%9B%B0.png",
@@ -83467,7 +83815,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_absin"
+          "id": "uniequip_002_absin",
+          "type": "CCR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e9/%E5%A4%B4%E5%83%8F_%E8%8B%A6%E8%89%BE.png",
@@ -83753,7 +84102,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lionhd"
+          "id": "uniequip_002_lionhd",
+          "type": "SPC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/03/%E5%A4%B4%E5%83%8F_%E8%8E%B1%E6%81%A9%E5%93%88%E7%89%B9.png",
@@ -84039,7 +84389,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rockr"
+          "id": "uniequip_002_rockr",
+          "type": "FUN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d4/%E5%A4%B4%E5%83%8F_%E6%B4%9B%E6%B4%9B.png",
@@ -84325,7 +84676,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_beewax"
+          "id": "uniequip_002_beewax",
+          "type": "PLX-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1d/%E5%A4%B4%E5%83%8F_%E8%9C%9C%E8%9C%A1.png",
@@ -84611,7 +84963,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tmslot"
+          "id": "uniequip_002_tmslot",
+          "type": "FUN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/36/%E5%A4%B4%E5%83%8F_%E6%97%B6%E9%9A%99.png",
@@ -84897,7 +85250,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_serum"
+          "id": "uniequip_002_serum",
+          "type": "BLA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/7/70/%E5%A4%B4%E5%83%8F_%E8%9A%80%E6%B8%85.png",
@@ -85183,7 +85537,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tecno"
+          "id": "uniequip_002_tecno",
+          "type": "SOC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2e/%E5%A4%B4%E5%83%8F_%E7%89%B9%E5%85%8B%E8%AF%BA.png",
@@ -85469,7 +85824,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tomimi"
+          "id": "uniequip_002_tomimi",
+          "type": "CCR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b9/%E5%A4%B4%E5%83%8F_%E7%89%B9%E7%B1%B3%E7%B1%B3.png",
@@ -85755,7 +86111,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_skfire"
+          "id": "uniequip_002_skfire",
+          "type": "SPC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fa/%E5%A4%B4%E5%83%8F_%E5%A4%A9%E7%81%AB.png",
@@ -86041,7 +86398,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_warmy"
+          "id": "uniequip_002_warmy",
+          "type": "PRI-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3f/%E5%A4%B4%E5%83%8F_%E6%B8%A9%E7%B1%B3.png",
@@ -86327,7 +86685,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_halo"
+          "id": "uniequip_002_halo",
+          "type": "CHA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/48/%E5%A4%B4%E5%83%8F_%E6%98%9F%E6%BA%90.png",
@@ -86613,7 +86972,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_qanik"
+          "id": "uniequip_002_qanik",
+          "type": "CCR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/82/%E5%A4%B4%E5%83%8F_%E9%9B%AA%E7%BB%92.png",
@@ -86899,7 +87259,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lava2"
+          "id": "uniequip_002_lava2",
+          "type": "SPC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/20/%E5%A4%B4%E5%83%8F_%E7%82%8E%E7%8B%B1%E7%82%8E%E7%86%94.png",
@@ -87185,7 +87546,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kjera"
+          "id": "uniequip_002_kjera",
+          "type": "FUN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/7/71/%E5%A4%B4%E5%83%8F_%E8%80%B6%E6%8B%89.png",
@@ -87471,7 +87833,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nightm"
+          "id": "uniequip_002_nightm",
+          "type": "CCR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a7/%E5%A4%B4%E5%83%8F_%E5%A4%9C%E9%AD%94.png",
@@ -87757,7 +88120,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kaitou"
+          "id": "uniequip_002_kaitou",
+          "type": "PRI-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c2/%E5%A4%B4%E5%83%8F_%E6%8A%98%E5%85%89.png",
@@ -88043,7 +88407,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_malist"
+          "id": "uniequip_002_malist",
+          "type": "FUN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/98/%E5%A4%B4%E5%83%8F_%E8%87%B3%E7%AE%80.png",
@@ -88329,7 +88694,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_christ"
+          "id": "uniequip_002_christ",
+          "type": "PRI-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/10/%E5%A4%B4%E5%83%8F_Miss.Christine.png",
@@ -88589,7 +88955,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_amiya3"
+          "id": "uniequip_002_amiya3",
+          "type": "INC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ac/%E5%A4%B4%E5%83%8F_%E9%98%BF%E7%B1%B3%E5%A8%85%28%E5%8C%BB%E7%96%97%29.png",
@@ -88875,7 +89242,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_plosis"
+          "id": "uniequip_002_plosis",
+          "type": "RIN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/83/%E5%A4%B4%E5%83%8F_%E7%99%BD%E9%9D%A2%E9%B8%AE.png",
@@ -89161,7 +89529,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vendla"
+          "id": "uniequip_002_vendla",
+          "type": "INC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c6/%E5%A4%B4%E5%83%8F_%E5%88%BA%E7%8E%AB.png",
@@ -89679,7 +90048,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rosesa"
+          "id": "uniequip_002_rosesa",
+          "type": "RIN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8a/%E5%A4%B4%E5%83%8F_%E7%91%B0%E7%9B%90.png",
@@ -89965,7 +90335,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_harold"
+          "id": "uniequip_002_harold",
+          "type": "WDM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/22/%E5%A4%B4%E5%83%8F_%E5%93%88%E6%B4%9B%E5%BE%B7.png",
@@ -90251,7 +90622,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_silent"
+          "id": "uniequip_002_silent",
+          "type": "PHY-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/3/39/%E5%A4%B4%E5%83%8F_%E8%B5%AB%E9%BB%98.png",
@@ -90537,7 +90909,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bldsk"
+          "id": "uniequip_002_bldsk",
+          "type": "PHY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/30/%E5%A4%B4%E5%83%8F_%E5%8D%8E%E6%B3%95%E7%90%B3.png",
@@ -90823,7 +91196,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_reckpr"
+          "id": "uniequip_002_reckpr",
+          "type": "PHY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/09/%E5%A4%B4%E5%83%8F_%E5%BD%95%E6%AD%A6%E5%AE%98.png",
@@ -91109,7 +91483,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_glider"
+          "id": "uniequip_002_glider",
+          "type": "WDM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/29/%E5%A4%B4%E5%83%8F_%E8%9C%9C%E8%8E%93.png",
@@ -91395,7 +91770,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_peper"
+          "id": "uniequip_002_peper",
+          "type": "XAH-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3f/%E5%A4%B4%E5%83%8F_%E6%98%8E%E6%A4%92.png",
@@ -91681,7 +92057,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nowell"
+          "id": "uniequip_002_nowell",
+          "type": "WAH-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/69/%E5%A4%B4%E5%83%8F_%E8%AF%BA%E5%A8%81%E5%B0%94.png",
@@ -91967,7 +92344,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mberry"
+          "id": "uniequip_002_mberry",
+          "type": "WDM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/0f/%E5%A4%B4%E5%83%8F_%E6%A1%91%E8%91%9A.png",
@@ -92253,7 +92631,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_papyrs"
+          "id": "uniequip_002_papyrs",
+          "type": "XAH-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/3d/%E5%A4%B4%E5%83%8F_%E8%8E%8E%E8%8D%89.png",
@@ -92539,7 +92918,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tuye"
+          "id": "uniequip_002_tuye",
+          "type": "PHY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/93/%E5%A4%B4%E5%83%8F_%E5%9B%BE%E8%80%B6.png",
@@ -92825,7 +93205,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_breeze"
+          "id": "uniequip_002_breeze",
+          "type": "RIN-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ad/%E5%A4%B4%E5%83%8F_%E5%BE%AE%E9%A3%8E.png",
@@ -93111,7 +93492,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_turdus"
+          "id": "uniequip_002_turdus",
+          "type": "XAH-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/55/%E5%A4%B4%E5%83%8F_%E4%B9%8C%E5%95%BE.png",
@@ -93397,7 +93779,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ceylon"
+          "id": "uniequip_002_ceylon",
+          "type": "WAH-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/39/%E5%A4%B4%E5%83%8F_%E9%94%A1%E5%85%B0.png",
@@ -93683,7 +94066,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_whispr"
+          "id": "uniequip_002_whispr",
+          "type": "WAH-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/34/%E5%A4%B4%E5%83%8F_%E7%B5%AE%E9%9B%A8.png",
@@ -93969,7 +94353,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_folnic"
+          "id": "uniequip_002_folnic",
+          "type": "PHY-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b5/%E5%A4%B4%E5%83%8F_%E4%BA%9A%E5%8F%B6.png",
@@ -94255,7 +94640,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_hbisc2"
+          "id": "uniequip_002_hbisc2",
+          "type": "INC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8d/%E5%A4%B4%E5%83%8F_%E6%BF%AF%E5%B0%98%E8%8A%99%E8%93%89.png",
@@ -94541,7 +94927,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_alanna"
+          "id": "uniequip_002_alanna",
+          "type": "CRA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b6/%E5%A4%B4%E5%83%8F_%E9%98%BF%E5%85%B0%E5%A8%9C.png",
@@ -94827,7 +95214,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bobb"
+          "id": "uniequip_002_bobb",
+          "type": "RIT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d5/%E5%A4%B4%E5%83%8F_%E6%B3%A2%E5%8D%9C.png",
@@ -95113,7 +95501,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_botany"
+          "id": "uniequip_002_botany",
+          "type": "RIT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4d/%E5%A4%B4%E5%83%8F_%E4%BC%AF%E5%A1%94%E5%B0%BC.png",
@@ -95399,7 +95788,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_slbell"
+          "id": "uniequip_002_slbell",
+          "type": "UMD-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d7/%E5%A4%B4%E5%83%8F_%E5%88%9D%E9%9B%AA.png",
@@ -95685,7 +96075,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_provs"
+          "id": "uniequip_002_provs",
+          "type": "DEC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b0/%E5%A4%B4%E5%83%8F_%E4%BD%86%E4%B9%A6.png",
@@ -95971,7 +96362,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_glacus"
+          "id": "uniequip_002_glacus",
+          "type": "DEC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/53/%E5%A4%B4%E5%83%8F_%E6%A0%BC%E5%8A%B3%E5%85%8B%E6%96%AF.png",
@@ -96257,7 +96649,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_heidi"
+          "id": "uniequip_002_heidi",
+          "type": "BAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d9/%E5%A4%B4%E5%83%8F_%E6%B5%B7%E8%92%82.png",
@@ -96543,7 +96936,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_haini"
+          "id": "uniequip_002_haini",
+          "type": "UMD-X"
         }
       ],
       "portrait": "https://media.prts.wiki/7/72/%E5%A4%B4%E5%83%8F_%E6%B5%B7%E9%9C%93.png",
@@ -96829,7 +97223,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lasher"
+          "id": "uniequip_002_lasher",
+          "type": "SUM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f8/%E5%A4%B4%E5%83%8F_%E8%A1%A1%E6%B2%99.png",
@@ -97115,7 +97510,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ncdeer"
+          "id": "uniequip_002_ncdeer",
+          "type": "BLS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ab/%E5%A4%B4%E5%83%8F_%E4%B9%9D%E8%89%B2%E9%B9%BF.png",
@@ -97401,7 +97797,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cathy"
+          "id": "uniequip_002_cathy",
+          "type": "CRA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e9/%E5%A4%B4%E5%83%8F_%E5%87%AF%E7%91%9F%E7%90%B3.png",
@@ -97687,7 +98084,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sora"
+          "id": "uniequip_002_sora",
+          "type": "BAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/58/%E5%A4%B4%E5%83%8F_%E7%A9%BA.png",
@@ -97973,7 +98371,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_threye"
+          "id": "uniequip_002_threye",
+          "type": "RIT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e3/%E5%A4%B4%E5%83%8F_%E5%87%9B%E8%A7%86.png",
@@ -98259,7 +98658,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_windft"
+          "id": "uniequip_002_windft",
+          "type": "CRA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/5c/%E5%A4%B4%E5%83%8F_%E6%8E%A0%E9%A3%8E.png",
@@ -98545,7 +98945,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_otter"
+          "id": "uniequip_002_otter",
+          "type": "SUM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/07/%E5%A4%B4%E5%83%8F_%E6%A2%85%E5%B0%94.png",
@@ -99063,7 +99464,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_dolris"
+          "id": "uniequip_002_dolris",
+          "type": "BAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b4/%E5%A4%B4%E5%83%8F_%E4%B8%89%E8%A7%92%E5%88%9D%E5%8D%8E.png",
@@ -99349,7 +99751,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vodfox"
+          "id": "uniequip_002_vodfox",
+          "type": "UMD-X"
         }
       ],
       "portrait": "https://media.prts.wiki/3/36/%E5%A4%B4%E5%83%8F_%E5%B7%AB%E6%81%8B.png",
@@ -99635,7 +100038,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_folivo"
+          "id": "uniequip_002_folivo",
+          "type": "SUM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c6/%E5%A4%B4%E5%83%8F_%E7%A8%80%E9%9F%B3.png",
@@ -99921,7 +100325,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_quercu"
+          "id": "uniequip_002_quercu",
+          "type": "BLS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/08/%E5%A4%B4%E5%83%8F_%E5%A4%8F%E6%A0%8E.png",
@@ -100207,7 +100612,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_grabds"
+          "id": "uniequip_002_grabds",
+          "type": "DEC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1d/%E5%A4%B4%E5%83%8F_%E5%B0%8F%E6%BB%A1.png",
@@ -100493,7 +100899,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_flwr2"
+          "id": "uniequip_002_flwr2",
+          "type": "BLS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8f/%E5%A4%B4%E5%83%8F_%E6%92%B7%E8%8B%B1%E8%B0%83%E9%A6%99%E5%B8%88.png",
@@ -100779,7 +101186,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_xingzh"
+          "id": "uniequip_002_xingzh",
+          "type": "BLS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/42/%E5%A4%B4%E5%83%8F_%E8%A1%8C%E7%AE%B8.png",
@@ -101065,7 +101473,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tknogi"
+          "id": "uniequip_002_tknogi",
+          "type": "BLS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b6/%E5%A4%B4%E5%83%8F_%E6%9C%88%E7%A6%BE.png",
@@ -101351,7 +101760,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_glassb"
+          "id": "uniequip_002_glassb",
+          "type": "DEC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e6/%E5%A4%B4%E5%83%8F_%E7%9C%9F%E7%90%86.png",
@@ -101637,7 +102047,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tmoris"
+          "id": "uniequip_002_tmoris",
+          "type": "AMB-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f2/%E5%A4%B4%E5%83%8F_%E5%85%AB%E5%B9%A1%E6%B5%B7%E9%93%83.png",
@@ -101923,7 +102334,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bena"
+          "id": "uniequip_002_bena",
+          "type": "PUM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/95/%E5%A4%B4%E5%83%8F_%E8%B4%9D%E5%A8%9C.png",
@@ -102209,7 +102621,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_talr"
+          "id": "uniequip_002_talr",
+          "type": "MER-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/4a/%E5%A4%B4%E5%83%8F_%E8%A3%81%E5%BA%A6.png",
@@ -102727,7 +103140,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kazema"
+          "id": "uniequip_002_kazema",
+          "type": "PUM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/12/%E5%A4%B4%E5%83%8F_%E9%A3%8E%E4%B8%B8.png",
@@ -103013,7 +103427,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_red"
+          "id": "uniequip_002_red",
+          "type": "EXE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ac/%E5%A4%B4%E5%83%8F_%E7%BA%A2.png",
@@ -103299,7 +103714,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_waaifu"
+          "id": "uniequip_002_waaifu",
+          "type": "EXE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/ed/%E5%A4%B4%E5%83%8F_%E6%A7%90%E7%90%A5.png",
@@ -103585,7 +104001,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_forcer"
+          "id": "uniequip_002_forcer",
+          "type": "PUS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d2/%E5%A4%B4%E5%83%8F_%E8%A7%81%E8%A1%8C%E8%80%85.png",
@@ -103871,7 +104288,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kafka"
+          "id": "uniequip_002_kafka",
+          "type": "EXE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8d/%E5%A4%B4%E5%83%8F_%E5%8D%A1%E5%A4%AB%E5%8D%A1.png",
@@ -104157,7 +104575,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_spuria"
+          "id": "uniequip_002_spuria",
+          "type": "GEE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d1/%E5%A4%B4%E5%83%8F_%E7%A9%BA%E6%9E%84.png",
@@ -104443,7 +104862,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_robin"
+          "id": "uniequip_002_robin",
+          "type": "TRP-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/1f/%E5%A4%B4%E5%83%8F_%E7%BD%97%E5%AE%BE.png",
@@ -104729,7 +105149,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wulfen"
+          "id": "uniequip_002_wulfen",
+          "type": "TRP-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/20/%E5%A4%B4%E5%83%8F_%E9%92%BC%E9%93%85.png",
@@ -105015,7 +105436,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_kirara"
+          "id": "uniequip_002_kirara",
+          "type": "AMB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a8/%E5%A4%B4%E5%83%8F_%E7%BB%AE%E8%89%AF.png",
@@ -105301,7 +105723,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mortis"
+          "id": "uniequip_002_mortis",
+          "type": "PUM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a0/%E5%A4%B4%E5%83%8F_%E8%8B%A5%E5%8F%B6%E7%9D%A6.png",
@@ -105587,7 +106010,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mantic"
+          "id": "uniequip_002_mantic",
+          "type": "AMB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c5/%E5%A4%B4%E5%83%8F_%E7%8B%AE%E8%9D%8E.png",
@@ -105873,7 +106297,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_panda"
+          "id": "uniequip_002_panda",
+          "type": "PUS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/dd/%E5%A4%B4%E5%83%8F_%E9%A3%9F%E9%93%81%E5%85%BD.png",
@@ -106159,7 +106584,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_iana"
+          "id": "uniequip_002_iana",
+          "type": "PUM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/ff/%E5%A4%B4%E5%83%8F_%E5%8F%8C%E6%9C%88.png",
@@ -106445,7 +106871,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rfrost"
+          "id": "uniequip_002_rfrost",
+          "type": "TRP-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/51/%E5%A4%B4%E5%83%8F_%E9%9C%9C%E5%8D%8E.png",
@@ -106731,7 +107158,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nothin"
+          "id": "uniequip_002_nothin",
+          "type": "MER-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/04/%E5%A4%B4%E5%83%8F_%E4%B9%8C%E6%9C%89.png",
@@ -107017,7 +107445,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_tinman"
+          "id": "uniequip_002_tinman",
+          "type": "ALC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a1/%E5%A4%B4%E5%83%8F_%E9%94%A1%E4%BA%BA.png",
@@ -107303,7 +107732,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_almond"
+          "id": "uniequip_002_almond",
+          "type": "HOK-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2e/%E5%A4%B4%E5%83%8F_%E6%9D%8F%E4%BB%81.png",
@@ -107589,7 +108019,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_snsant"
+          "id": "uniequip_002_snsant",
+          "type": "HOK-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/24/%E5%A4%B4%E5%83%8F_%E9%9B%AA%E9%9B%89.png",
@@ -107875,7 +108306,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_slchan"
+          "id": "uniequip_002_slchan",
+          "type": "HOK-X"
         }
       ],
       "portrait": "https://media.prts.wiki/7/7d/%E5%A4%B4%E5%83%8F_%E5%B4%96%E5%BF%83.png",
@@ -108157,7 +108589,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wintim"
+          "id": "uniequip_002_wintim",
+          "type": "AGE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/27/%E5%A4%B4%E5%83%8F_%E5%86%AC%E6%97%B6.png",
@@ -108439,7 +108872,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bstalk"
+          "id": "uniequip_002_bstalk",
+          "type": "TAC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cb/%E5%A4%B4%E5%83%8F_%E8%B1%86%E8%8B%97.png",
@@ -108721,7 +109155,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vigna"
+          "id": "uniequip_002_vigna",
+          "type": "CHG-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/bb/%E5%A4%B4%E5%83%8F_%E7%BA%A2%E8%B1%86.png",
@@ -109003,7 +109438,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_scave"
+          "id": "uniequip_002_scave",
+          "type": "SOL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E6%B8%85%E9%81%93%E5%A4%AB.png",
@@ -109285,7 +109721,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_myrtle"
+          "id": "uniequip_002_myrtle",
+          "type": "BEA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/9d/%E5%A4%B4%E5%83%8F_%E6%A1%83%E9%87%91%E5%A8%98.png",
@@ -109567,7 +110004,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_blackd"
+          "id": "uniequip_002_blackd",
+          "type": "SOL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/27/%E5%A4%B4%E5%83%8F_%E8%AE%AF%E4%BD%BF.png",
@@ -109849,7 +110287,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_estell"
+          "id": "uniequip_002_estell",
+          "type": "CEN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/57/%E5%A4%B4%E5%83%8F_%E8%89%BE%E4%B8%9D%E9%BB%9B%E5%B0%94.png",
@@ -110131,7 +110570,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_gyuki"
+          "id": "uniequip_002_gyuki",
+          "type": "DRE-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/13/%E5%A4%B4%E5%83%8F_%E7%BC%A0%E4%B8%B8.png",
@@ -110413,7 +110853,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_wscoot"
+          "id": "uniequip_002_wscoot",
+          "type": "LIB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fe/%E5%A4%B4%E5%83%8F_%E9%AA%8B%E9%A3%8E.png",
@@ -110695,7 +111136,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_doberm"
+          "id": "uniequip_002_doberm",
+          "type": "INS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/a/a1/%E5%A4%B4%E5%83%8F_%E6%9D%9C%E5%AE%BE.png",
@@ -110977,7 +111419,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_peacok"
+          "id": "uniequip_002_peacok",
+          "type": "DRE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f2/%E5%A4%B4%E5%83%8F_%E6%96%AD%E7%BD%AA%E8%80%85.png",
@@ -111259,7 +111702,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_spikes"
+          "id": "uniequip_002_spikes",
+          "type": "LOR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/6a/%E5%A4%B4%E5%83%8F_%E8%8A%B3%E6%B1%80.png",
@@ -111541,7 +111985,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_jaksel"
+          "id": "uniequip_002_jaksel",
+          "type": "FGT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d8/%E5%A4%B4%E5%83%8F_%E6%9D%B0%E5%85%8B.png",
@@ -111823,7 +112268,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cutter"
+          "id": "uniequip_002_cutter",
+          "type": "SWO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2c/%E5%A4%B4%E5%83%8F_%E5%88%BB%E5%88%80.png",
@@ -112105,7 +112551,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_brownb"
+          "id": "uniequip_002_brownb",
+          "type": "FGT-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c2/%E5%A4%B4%E5%83%8F_%E7%8C%8E%E8%9C%82.png",
@@ -112387,7 +112834,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_lolxh"
+          "id": "uniequip_002_lolxh",
+          "type": "LOR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/50/%E5%A4%B4%E5%83%8F_%E7%BD%97%E5%B0%8F%E9%BB%91.png",
@@ -112669,7 +113117,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_frncat"
+          "id": "uniequip_002_frncat",
+          "type": "AFT-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fc/%E5%A4%B4%E5%83%8F_%E6%85%95%E6%96%AF.png",
@@ -112951,7 +113400,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_quartz"
+          "id": "uniequip_002_quartz",
+          "type": "CRU-X"
         }
       ],
       "portrait": "https://media.prts.wiki/b/bc/%E5%A4%B4%E5%83%8F_%E7%9F%B3%E8%8B%B1.png",
@@ -113233,7 +113683,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_frostl"
+          "id": "uniequip_002_frostl",
+          "type": "LOR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/29/%E5%A4%B4%E5%83%8F_%E9%9C%9C%E5%8F%B6.png",
@@ -113515,7 +113966,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_humus"
+          "id": "uniequip_002_humus",
+          "type": "REA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e0/%E5%A4%B4%E5%83%8F_%E4%BC%91%E8%B0%9F%E6%96%AF.png",
@@ -113797,7 +114249,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_utage"
+          "id": "uniequip_002_utage",
+          "type": "SBL-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/f4/%E5%A4%B4%E5%83%8F_%E5%AE%B4.png",
@@ -114079,7 +114532,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sunbr"
+          "id": "uniequip_002_sunbr",
+          "type": "GUA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/07/%E5%A4%B4%E5%83%8F_%E5%8F%A4%E7%B1%B3.png",
@@ -114361,7 +114815,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_durnar"
+          "id": "uniequip_002_durnar",
+          "type": "AST-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ab/%E5%A4%B4%E5%83%8F_%E5%9D%9A%E9%9B%B7.png",
@@ -114643,7 +115098,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_yak"
+          "id": "uniequip_002_yak",
+          "type": "PRO-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e4/%E5%A4%B4%E5%83%8F_%E8%A7%92%E5%B3%B0.png",
@@ -114925,7 +115381,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_luton"
+          "id": "uniequip_002_luton",
+          "type": "UNY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/7/77/%E5%A4%B4%E5%83%8F_%E9%9C%B2%E6%89%98.png",
@@ -115207,7 +115664,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_bubble"
+          "id": "uniequip_002_bubble",
+          "type": "PRO-X"
         }
       ],
       "portrait": "https://media.prts.wiki/2/28/%E5%A4%B4%E5%83%8F_%E6%B3%A1%E6%B3%A1.png",
@@ -115489,7 +115947,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_snakek"
+          "id": "uniequip_002_snakek",
+          "type": "PRO-X"
         }
       ],
       "portrait": "https://media.prts.wiki/0/02/%E5%A4%B4%E5%83%8F_%E8%9B%87%E5%B1%A0%E7%AE%B1.png",
@@ -115771,7 +116230,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_glaze"
+          "id": "uniequip_002_glaze",
+          "type": "DEA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/f/ff/%E5%A4%B4%E5%83%8F_%E5%AE%89%E6%AF%94%E5%B0%94.png",
@@ -116053,7 +116513,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_yuki"
+          "id": "uniequip_002_yuki",
+          "type": "ART-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b4/%E5%A4%B4%E5%83%8F_%E7%99%BD%E9%9B%AA.png",
@@ -116335,7 +116796,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_clour"
+          "id": "uniequip_002_clour",
+          "type": "MAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/af/%E5%A4%B4%E5%83%8F_%E7%BA%A2%E4%BA%91.png",
@@ -116617,7 +117079,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_jesica"
+          "id": "uniequip_002_jesica",
+          "type": "MAR-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E6%9D%B0%E8%A5%BF%E5%8D%A1.png",
@@ -116899,7 +117362,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_shotst"
+          "id": "uniequip_002_shotst",
+          "type": "MAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/1/14/%E5%A4%B4%E5%83%8F_%E6%B5%81%E6%98%9F.png",
@@ -117181,7 +117645,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_mm"
+          "id": "uniequip_002_mm",
+          "type": "MAR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/ac/%E5%A4%B4%E5%83%8F_%E6%A2%85.png",
@@ -117463,7 +117928,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_totter"
+          "id": "uniequip_002_totter",
+          "type": "SIE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/87/%E5%A4%B4%E5%83%8F_%E9%93%85%E8%B8%9D.png",
@@ -117745,7 +118211,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_pinecn"
+          "id": "uniequip_002_pinecn",
+          "type": "RPR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/5e/%E5%A4%B4%E5%83%8F_%E6%9D%BE%E6%9E%9C.png",
@@ -118027,7 +118494,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_acdrop"
+          "id": "uniequip_002_acdrop",
+          "type": "ARC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/e/e9/%E5%A4%B4%E5%83%8F_%E9%85%B8%E7%B3%96.png",
@@ -118309,7 +118777,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_caper"
+          "id": "uniequip_002_caper",
+          "type": "LPS-X"
         }
       ],
       "portrait": "https://media.prts.wiki/a/aa/%E5%A4%B4%E5%83%8F_%E8%B7%83%E8%B7%83.png",
@@ -118591,7 +119060,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_pudd"
+          "id": "uniequip_002_pudd",
+          "type": "CHA-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/b/b0/%E5%A4%B4%E5%83%8F_%E5%B8%83%E4%B8%81.png",
@@ -118873,7 +119343,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_greyy"
+          "id": "uniequip_002_greyy",
+          "type": "SPC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/f/fe/%E5%A4%B4%E5%83%8F_%E6%A0%BC%E9%9B%B7%E4%BC%8A.png",
@@ -119155,7 +119626,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_cammou"
+          "id": "uniequip_002_cammou",
+          "type": "FUN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/4/43/%E5%A4%B4%E5%83%8F_%E5%8D%A1%E8%BE%BE.png",
@@ -119437,7 +119909,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_indigo"
+          "id": "uniequip_002_indigo",
+          "type": "MSC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/9/92/%E5%A4%B4%E5%83%8F_%E6%B7%B1%E9%9D%9B.png",
@@ -119719,7 +120192,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_akkord"
+          "id": "uniequip_002_akkord",
+          "type": "BLA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/8/8e/%E5%A4%B4%E5%83%8F_%E5%8D%8F%E5%BE%8B.png",
@@ -120001,7 +120475,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_nights"
+          "id": "uniequip_002_nights",
+          "type": "CCR-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/55/%E5%A4%B4%E5%83%8F_%E5%A4%9C%E7%83%9F.png",
@@ -120283,7 +120758,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_fmout"
+          "id": "uniequip_002_fmout",
+          "type": "SPC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E8%BF%9C%E5%B1%B1.png",
@@ -120565,7 +121041,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_flower"
+          "id": "uniequip_002_flower",
+          "type": "RIN-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/6/6a/%E5%A4%B4%E5%83%8F_%E8%B0%83%E9%A6%99%E5%B8%88.png",
@@ -120847,7 +121324,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_chnut"
+          "id": "uniequip_002_chnut",
+          "type": "WDM-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/58/%E5%A4%B4%E5%83%8F_%E8%A4%90%E6%9E%9C.png",
@@ -121129,7 +121607,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ccheal"
+          "id": "uniequip_002_ccheal",
+          "type": "PHY-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/c/cc/%E5%A4%B4%E5%83%8F_%E5%98%89%E7%BB%B4%E5%B0%94.png",
@@ -121411,7 +121890,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_myrrh"
+          "id": "uniequip_002_myrrh",
+          "type": "PHY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d9/%E5%A4%B4%E5%83%8F_%E6%9C%AB%E8%8D%AF.png",
@@ -121693,7 +122173,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_finlpp"
+          "id": "uniequip_002_finlpp",
+          "type": "WAH-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/1/19/%E5%A4%B4%E5%83%8F_%E6%B8%85%E6%B5%81.png",
@@ -121975,7 +122456,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_susuro"
+          "id": "uniequip_002_susuro",
+          "type": "PHY-X"
         }
       ],
       "portrait": "https://media.prts.wiki/6/63/%E5%A4%B4%E5%83%8F_%E8%8B%8F%E8%8B%8F%E6%B4%9B.png",
@@ -122257,7 +122739,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_podego"
+          "id": "uniequip_002_podego",
+          "type": "DEC-X"
         }
       ],
       "portrait": "https://media.prts.wiki/4/43/%E5%A4%B4%E5%83%8F_%E6%B3%A2%E7%99%BB%E5%8F%AF.png",
@@ -122539,7 +123022,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_skgoat"
+          "id": "uniequip_002_skgoat",
+          "type": "DEC-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/5/57/%E5%A4%B4%E5%83%8F_%E5%9C%B0%E7%81%B5.png",
@@ -122821,7 +123305,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_robrta"
+          "id": "uniequip_002_robrta",
+          "type": "CRA-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/52/%E5%A4%B4%E5%83%8F_%E7%BD%97%E6%AF%94%E8%8F%88%E5%A1%94.png",
@@ -123103,7 +123588,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_deepcl"
+          "id": "uniequip_002_deepcl",
+          "type": "SUM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/d/d1/%E5%A4%B4%E5%83%8F_%E6%B7%B1%E6%B5%B7%E8%89%B2.png",
@@ -123385,7 +123871,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_sqrrel"
+          "id": "uniequip_002_sqrrel",
+          "type": "PUS-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/2/2f/%E5%A4%B4%E5%83%8F_%E9%98%BF%E6%B6%88.png",
@@ -123667,7 +124154,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_rope"
+          "id": "uniequip_002_rope",
+          "type": "HOK-X"
         }
       ],
       "portrait": "https://media.prts.wiki/d/dd/%E5%A4%B4%E5%83%8F_%E6%9A%97%E7%B4%A2.png",
@@ -123949,7 +124437,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_strong"
+          "id": "uniequip_002_strong",
+          "type": "MER-X"
         }
       ],
       "portrait": "https://media.prts.wiki/5/54/%E5%A4%B4%E5%83%8F_%E5%AD%91.png",
@@ -124231,7 +124720,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_gravel"
+          "id": "uniequip_002_gravel",
+          "type": "EXE-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/ce/%E5%A4%B4%E5%83%8F_%E7%A0%BE.png",
@@ -124513,7 +125003,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_vrdant"
+          "id": "uniequip_002_vrdant",
+          "type": "PUM-Y"
         }
       ],
       "portrait": "https://media.prts.wiki/9/97/%E5%A4%B4%E5%83%8F_%E7%BB%B4%E8%8D%BB.png",
@@ -124795,7 +125286,8 @@
               ]
             }
           ],
-          "id": "uniequip_002_ethan"
+          "id": "uniequip_002_ethan",
+          "type": "AMB-X"
         }
       ],
       "portrait": "https://media.prts.wiki/c/c1/%E5%A4%B4%E5%83%8F_%E4%BC%8A%E6%A1%91.png",
@@ -129293,7 +129785,7 @@
     "高级作战记录",
     "芯片助剂"
   ],
-  "dataVersion": "prts-420259-progress-1",
+  "dataVersion": "prts-420259-86eca7fa55e8",
   "MATERIAL_META": {
     "特种芯片": {
       "id": "3281",

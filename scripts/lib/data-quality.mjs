@@ -62,7 +62,7 @@ export function validateSynchronizedOperators(baseOperators = {}, candidateOpera
     }
     if (!ALLOWED_PROFESSIONS.has(operator.p)) throw new Error(`干员 ${name} 使用非法职业。`);
     if (!ALLOWED_POSITIONS.has(operator.pos)) throw new Error(`干员 ${name} 使用非法部署位置。`);
-    for (const value of [operator.sp, operator.obtain, ...(operator.md || []).map((module) => module.name)]) {
+    for (const value of [operator.sp, operator.obtain, ...(operator.md || []).flatMap((module) => [module.name, module.type])]) {
       if (containsMarkup(value)) throw new Error(`干员 ${name} 包含非法外部文本。`);
     }
     assertMaterialRecords(name, operator);
