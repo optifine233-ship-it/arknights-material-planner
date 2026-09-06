@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "dataVersion": "prts-423084-9f120fe204fb",
-  "generatedAt": "2026-08-30T22:44:54.829Z",
-  "operatorCount": 427,
+  "dataVersion": "prts-424965-4e5d07deb9f7",
+  "generatedAt": "2026-09-06T22:08:18.846Z",
+  "operatorCount": 431,
   "materialCount": 96,
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
     "operatorCategory": "Category:干员",
-    "latestRevision": 423084,
+    "latestRevision": 424965,
     "progressIdSources": {
       "characters": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json",
       "patches": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json",
