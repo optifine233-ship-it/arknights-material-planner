@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-06T22:08:18.846Z",
+  "generatedAt": "2026-09-13T22:24:48.897Z",
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
     "operatorCategory": "Category:干员",
-    "latestRevision": 424965,
+    "latestRevision": 428029,
     "progressIdSources": {
       "characters": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json",
       "patches": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json",
@@ -130784,7 +130784,7 @@
     "高级作战记录",
     "芯片助剂"
   ],
-  "dataVersion": "prts-424965-4e5d07deb9f7",
+  "dataVersion": "prts-428029-4e5d07deb9f7",
   "MATERIAL_META": {
     "特种芯片": {
       "id": "3281",
