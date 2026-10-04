@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-27T23:03:23.877Z",
+  "generatedAt": "2026-10-04T23:09:33.458Z",
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
     "operatorCategory": "Category:干员",
-    "latestRevision": 429205,
+    "latestRevision": 433363,
     "progressIdSources": {
       "characters": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json",
       "patches": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json",
@@ -98216,7 +98216,7 @@
       "p": "辅助",
       "sp": "工匠",
       "pos": "近战位",
-      "obtain": "活动获得",
+      "obtain": "活动获得 记录修复奖励",
       "e1": [
         {
           "name": "辅助芯片",
@@ -130784,7 +130784,7 @@
     "高级作战记录",
     "芯片助剂"
   ],
-  "dataVersion": "prts-429205-a71cee876aa8",
+  "dataVersion": "prts-433363-32b17d2ab6f7",
   "MATERIAL_META": {
     "特种芯片": {
       "id": "3281",
