@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-04T23:09:33.458Z",
+  "generatedAt": "2026-10-18T22:25:43.978Z",
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
     "operatorCategory": "Category:干员",
-    "latestRevision": 433363,
+    "latestRevision": 441835,
     "progressIdSources": {
       "characters": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json",
       "patches": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json",
@@ -8948,6 +8948,299 @@
       "portrait": "https://media.prts.wiki/0/0f/%E5%A4%B4%E5%83%8F_%E9%94%8F.png",
       "source": "https://prts.wiki/w/%E9%94%8F"
     },
+    "克莱门莎": {
+      "id": "char_4231_clemnt",
+      "r": 5,
+      "p": "近卫",
+      "sp": "本源近卫",
+      "pos": "近战位",
+      "obtain": "标准寻访",
+      "e1": [
+        {
+          "name": "近卫芯片",
+          "qty": 5
+        },
+        {
+          "name": "异铁",
+          "qty": 8
+        },
+        {
+          "name": "酮凝集",
+          "qty": 3
+        }
+      ],
+      "e2": [
+        {
+          "name": "近卫双芯片",
+          "qty": 4
+        },
+        {
+          "name": "聚合剂",
+          "qty": 4
+        },
+        {
+          "name": "提纯源岩",
+          "qty": 9
+        }
+      ],
+      "sl": [
+        {
+          "level": 2,
+          "mats": [
+            {
+              "name": "技巧概要·卷1",
+              "qty": 5
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "mats": [
+            {
+              "name": "技巧概要·卷1",
+              "qty": 5
+            },
+            {
+              "name": "破损装置",
+              "qty": 4
+            },
+            {
+              "name": "酯原料",
+              "qty": 4
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 8
+            },
+            {
+              "name": "固源岩",
+              "qty": 7
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 8
+            },
+            {
+              "name": "糖",
+              "qty": 4
+            },
+            {
+              "name": "酮凝集",
+              "qty": 4
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 8
+            },
+            {
+              "name": "晶体元件",
+              "qty": 6
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "mats": [
+            {
+              "name": "技巧概要·卷3",
+              "qty": 8
+            },
+            {
+              "name": "酮凝集组",
+              "qty": 5
+            },
+            {
+              "name": "研磨石",
+              "qty": 3
+            }
+          ]
+        }
+      ],
+      "ms": {
+        "s1": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 8
+              },
+              {
+                "name": "异铁块",
+                "qty": 4
+              },
+              {
+                "name": "类凝结核",
+                "qty": 3
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 12
+              },
+              {
+                "name": "精炼溶剂",
+                "qty": 4
+              },
+              {
+                "name": "手性屈光体",
+                "qty": 9
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 15
+              },
+              {
+                "name": "烧结核凝晶",
+                "qty": 6
+              },
+              {
+                "name": "环烃预制体",
+                "qty": 2
+              }
+            ]
+          }
+        ],
+        "s2": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 8
+              },
+              {
+                "name": "液化醚吸聚体",
+                "qty": 4
+              },
+              {
+                "name": "电极单元",
+                "qty": 6
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 12
+              },
+              {
+                "name": "切削原液",
+                "qty": 4
+              },
+              {
+                "name": "提纯源岩",
+                "qty": 10
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 15
+              },
+              {
+                "name": "晶体电子单元",
+                "qty": 6
+              },
+              {
+                "name": "精炼溶剂",
+                "qty": 1
+              }
+            ]
+          }
+        ],
+        "s3": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 8
+              },
+              {
+                "name": "固化纤维板",
+                "qty": 4
+              },
+              {
+                "name": "化合切削液",
+                "qty": 5
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 12
+              },
+              {
+                "name": "聚合凝胶",
+                "qty": 4
+              },
+              {
+                "name": "晶体电路",
+                "qty": 7
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 15
+              },
+              {
+                "name": "重相位对映体",
+                "qty": 6
+              },
+              {
+                "name": "切削原液",
+                "qty": 1
+              }
+            ]
+          }
+        ]
+      },
+      "md": [],
+      "skillIds": {
+        "s1": "skchr_clemnt_1",
+        "s2": "skchr_clemnt_2",
+        "s3": "skchr_clemnt_3"
+      },
+      "portrait": "https://media.prts.wiki/3/34/%E5%A4%B4%E5%83%8F_%E5%85%8B%E8%8E%B1%E9%97%A8%E8%8E%8E.png",
+      "source": "https://prts.wiki/w/%E5%85%8B%E8%8E%B1%E9%97%A8%E8%8E%8E"
+    },
     "玛恩纳": {
       "id": "char_4064_mlynar",
       "r": 5,
@@ -13526,6 +13819,60 @@
             }
           ],
           "id": "uniequip_002_ulpia"
+        },
+        {
+          "name": "“前路”",
+          "type": "CRU-Y",
+          "stages": [
+            {
+              "stage": 1,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 4
+                },
+                {
+                  "name": "重相位对映体",
+                  "qty": 2
+                }
+              ]
+            },
+            {
+              "stage": 2,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 4
+                },
+                {
+                  "name": "数据增补条",
+                  "qty": 60
+                },
+                {
+                  "name": "聚合剂",
+                  "qty": 3
+                }
+              ]
+            },
+            {
+              "stage": 3,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 4
+                },
+                {
+                  "name": "数据增补仪",
+                  "qty": 20
+                },
+                {
+                  "name": "烧结核凝晶",
+                  "qty": 4
+                }
+              ]
+            }
+          ],
+          "id": "uniequip_003_ulpia"
         }
       ],
       "skillIds": {
@@ -19452,6 +19799,60 @@
             }
           ],
           "id": "uniequip_002_shu"
+        },
+        {
+          "name": "好时节",
+          "type": "GUA-Y",
+          "stages": [
+            {
+              "stage": 1,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 4
+                },
+                {
+                  "name": "聚合剂",
+                  "qty": 2
+                }
+              ]
+            },
+            {
+              "stage": 2,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 4
+                },
+                {
+                  "name": "数据增补条",
+                  "qty": 60
+                },
+                {
+                  "name": "烧结核凝晶",
+                  "qty": 3
+                }
+              ]
+            },
+            {
+              "stage": 3,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 4
+                },
+                {
+                  "name": "数据增补仪",
+                  "qty": 20
+                },
+                {
+                  "name": "晶体电子单元",
+                  "qty": 4
+                }
+              ]
+            }
+          ],
+          "id": "uniequip_003_shu"
         }
       ],
       "skillIds": {
@@ -96775,6 +97176,293 @@
       "portrait": "https://media.prts.wiki/b/b0/%E5%A4%B4%E5%83%8F_%E4%BD%86%E4%B9%A6.png",
       "source": "https://prts.wiki/w/%E4%BD%86%E4%B9%A6"
     },
+    "德·托莱多": {
+      "id": "char_393_toledo",
+      "r": 4,
+      "p": "辅助",
+      "sp": "削弱者",
+      "pos": "远程位",
+      "obtain": "标准寻访",
+      "e1": [
+        {
+          "name": "辅助芯片",
+          "qty": 4
+        },
+        {
+          "name": "糖",
+          "qty": 5
+        },
+        {
+          "name": "固源岩",
+          "qty": 3
+        }
+      ],
+      "e2": [
+        {
+          "name": "辅助双芯片",
+          "qty": 3
+        },
+        {
+          "name": "聚合凝胶",
+          "qty": 9
+        },
+        {
+          "name": "异铁组",
+          "qty": 13
+        }
+      ],
+      "sl": [
+        {
+          "level": 2,
+          "mats": [
+            {
+              "name": "技巧概要·卷1",
+              "qty": 4
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "mats": [
+            {
+              "name": "技巧概要·卷1",
+              "qty": 4
+            },
+            {
+              "name": "异铁碎片",
+              "qty": 5
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 6
+            },
+            {
+              "name": "酮凝集",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 6
+            },
+            {
+              "name": "装置",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 6
+            },
+            {
+              "name": "全新装置",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "mats": [
+            {
+              "name": "技巧概要·卷3",
+              "qty": 6
+            },
+            {
+              "name": "晶体元件",
+              "qty": 3
+            },
+            {
+              "name": "聚酸酯组",
+              "qty": 3
+            }
+          ]
+        }
+      ],
+      "ms": {
+        "s1": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 5
+              },
+              {
+                "name": "切削原液",
+                "qty": 3
+              },
+              {
+                "name": "固源岩组",
+                "qty": 5
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 6
+              },
+              {
+                "name": "环烃预制体",
+                "qty": 3
+              },
+              {
+                "name": "固化纤维板",
+                "qty": 5
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 10
+              },
+              {
+                "name": "重相位对映体",
+                "qty": 4
+              },
+              {
+                "name": "晶体电路",
+                "qty": 1
+              }
+            ]
+          }
+        ],
+        "s2": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 5
+              },
+              {
+                "name": "聚合凝胶",
+                "qty": 3
+              },
+              {
+                "name": "研磨石",
+                "qty": 4
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 6
+              },
+              {
+                "name": "精炼溶剂",
+                "qty": 3
+              },
+              {
+                "name": "手性屈光体",
+                "qty": 6
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 10
+              },
+              {
+                "name": "聚合剂",
+                "qty": 4
+              },
+              {
+                "name": "转质盐聚块",
+                "qty": 4
+              }
+            ]
+          }
+        ],
+        "s3": []
+      },
+      "md": [
+        {
+          "name": "贵族义务",
+          "type": "UMD-Y",
+          "stages": [
+            {
+              "stage": 1,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 2
+                },
+                {
+                  "name": "切削原液",
+                  "qty": 3
+                }
+              ]
+            },
+            {
+              "stage": 2,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 2
+                },
+                {
+                  "name": "数据增补条",
+                  "qty": 20
+                },
+                {
+                  "name": "固化纤维板",
+                  "qty": 4
+                }
+              ]
+            },
+            {
+              "stage": 3,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 2
+                },
+                {
+                  "name": "数据增补仪",
+                  "qty": 8
+                },
+                {
+                  "name": "聚合凝胶",
+                  "qty": 5
+                }
+              ]
+            }
+          ],
+          "id": "uniequip_002_toledo"
+        }
+      ],
+      "skillIds": {
+        "s1": "skchr_toledo_1",
+        "s2": "skchr_toledo_2"
+      },
+      "portrait": "https://media.prts.wiki/1/16/%E5%A4%B4%E5%83%8F_%E5%BE%B7%C2%B7%E6%89%98%E8%8E%B1%E5%A4%9A.png",
+      "source": "https://prts.wiki/w/%E5%BE%B7%C2%B7%E6%89%98%E8%8E%B1%E5%A4%9A"
+    },
     "格劳克斯": {
       "id": "char_326_glacus",
       "r": 4,
@@ -105561,6 +106249,293 @@
       },
       "portrait": "https://media.prts.wiki/d/d1/%E5%A4%B4%E5%83%8F_%E7%A9%BA%E6%9E%84.png",
       "source": "https://prts.wiki/w/%E7%A9%BA%E6%9E%84"
+    },
+    "旅骨": {
+      "id": "char_4232_hbound",
+      "r": 4,
+      "p": "特种",
+      "sp": "炼金师",
+      "pos": "远程位",
+      "obtain": "活动获得",
+      "e1": [
+        {
+          "name": "特种芯片",
+          "qty": 4
+        },
+        {
+          "name": "固源岩",
+          "qty": 7
+        },
+        {
+          "name": "装置",
+          "qty": 2
+        }
+      ],
+      "e2": [
+        {
+          "name": "特种双芯片",
+          "qty": 3
+        },
+        {
+          "name": "固化纤维板",
+          "qty": 7
+        },
+        {
+          "name": "褐素纤维",
+          "qty": 13
+        }
+      ],
+      "sl": [
+        {
+          "level": 2,
+          "mats": [
+            {
+              "name": "技巧概要·卷1",
+              "qty": 4
+            }
+          ]
+        },
+        {
+          "level": 3,
+          "mats": [
+            {
+              "name": "技巧概要·卷1",
+              "qty": 4
+            },
+            {
+              "name": "酯原料",
+              "qty": 7
+            }
+          ]
+        },
+        {
+          "level": 4,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 6
+            },
+            {
+              "name": "异铁",
+              "qty": 3
+            }
+          ]
+        },
+        {
+          "level": 5,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 6
+            },
+            {
+              "name": "酮凝集",
+              "qty": 4
+            }
+          ]
+        },
+        {
+          "level": 6,
+          "mats": [
+            {
+              "name": "技巧概要·卷2",
+              "qty": 6
+            },
+            {
+              "name": "化合切削液",
+              "qty": 4
+            }
+          ]
+        },
+        {
+          "level": 7,
+          "mats": [
+            {
+              "name": "技巧概要·卷3",
+              "qty": 6
+            },
+            {
+              "name": "液化高能气体",
+              "qty": 3
+            },
+            {
+              "name": "炽合金",
+              "qty": 2
+            }
+          ]
+        }
+      ],
+      "ms": {
+        "s1": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 5
+              },
+              {
+                "name": "环烃预制体",
+                "qty": 3
+              },
+              {
+                "name": "褐素纤维",
+                "qty": 2
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 6
+              },
+              {
+                "name": "炽合金块",
+                "qty": 3
+              },
+              {
+                "name": "异铁块",
+                "qty": 5
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 10
+              },
+              {
+                "name": "烧结核凝晶",
+                "qty": 4
+              },
+              {
+                "name": "手性屈光体",
+                "qty": 1
+              }
+            ]
+          }
+        ],
+        "s2": [
+          {
+            "stage": 1,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 5
+              },
+              {
+                "name": "精炼溶剂",
+                "qty": 3
+              },
+              {
+                "name": "异铁组",
+                "qty": 4
+              }
+            ]
+          },
+          {
+            "stage": 2,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 6
+              },
+              {
+                "name": "酮阵列",
+                "qty": 3
+              },
+              {
+                "name": "液化醚吸聚体",
+                "qty": 5
+              }
+            ]
+          },
+          {
+            "stage": 3,
+            "mats": [
+              {
+                "name": "技巧概要·卷3",
+                "qty": 10
+              },
+              {
+                "name": "晶体电子单元",
+                "qty": 4
+              },
+              {
+                "name": "提纯源岩",
+                "qty": 1
+              }
+            ]
+          }
+        ],
+        "s3": []
+      },
+      "md": [
+        {
+          "name": "看不见的大海",
+          "type": "ALC-X",
+          "stages": [
+            {
+              "stage": 1,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 2
+                },
+                {
+                  "name": "手性屈光体",
+                  "qty": 3
+                }
+              ]
+            },
+            {
+              "stage": 2,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 2
+                },
+                {
+                  "name": "数据增补条",
+                  "qty": 20
+                },
+                {
+                  "name": "聚能动力单元",
+                  "qty": 4
+                }
+              ]
+            },
+            {
+              "stage": 3,
+              "mats": [
+                {
+                  "name": "模组数据块",
+                  "qty": 2
+                },
+                {
+                  "name": "数据增补仪",
+                  "qty": 8
+                },
+                {
+                  "name": "提纯源岩",
+                  "qty": 5
+                }
+              ]
+            }
+          ],
+          "id": "uniequip_002_hbound"
+        }
+      ],
+      "skillIds": {
+        "s1": "skchr_hbound_1",
+        "s2": "skchr_hbound_2"
+      },
+      "portrait": "https://media.prts.wiki/2/29/%E5%A4%B4%E5%83%8F_%E6%97%85%E9%AA%A8.png",
+      "source": "https://prts.wiki/w/%E6%97%85%E9%AA%A8"
     },
     "罗宾": {
       "id": "char_451_robin",
@@ -128498,6 +129473,7 @@
     "煌",
     "棘刺",
     "锏",
+    "克莱门莎",
     "玛恩纳",
     "怒潮凛冬",
     "帕拉斯",
@@ -128767,6 +129743,7 @@
     "伯塔尼",
     "初雪",
     "但书",
+    "德·托莱多",
     "格劳克斯",
     "海蒂",
     "海霓",
@@ -128798,6 +129775,7 @@
     "见行者",
     "卡夫卡",
     "空构",
+    "旅骨",
     "罗宾",
     "钼铅",
     "绮良",
@@ -130784,7 +131762,7 @@
     "高级作战记录",
     "芯片助剂"
   ],
-  "dataVersion": "prts-433363-32b17d2ab6f7",
+  "dataVersion": "prts-441835-e3afec5fe08a",
   "MATERIAL_META": {
     "特种芯片": {
       "id": "3281",
@@ -131556,14 +132534,14 @@
     }
   },
   "syncReport": {
-    "operatorCandidates": 460,
-    "operators": 431,
+    "operatorCandidates": 463,
+    "operators": 434,
     "materials": 96,
     "skippedOperators": [
       "领主·Sharp",
       "Mechanist(卫戍协议)",
-      "盟约·辅助干员",
       "Misery(卫戍协议)",
+      "盟约·辅助干员",
       "暮落(集成战略)",
       "Pith",
       "Pith(卫戍协议)",
@@ -131574,19 +132552,19 @@
       "Stormeye(卫戍协议)",
       "Touch",
       "Touch(卫戍协议)",
-      "预备干员-后勤",
-      "预备干员-辅助(卫戍协议)",
       "预备干员-近战",
       "预备干员-狙击",
+      "预备干员-后勤",
       "预备干员-术师",
-      "预备干员-重装",
-      "郁金香",
       "预备干员-术师(卫戍协议)",
       "预备干员-狙击(卫戍协议)",
       "预备干员-先锋(卫戍协议)",
       "预备干员-近卫(卫戍协议)",
       "预备干员-特种(卫戍协议)",
       "预备干员-医疗(卫戍协议)",
+      "预备干员-辅助(卫戍协议)",
+      "预备干员-重装",
+      "郁金香",
       "预备干员-重装(卫戍协议)",
       "郁金香(卫戍协议)"
     ],
