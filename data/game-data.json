@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-01T23:34:53.462Z",
+  "generatedAt": "2026-11-15T23:58:19.712Z",
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
     "operatorCategory": "Category:干员",
-    "latestRevision": 447135,
+    "latestRevision": 450494,
     "progressIdSources": {
       "characters": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json",
       "patches": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json",
@@ -2377,7 +2377,7 @@
       "p": "先锋",
       "sp": "执旗手",
       "pos": "近战位",
-      "obtain": "中坚寻访 公开招募",
+      "obtain": "公开招募 中坚寻访",
       "e1": [
         {
           "name": "先锋芯片",
@@ -51927,7 +51927,7 @@
       "p": "特种",
       "sp": "伏击客",
       "pos": "近战位",
-      "obtain": "中坚寻访 公开招募",
+      "obtain": "公开招募 中坚寻访",
       "e1": [
         {
           "name": "特种芯片",
@@ -68890,7 +68890,7 @@
       "p": "近卫",
       "sp": "收割者",
       "pos": "近战位",
-      "obtain": "中坚寻访 公开招募",
+      "obtain": "公开招募 中坚寻访",
       "e1": [
         {
           "name": "近卫芯片",
@@ -94924,7 +94924,7 @@
       "p": "医疗",
       "sp": "行医",
       "pos": "远程位",
-      "obtain": "中坚寻访 公开招募",
+      "obtain": "公开招募 中坚寻访",
       "e1": [
         {
           "name": "医疗芯片",
@@ -126750,7 +126750,7 @@
       "p": "辅助",
       "sp": "工匠",
       "pos": "近战位",
-      "obtain": "标准寻访 中坚寻访 公开招募",
+      "obtain": "公开招募 标准寻访 中坚寻访",
       "e1": [
         {
           "name": "辅助芯片",
@@ -133756,7 +133756,7 @@
     "高级作战记录",
     "芯片助剂"
   ],
-  "dataVersion": "prts-447135-156fe82ee98e",
+  "dataVersion": "prts-450494-8acb7058dc60",
   "MATERIAL_META": {
     "特种芯片": {
       "id": "3281",
@@ -134528,15 +134528,16 @@
     }
   },
   "syncReport": {
-    "operatorCandidates": 469,
+    "operatorCandidates": 470,
     "operators": 440,
     "materials": 96,
     "skippedOperators": [
+      "“暴躁铁皮”",
       "领主·Sharp",
       "Mechanist(卫戍协议)",
       "盟约·辅助干员",
-      "暮落(集成战略)",
       "Misery(卫戍协议)",
+      "暮落(集成战略)",
       "Pith",
       "Pith(卫戍协议)",
       "Raidian(卫戍协议)",
@@ -134547,10 +134548,10 @@
       "Touch",
       "Touch(卫戍协议)",
       "预备干员-近战",
-      "预备干员-狙击",
       "预备干员-后勤",
       "预备干员-近卫(卫戍协议)",
       "预备干员-辅助(卫戍协议)",
+      "预备干员-狙击",
       "预备干员-术师",
       "预备干员-重装",
       "郁金香",
