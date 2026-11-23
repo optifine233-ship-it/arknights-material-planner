@@ -1,11 +1,11 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-15T23:58:19.712Z",
+  "generatedAt": "2026-11-23T00:51:26.952Z",
   "source": {
     "kind": "prts-mediawiki-api",
     "url": "https://prts.wiki/api.php",
     "operatorCategory": "Category:干员",
-    "latestRevision": 450494,
+    "latestRevision": 451310,
     "progressIdSources": {
       "characters": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json",
       "patches": "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/char_patch_table.json",
@@ -51525,7 +51525,7 @@
       "p": "特种",
       "sp": "处决者",
       "pos": "近战位",
-      "obtain": "活动获得",
+      "obtain": "活动获得 记录修复奖励",
       "e1": [
         {
           "name": "特种芯片",
@@ -74917,7 +74917,7 @@
       "p": "重装",
       "sp": "哨戒铁卫",
       "pos": "近战位",
-      "obtain": "活动获得",
+      "obtain": "活动获得 记录修复奖励",
       "e1": [
         {
           "name": "重装芯片",
@@ -95211,7 +95211,7 @@
       "p": "医疗",
       "sp": "链愈师",
       "pos": "远程位",
-      "obtain": "活动获得",
+      "obtain": "活动获得 记录修复奖励",
       "e1": [
         {
           "name": "医疗芯片",
@@ -133756,7 +133756,7 @@
     "高级作战记录",
     "芯片助剂"
   ],
-  "dataVersion": "prts-450494-8acb7058dc60",
+  "dataVersion": "prts-451310-67111e6c0956",
   "MATERIAL_META": {
     "特种芯片": {
       "id": "3281",
